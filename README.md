@@ -22,6 +22,7 @@ Start by cloning the repository and navigating into the project directory:
 ```bash
 git clone https://github.com/karlMoreno/MovieGraf.git
 cd MovieGraf
+npm install --save neo4j-driver
 ```
 
 ### Set Up the Backend
