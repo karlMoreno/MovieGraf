@@ -38,7 +38,7 @@ To get the backend up and running, follow these steps:
 
    npm install
 
-   npm start
+   node server.js
     ```
 
 ### Set Up the Frontend
