@@ -1,0 +1,113 @@
+{
+    "AnimationMovieCreation": {
+      "type": "object",
+      "properties": {
+        "Asset": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Asset/properties/Asset"
+          },
+          "description": "Animation assets like characters, backgrounds, and props."
+        },
+        "CreativeWork": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MediaCreationContext/properties/CreativeWork"
+          },
+          "description": "Details of the animation project, including title, description, and production details."
+        },
+        "NarrativeScene": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MediaCreationContext/properties/NarrativeScene"
+          },
+          "description": "Scenes specifically detailing the storyboard or animation sequences."
+        },
+        "Task": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Task/properties/Task"
+          },
+          "description": "Tasks specific to animation such as rigging, animating scenes, texturing, and rendering."
+        },
+        "Participant": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Participant/properties/Participant"
+          },
+          "description": "Participants involved in the animation project, including animators, directors, and other crew members."
+        }
+      },
+      "required": ["Asset", "CreativeWork", "NarrativeScene", "Task", "Participant"],
+      "additionalProperties": false,
+      "description": "Schema for managing the creation of animations in movies, focusing on assets, production details, scenes, specific tasks, and the participants involved."
+    },
+    "$defs": {
+      "Asset": {
+        "properties": {
+          "Asset": {
+            "properties": {
+              "version": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Version Name",
+                    "description": "Name of the version specific to animation components like character versions."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "MediaCreationContext": {
+        "properties": {
+          "CreativeWork": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Project Name",
+                "description": "Name of the animation project."
+              }
+            }
+          },
+          "NarrativeScene": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Scene Name",
+                "description": "Name of the narrative scene in the animation storyboard."
+              }
+            }
+          }
+        }
+      },
+      "Task": {
+        "properties": {
+          "Task": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Task Name",
+                "description": "Specific task name in animation production, such as 'Character Rigging'."
+              }
+            }
+          }
+        }
+      },
+      "Participant": {
+        "properties": {
+          "Participant": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Participant Name",
+                "description": "Name of the participant, such as the animator or director."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

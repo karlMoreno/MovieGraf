@@ -1,0 +1,34 @@
+1. Assets
+GET /api/assets - Retrieve all assets
+POST /api/assets - Create a new asset
+GET /api/assets/:id - Retrieve a specific asset by ID
+PUT /api/assets/:id - Update a specific asset by ID
+DELETE /api/assets/:id - Delete a specific asset by ID
+
+2. Creative Works
+GET /api/creativeWorks - Retrieve all creative works
+POST /api/creativeWorks - Create a new creative work
+GET /api/creativeWorks/:id - Retrieve a specific creative work by ID
+PUT /api/creativeWorks/:id - Update a specific creative work by ID
+DELETE /api/creativeWorks/:id - Delete a specific creative work by ID
+
+3. Narrative Scenes
+GET /api/narrativeScenes - Retrieve all narrative scenes
+POST /api/narrativeScenes - Create a new narrative scene
+GET /api/narrativeScenes/:id - Retrieve a specific narrative scene by ID
+PUT /api/narrativeScenes/:id - Update a specific narrative scene by ID
+DELETE /api/narrativeScenes/:id - Delete a specific narrative scene by ID
+
+4. Tasks
+GET /api/tasks - Retrieve all tasks
+POST /api/tasks - Create a new task
+GET /api/tasks/:id - Retrieve a specific task by ID
+PUT /api/tasks/:id - Update a specific task by ID
+DELETE /api/tasks/:id - Delete a specific task by ID
+
+5. Participants
+GET /api/participants - Retrieve all participants
+POST /api/participants - Create a new participant
+GET /api/participants/:id - Retrieve a specific participant by ID
+PUT /api/participants/:id - Update a specific participant by ID
+DELETE /api/participants/:id - Delete a specific participant by ID
