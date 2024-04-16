@@ -22,7 +22,7 @@ Start by cloning the repository and navigating into the project directory:
 ```bash
 git clone https://github.com/karlMoreno/MovieGraf.git
 cd MovieGraf
-
+```
 
 ### Set Up the Backend
 
@@ -38,7 +38,7 @@ To get the backend up and running, follow these steps:
    npm install
 
    npm start
-
+    ```
 
 ### Set Up the Frontend
 
@@ -56,8 +56,8 @@ To get the frontend up and running, follow these steps:
    cd ../frontend
 
    npm install
-   
-   npm start
 
+   npm start
+    ```
 
 
