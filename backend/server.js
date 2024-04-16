@@ -3,17 +3,6 @@ const app = express();
 const port =  3001;
 
 
-
-
-const neo4j = require('neo4j-driver');
-
-const uri = "bolt://localhost:7687";
-const user = "neo4j";
-const password = "your_password";
-
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-const session = driver.session();
-
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -25,16 +14,33 @@ app.listen(port, () => {
 });
 
 
-app.get('/data', async (req, res) => {
-    try {
-      const result = await session.run('MATCH (n) RETURN n LIMIT 10');
-      const records = result.records;
-      res.send(records.map(record => record.get('n')));
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
-  });
-  
-  process.on('exit', () => {
+
+
+// npm install --save neo4j-driver
+// node example.js
+const neo4j = require('neo4j-driver');
+const driver = neo4j.driver('bolt://3.86.85.127:7687',
+                  neo4j.auth.basic('neo4j', 'inlets-percents-rocks'), 
+                  {/* encrypted: 'ENCRYPTION_OFF' */});
+
+const query =
+  `
+  MATCH (movie:Movie {title:$favorite})<-[:ACTED_IN]-(actor)-[:ACTED_IN]->(rec:Movie)
+   RETURN distinct rec.title as title LIMIT 20
+  `;
+
+const params = {"favorite": "The Matrix"};
+
+const session = driver.session({database:"neo4j"});
+
+session.run(query, params)
+  .then((result) => {
+    result.records.forEach((record) => {
+        console.log(record.get('title'));
+    });
+    session.close();
     driver.close();
+  })
+  .catch((error) => {
+    console.error(error);
   });
