@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const port = 3002;
+const cors = require('cors');
+
 
 const neo4j = require("neo4j-driver");
 const driver = neo4j.driver(
@@ -19,18 +21,20 @@ const params = { favorite: "The Matrix" };
 
 const session = driver.session({ database: "neo4j" });
 
-session
-  .run(query, params)
-  .then((result) => {
-    result.records.forEach((record) => {
-      console.log(record.get("title"));
-    });
-    // session.close();
-    // driver.close();
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+app.use(cors()); 
+
+// session
+//   .run(query, params)
+//   .then((result) => {
+//     result.records.forEach((record) => {
+//       console.log(record.get("title"));
+//     });
+//     // session.close();
+//     // driver.close();
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
