@@ -1,21 +1,6 @@
 const express = require('express');
 const app = express();
 const port =  3001;
-
-
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
-
-
-
 // npm install --save neo4j-driver
 // node example.js
 const neo4j = require('neo4j-driver');
@@ -44,3 +29,28 @@ session.run(query, params)
   .catch((error) => {
     console.error(error);
   });
+
+
+ 
+
+
+// app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'This is your data!' });
+});
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+
+
