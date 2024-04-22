@@ -6,8 +6,8 @@ const cors = require('cors');
 
 const neo4j = require("neo4j-driver");
 const driver = neo4j.driver(
-  "bolt://3.86.85.127:7687",
-  neo4j.auth.basic("neo4j", "inlets-percents-rocks"),
+  "neo4j://localhost:7687",
+  neo4j.auth.basic("neo4j", "testtest"),
   {
     /* encrypted: 'ENCRYPTION_OFF' */
   }
