@@ -39,6 +39,12 @@ To get the backend up and running, follow these steps:
    npm install
 
    node server.js
+
+   npm install bcrypt
+
+   npm install cors
+
+
     ```
 
 ### Set Up the Frontend
@@ -59,6 +65,22 @@ To get the frontend up and running, follow these steps:
    npm install
 
    npm start
+
+
+   npm install @mui/material @mui/icons-material
+
+   npm install @emotion/react @emotion/styled
+
+   npm install react-router-domv
     ```
 
 
+
+
+npm install cors
+
+npm install @mui/material @mui/icons-material
+
+npm install @emotion/react @emotion/styled
+
+npm install react-router-dom
