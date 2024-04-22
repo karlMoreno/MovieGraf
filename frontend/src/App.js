@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useEffect } from 'react';
+import SignIn from './pages/SignIn';
+
 
 
 function App() {
@@ -17,7 +19,8 @@ function App() {
 
   return (
     <div className="App">
-      
+      <SignIn />  // Use SignIn component here
+
     </div>
   );
 }
