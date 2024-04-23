@@ -1,5 +1,5 @@
 
-const driver = require("../server");
+const driver = require('../database/db');
 const bcrypt = require('bcrypt')
 
 
@@ -9,7 +9,7 @@ const createUser = async ({firstName, lastName, email, password}) => {
     try {
         const result = await session.run(
             'CREATE (u:User {firstName: $firstName, lastName: $lastName, email: $email,password: $hashedPassword}) RETURN u',
-            { firstName, lastName, email, password: hashedPassword}
+            { firstName, lastName, email, hashedPassword}
         );
         const user = result.records[0]?.get('u').properties;
         return user;
