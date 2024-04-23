@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3002;
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const routes = require('./routes'); 
 
 
 const neo4j = require("neo4j-driver");
@@ -24,6 +24,9 @@ const params = { favorite: "The Matrix" };
 const session = driver.session({ database: "neo4j" });
 
 app.use(cors()); 
+app.use(express.json());
+
+app.use('/api', routes); 
 
 
 
