@@ -8,6 +8,7 @@ const createUser = async ({firstName, lastName, email, password}) => {
     const hashedPassword = await bcrypt.hash(password,10);
     try {
         const result = await session.run(
+            //it is not possible to replace u dynamically with say the first name of the user you are trying to create
             'CREATE (u:User {firstName: $firstName, lastName: $lastName, email: $email,password: $hashedPassword}) RETURN u',
             { firstName, lastName, email, hashedPassword}
         );
