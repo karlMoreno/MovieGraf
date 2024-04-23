@@ -1,4 +1,4 @@
-const {createUser} = require('../models')
+const {createUser} = require('../models/UserModel')
 
 const signUp = async (req,res) => {
     const {firstName, lastName, email, password} = req.body;

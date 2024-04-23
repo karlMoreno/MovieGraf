@@ -2,11 +2,9 @@ const express = require("express");
 const app = express();
 const port = 3002;
 const cors = require('cors');
-const routes = require('./routes'); 
-
+const mainRouter = require('./routes/index'); 
 
 const neo4j = require("neo4j-driver");
-
 const driver = neo4j.driver(
   "neo4j://localhost:7687",
   neo4j.auth.basic("neo4j", "testtest"),
@@ -14,19 +12,21 @@ const driver = neo4j.driver(
     /* encrypted: 'ENCRYPTION_OFF' */
   }
 );
-const query = `
-  MATCH (movie:Movie {title:$favorite})<-[:ACTED_IN]-(actor)-[:ACTED_IN]->(rec:Movie)
-   RETURN distinct rec.title as title LIMIT 20
-  `;
 
-const params = { favorite: "The Matrix" };
+console.log("Starting server...");
 
-const session = driver.session({ database: "neo4j" });
+
 
 app.use(cors()); 
 app.use(express.json());
-
-app.use('/api', routes); 
+// Log every request to the server:
+app.use((req, res, next) => {
+  console.log(`Received request on ${req.method} ${req.path}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+});
+app.use('/api', mainRouter); 
 
 
 

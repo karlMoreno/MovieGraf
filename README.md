@@ -44,6 +44,9 @@ To get the backend up and running, follow these steps:
 
    npm install cors
 
+   npm install bcrypt
+
+
 
     ```
 
