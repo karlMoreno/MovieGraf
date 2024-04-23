@@ -1,25 +1,22 @@
-// src/models/UserModel.js
+
+const driver = require("../server");
+const bcrypt = require('bcrypt')
 
 
-
-const session = require('../db/neo4jdb');  // Assuming you export a Neo4j session from this module
-
-const UserModel = {
-  createUser: async (userData) => {
-    const { email, password, name } = userData;
-    return await session.run(
-      'CREATE (u:User {email: $email, password: $password, name: $name, createdAt: $createdAt}) RETURN u',
-      { email, password, name, createdAt: new Date() }
-    );
-  },
-
-  findUserByEmail: async (email) => {
-    const result = await session.run(
-      'MATCH (u:User {email: $email}) RETURN u',
-      { email }
-    );
-    return result.records[0]?.get('u').properties;
-  }
+const createUser = async ({firstName, lastName, email, password}) => {
+    const session = driver.session({database:"neo4j"});
+    const hashedPassword = await bcrypt.hash(password,10);
+    try {
+        const result = await session.run(
+            'CREATE (u:User {firstName: $firstName, lastName: $lastName, email: $email,password: $hashedPassword}) RETURN u',
+            { firstName, lastName, email, password: hashedPassword}
+        );
+        const user = result.records[0]?.get('u').properties;
+        return user;
+    } finally {
+        await session.close();
+    }
+    
 };
 
-module.exports = UserModel;
+module.exports = { createUser };
