@@ -1,5 +1,4 @@
-// controllers/index.js
-const UserController = require('./UserController');
+const UserController = require("./UserController");
 
 module.exports = {
   UserController
