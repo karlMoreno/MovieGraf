@@ -9,6 +9,7 @@ These instructions will guide you through setting up your local development envi
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - **Node.js**: This project requires Node.js. If it's not installed, download and install it from [Node.js official website](https://nodejs.org/).
 
 ### Installation
@@ -48,7 +49,7 @@ To get the backend up and running, follow these steps:
 
 
 
-    ```
+   ```
 
 ### Set Up the Frontend
 
@@ -75,10 +76,7 @@ To get the frontend up and running, follow these steps:
    npm install @emotion/react @emotion/styled
 
    npm install react-router-domv
-    ```
-
-
-
+   ```
 
 npm install cors
 
@@ -87,3 +85,17 @@ npm install @mui/material @mui/icons-material
 npm install @emotion/react @emotion/styled
 
 npm install react-router-dom
+
+### For Interacting with neo4j desktop here are some useful queries
+
+Query to View All Nodes and Relationships
+
+````bash
+
+   MATCH (n)
+   OPTIONAL MATCH (n)-[r]->(m)
+   RETURN n, r, m
+
+
+    ```
+````
