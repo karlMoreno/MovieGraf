@@ -33,15 +33,45 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+
+  export default function SignUp() {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    // Collect the form data
+    const formData = {
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    // Use fetch API to send the POST request
+    try {
+      const response = await fetch('http://localhost:3002/api/signup/user-create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Signup Success:', result);
+        // Handle success, such as redirecting to another page or showing a success message
+      } else {
+        throw new Error('Failed to sign up');
+      }
+    } catch (error) {
+      console.error('Signup Error:', error);
+      // Optionally handle errors, such as showing an error message to the user
+    }
   };
+
+  // Remaining component code...
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
