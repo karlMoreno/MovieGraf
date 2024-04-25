@@ -1,0 +1,382 @@
+[ {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Ontology" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Ontology for tracking assets and tasks in the domain of digital video creation."
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Animation",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Animation Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "An Artist involved in the digital video creation process."
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "An Asset used in the digital video creation process."
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Character",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "A Character Asset in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Complete",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The 'Complete' state of a Task's progress."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ProgressState"
+  } ],
+  "http://www.w3.org/2002/07/owl#disjointWith" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#InProgress"
+  }, {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#NotStarted"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Compositing",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Compositing Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ConceptArt",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Concept Art Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Environment",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "An Environment Asset in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#InProgress",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The 'In Progress' state of a Task's progress."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ProgressState"
+  } ],
+  "http://www.w3.org/2002/07/owl#disjointWith" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#NotStarted"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Kendal",
+  "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual", "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist" ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Lighting",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Lighting Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Model3D",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "3D Modeling Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#NotStarted",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The 'Not Started' state of a Task's progress."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ProgressState"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ProgressState",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The possible states of a Task's progress."
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Prop",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "A Prop Asset in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Reference",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "A Reference Asset in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Rendering",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Rendering Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Rigging",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Rigging Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "A Task in the digital video creation process."
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Textures",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Texturing Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#UVMapping",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "UV Mapping Task in the digital video creation process."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#assignedToTask",
+  "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Relates an Artist to the Task(s) they are assigned to."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ],
+  "http://www.w3.org/2002/07/owl#inverseOf" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#hasAssignedArtist"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#discordId",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The Discord ID of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#emailAddress",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The email address of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#endDate",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The end date of a Task."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#date"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#firstName",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The first name of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#hasAssignedArtist",
+  "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "Relates a Task to the Artist(s) assigned to it."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#lastName",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The last name of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#location",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The URI location of an Asset, e.g., a web location."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#anyURI"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#locationOnDisk",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The file system location of an Asset."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Asset"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#middleName",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The middle name of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#name",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The full name of an Artist."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Artist"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#string"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#progress",
+  "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty", "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The progress state of a Task."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#ProgressState"
+  } ]
+}, {
+  "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#startDate",
+  "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ],
+  "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
+    "@language" : "en",
+    "@value" : "The start date of a Task."
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#domain" : [ {
+    "@id" : "http://www.distant-galaxy.com/jlapre/ontologies/2024/04/dg_digitalAssetTask_c3s_v01#Task"
+  } ],
+  "http://www.w3.org/2000/01/rdf-schema#range" : [ {
+    "@id" : "http://www.w3.org/2001/XMLSchema#date"
+  } ]
+}, {
+  "@id" : "http://www.w3.org/2001/XMLSchema#date",
+  "@type" : [ "http://www.w3.org/2000/01/rdf-schema#Datatype" ]
+} ]

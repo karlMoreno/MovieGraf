@@ -44,7 +44,6 @@ _site
 
 # Gatsby files
 .cache/
-public/
 
 # Next.js build output
 .next/

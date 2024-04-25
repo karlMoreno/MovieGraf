@@ -4,6 +4,7 @@ const signUp = async (req,res) => {
     const {firstName, lastName, email, password} = req.body;
     try {
         const user = await createUser({firstName, lastName,email,password});
+        console.log("User has been successfully created:", user);
         res.status(201).json({
             sucess:true,
             message: "User has been sucessfully created",
