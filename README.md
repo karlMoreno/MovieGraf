@@ -76,6 +76,8 @@ To get the frontend up and running, follow these steps:
    npm install @emotion/react @emotion/styled
 
    npm install react-router-domv
+
+   npm install @mui/x-charts
    ```
 
 npm install cors
