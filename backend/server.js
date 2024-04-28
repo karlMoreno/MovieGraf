@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3002;
 const cors = require('cors');
-const mainRouter = require('./routes/index'); 
+const mainRouter = require('./routes'); 
 
 
 console.log("Starting server...");

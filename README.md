@@ -91,7 +91,7 @@ npm install react-router-dom
 Query to View All Nodes and Relationships
 
 ````bash
-
+   // this is for Finding everything in the database
    MATCH (n)
    OPTIONAL MATCH (n)-[r]->(m)
    RETURN n, r, m
