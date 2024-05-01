@@ -42,7 +42,7 @@ export default function Hero() {
               fontSize: 'clamp(3.5rem, 10vw, 4rem)',
             }}
           >
-            Our latest&nbsp;
+            &nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -52,7 +52,7 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              products
+              MovieGraf
             </Typography>
           </Typography>
           <Typography

@@ -17,10 +17,12 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from '../components/dashboard/listItems';
+import { MainListItems, secondaryListItems } from '../components/dashboard/listItems';
 import Chart from '../components/dashboard/Chart';
 import Deposits from '../components/dashboard/Deposits';
 import Orders from '../components/dashboard/Orders';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -90,6 +92,12 @@ export default function Dashboard() {
     setOpen(!open);
   };
 
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  }
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -128,6 +136,7 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
         </AppBar>
+        
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -143,11 +152,12 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            <MainListItems onNavigate={handleNavigate} />
             <Divider sx={{ my: 1 }} />
             {secondaryListItems}
           </List>
         </Drawer>
+
         <Box
           component="main"
           sx={{
