@@ -80,8 +80,16 @@ To get the frontend up and running, follow these steps:
    npm install @mui/x-charts
 
    npm install react-virtuoso
-   
+
    npm install @mui/icons-material
+
+   
+
+   npm install @mui/x-date-pickers
+    npm install date-fns@2
+    npm install @mui/x-date-pickers @mui/lab date-fns
+
+
 
 
    ```

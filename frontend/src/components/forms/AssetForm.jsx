@@ -10,7 +10,6 @@ import {
   Stack,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from '@mui/material/styles';
 
 export default function AssetForm({ onClose }) {
   const [name, setName] = useState("");
@@ -24,16 +23,12 @@ export default function AssetForm({ onClose }) {
     onClose(); // Close the drawer after form submission
   };
 
-
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
 
   return (
     <form
@@ -66,7 +61,11 @@ export default function AssetForm({ onClose }) {
             startIcon={<CloudUploadIcon />}
           >
             Upload file
-            <VisuallyHiddenInput type="file" />
+            <input
+              type="file"
+              hidden
+              onChange={handleFileChange}
+            />
           </Button>
         </label>
         <TextField
@@ -87,7 +86,6 @@ export default function AssetForm({ onClose }) {
             <MenuItem value="Environment">Environment</MenuItem>
             <MenuItem value="Prop">Prop</MenuItem>
             <MenuItem value="Reference">Reference</MenuItem>
-
           </Select>
         </FormControl>
         <FormControl fullWidth>

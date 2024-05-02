@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import VirtualizedTable from '../VirtualizedTable';  
 import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer'
-import AssetForm from '../assets/AssetForm';
+import AssetForm from '../forms/AssetForm';
 
 
 

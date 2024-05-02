@@ -7,7 +7,10 @@ export default function AssetPage() {
 
   return (
     <div style={{ fontSize: '24px', color: theme.palette.text.primary }}>
-      Artists Page
+      <div>
+        Artists Page
+      </div>
+      
     </div>
   );
 }
