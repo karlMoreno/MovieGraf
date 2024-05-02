@@ -14,28 +14,28 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 export function MainListItems({ onNavigate }) {
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => onNavigate('/')}>
+      <ListItemButton onClick={() => onNavigate('dashboard')}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => onNavigate('/artists')}>
+      <ListItemButton onClick={() => onNavigate('artists')}>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Artists" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => onNavigate('/assets')}>
+      <ListItemButton onClick={()=> onNavigate('assets')}>
         <ListItemIcon>
           <LayersIcon />
         </ListItemIcon>
         <ListItemText primary="Assets" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => onNavigate('/tasks')}>
+      <ListItemButton onClick={() => onNavigate('tasks')}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
