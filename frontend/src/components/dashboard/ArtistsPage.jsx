@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
-
+import VirtualizedTable from "../VirtualizedTable";
 
 export default function AssetPage() {
   const theme = useTheme();
@@ -10,7 +10,8 @@ export default function AssetPage() {
       <div>
         Artists Page
       </div>
-      
+      <VirtualizedTable></VirtualizedTable> 
+
     </div>
   );
 }
