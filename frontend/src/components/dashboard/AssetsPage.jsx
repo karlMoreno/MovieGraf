@@ -1,7 +1,10 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
-import VirtualizedTable from '../VirtualizedTable';  // Adjust the import path as necessary
-import AnchorButton from '../AnchorButton'
+import VirtualizedTable from '../VirtualizedTable';  
+import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer'
+import AssetForm from '../assets/AssetForm';
+
+
 
 export default function AssetPage() {
   const theme = useTheme();
@@ -11,8 +14,9 @@ export default function AssetPage() {
       <div style={{ fontSize: '24px', color: theme.palette.text.primary }}>
         Assets Page
       </div>
-      <AnchorButton></AnchorButton>
-      <VirtualizedTable></VirtualizedTable> // Using the table component here
+      <SwipeableTemporaryDrawer contentComponent={<AssetForm />} />
+
+      <VirtualizedTable></VirtualizedTable> 
     </div>
     
   );
