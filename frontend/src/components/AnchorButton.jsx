@@ -10,13 +10,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
+    right: false,  // Only keep 'right' as active
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -28,12 +26,12 @@ export default function SwipeableTemporaryDrawer() {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setState({ [anchor]: open });
   };
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      sx={{ width: 250 }}  // Set static width for 'right' drawer
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -68,19 +66,16 @@ export default function SwipeableTemporaryDrawer() {
 
   return (
     <div>
-      {['left', 'right', 'top', 'bottom'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
+      {/* Only render button and drawer for 'right' anchor */}
+      <Button variant="contained" startIcon={<AddBoxIcon />} onClick={toggleDrawer('right', true)}>Add Asset</Button>
+      <SwipeableDrawer
+        anchor="right"
+        open={state.right}
+        onClose={toggleDrawer('right', false)}
+        onOpen={toggleDrawer('right', true)}
+      >
+        {list('right')}
+      </SwipeableDrawer>
     </div>
   );
 }

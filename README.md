@@ -80,6 +80,9 @@ To get the frontend up and running, follow these steps:
    npm install @mui/x-charts
 
    npm install react-virtuoso
+   
+   npm install @mui/icons-material
+
 
    ```
 
