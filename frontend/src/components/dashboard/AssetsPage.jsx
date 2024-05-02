@@ -9,6 +9,10 @@ export default function AssetPage() {
   return (
     <div style={{ fontSize: '24px', color: theme.palette.text.primary }}>
       Assets Page
+      <div>
+        <VirtualizedTable></VirtualizedTable>
+      </div>
     </div>
+    
   );
 }

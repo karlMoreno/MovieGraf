@@ -78,15 +78,12 @@ To get the frontend up and running, follow these steps:
    npm install react-router-domv
 
    npm install @mui/x-charts
+
+   npm install react-virtuoso
+
    ```
 
-npm install cors
 
-npm install @mui/material @mui/icons-material
-
-npm install @emotion/react @emotion/styled
-
-npm install react-router-dom
 
 ### For Interacting with neo4j desktop here are some useful queries
 
