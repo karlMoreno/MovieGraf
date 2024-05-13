@@ -12,38 +12,84 @@ const Graph = () => {
       elements: [], // No initial elements
       style: [
         {
-          selector: 'node',
-          style: {
-            'background-color': '#666',
-            'label': 'data(label)',
-            'text-valign': 'center',
-            'text-halign': 'center',
-            'color': '#fff'
-          }
+            selector: 'node',
+            style: {
+                'background-color': '#666',
+                'label': 'data(label)',
+                'text-valign': 'center',
+                'text-halign': 'center',
+                'color': '#fff'
+            }
         },
         {
+            selector: 'node[type="Task"]',
+            style: {
+              'shape': 'rectangle',
+              'width': '60px', // Set width to 60px
+              'height': '30px', // Set height to 30px
+              'background-color': '#2E8B57'
+            }
+        },
+        {
+            selector: 'node[type="Participant"]',
+            style: {
+                'shape': 'hexagon',
+                'background-color': '#4682B4'
+            }
+        },
+        {
+            selector: 'node[type="Asset"]',
+            style: {
+                'shape': 'square',
+                'background-color': '#FFD700'
+            }
+        },
+        {
+            selector: 'node[type="Context"]',
+            style: {
+                'shape': 'ellipse',
+                'background-color': '#FF6347'
+            }
+        },
+      
+      {
           selector: 'edge',
           style: {
-            'width': 4, // Increased width for better visibility
-            'line-color': '#f00', // Change to a bright color to ensure visibility
-            'target-arrow-color': '#f00', // Same bright color for arrow
-            'target-arrow-shape': 'triangle',
-            'curve-style': 'bezier',
-            'label': 'data(label)',
-            'color': '#000', // Ensuring text color is visible
-            'text-background-opacity': 1, // Adding background to text for visibility
-            'text-background-color': '#fff', // White background for text
-            'text-background-shape': 'rectangle', // Shape of text background
-            'text-border-opacity': 1,
-            'text-border-width': 1,
-            'text-border-color': '#000',
-            'text-margin-y': -10
+              'line-color': '#808080', // Default gray color for all other edges
+              'target-arrow-color': '#808080',
+              'width': 4,
+              'target-arrow-shape': 'triangle',
+              'curve-style': 'bezier',
+              'label': 'data(label)',
+              'color': '#000',
+              'text-background-opacity': 1,
+              'text-background-color': '#fff',
+              'text-background-shape': 'rectangle',
+              'text-border-opacity': 1,
+              'text-border-width': 1,
+              'text-border-color': '#000',
+              'text-margin-y': -10
           }
+      },  // Add styles for edges
+      {
+        selector: 'edge[label="PERFORMED_BY"]',
+        style: {
+            'line-color': '#00FFFF', // Cyan color for PERFORMED_BY edges
+            'target-arrow-color': '#00FFFF'
         }
-      ],
+    },
+    {
+        selector: 'edge[label="PRODUCED_BY"]',
+        style: {
+            'line-color': '#FF00FF', // Magenta color for PRODUCED_BY edges
+            'target-arrow-color': '#FF00FF'
+        }
+    }
+    ],
       layout: {
         name: 'grid'
-      }
+      },
+      wheelSensitivity: 0.1 // zoom sensitivity
     });
     setCy(cyInstance);
     fetchGraph(cyInstance);
@@ -55,14 +101,15 @@ const Graph = () => {
       const formattedNodes = data.nodes.map(node => ({
         group: 'nodes',
         data: {
-          id: node.identity.low.toString(),  // Ensuring ID is a string
-          label: node.properties.name,        // Assuming 'name' for label
+            id: node.identity.low.toString(), // Ensuring ID is a string
+            label: node.properties.name, // Assuming 'name' for label
+            type: node.labels[0] // Assuming the type of the node is determined by its label
         }
-      }));
+    }));
       const formattedEdges = data.edges.map(edge => ({
         group: 'edges',
         data: {
-          id: (edge.identity.low + formattedNodes.length).toString(),  // Ensuring ID is a string
+          id: edge.identity.low.toString() + '-' + edge.start.low.toString() + '-' + edge.end.low.toString(),  // Ensuring ID is a string
           source: edge.start.low.toString(), // Ensuring source is a string
           target: edge.end.low.toString(),   // Ensuring target is a string
           label: edge.type                   // Using 'type' as the label
@@ -80,14 +127,14 @@ const Graph = () => {
     }
   };
 
-  const handleAddNode = async (label) => {
+  const handleAddNode = async (type) => {
     try {
-      await axios.post('/node', { label });
-      fetchGraph(cy);
+        await axios.post('/node', { type });
+        fetchGraph(cy);
     } catch (error) {
-      console.error('Error adding node:', error);
+        console.error('Error adding node:', error);
     }
-  };
+};
 
   const handleAddEdge = async (fromId, toId, label) => {
     try {
@@ -101,11 +148,10 @@ const Graph = () => {
   return (
     <div>
       <div id="cy" style={{ width: '800px', height: '600px' }} />
-      <button onClick={() => handleAddNode('1')}>Create Task </button>
-      <button onClick={() => handleAddNode('2')}>Create Participant </button>
-      <button onClick={() => handleAddNode('1')}>Create Asset </button>
-      <button onClick={() => handleAddNode('2')}>Create Context </button>
-      <button onClick={() => handleAddNode('1')}>Create Relationship </button>
+      <button onClick={() => handleAddNode('Task')}>Create Task</button>
+      <button onClick={() => handleAddNode('Participant')}>Create Participant</button>
+      <button onClick={() => handleAddNode('Asset')}>Create Asset</button>
+      <button onClick={() => handleAddNode('Context')}>Create Context</button>
       
     </div>
   );
