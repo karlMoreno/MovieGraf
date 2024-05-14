@@ -21,7 +21,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
       {'Copyright © '}
-      <Link href="https://mui.com/">Sitemark&nbsp;</Link>
+      <Link href="https://mui.com/">MovieGraf&nbsp;</Link>
       {new Date().getFullYear()}
     </Typography>
   );
@@ -59,10 +59,10 @@ export default function Footer() {
             <Box sx={{ ml: '-15px' }}>
               <img
                 src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
+                  'https://svgshare.com/i/162o.svg'
                 }
                 style={logoStyle}
-                alt="logo of sitemark"
+                alt="logo"
               />
             </Box>
             <Typography variant="body2" fontWeight={600} gutterBottom>
@@ -102,16 +102,7 @@ export default function Footer() {
             Product
           </Typography>
           <Link color="text.secondary" href="#">
-            Features
-          </Link>
-          <Link color="text.secondary" href="#">
-            Testimonials
-          </Link>
-          <Link color="text.secondary" href="#">
             Highlights
-          </Link>
-          <Link color="text.secondary" href="#">
-            Pricing
           </Link>
           <Link color="text.secondary" href="#">
             FAQs
@@ -129,12 +120,6 @@ export default function Footer() {
           </Typography>
           <Link color="text.secondary" href="#">
             About us
-          </Link>
-          <Link color="text.secondary" href="#">
-            Careers
-          </Link>
-          <Link color="text.secondary" href="#">
-            Press
           </Link>
         </Box>
         <Box
@@ -168,9 +153,14 @@ export default function Footer() {
           borderColor: 'divider',
         }}
       >
+        
         <div>
+          <a href="https://www.vecteezy.com/free-videos/plexus">Plexus Stock Videos by Vecteezy</a>
+          <Typography display="inline" sx={{ mx: 0.5, opacity: 0.5 }}>
+            &nbsp;•&nbsp;
+          </Typography>
           <Link color="text.secondary" href="#">
-            Privacy Policy
+          Privacy Policy
           </Link>
           <Typography display="inline" sx={{ mx: 0.5, opacity: 0.5 }}>
             &nbsp;•&nbsp;

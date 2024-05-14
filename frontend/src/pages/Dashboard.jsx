@@ -22,8 +22,7 @@ import {
   secondaryListItems,
 } from "../components/dashboard/listItems";
 import Chart from "../components/dashboard/Chart";
-import Deposits from "../components/dashboard/Deposits";
-import Orders from "../components/dashboard/Orders";
+
 import { Navigate, useNavigate } from "react-router-dom";
 import AssetPage from "../components/dashboard/AssetsPage";
 import ArtistsPage from "../components/dashboard/ArtistsPage"
@@ -141,9 +140,7 @@ export default function Dashboard() {
               Dashboard
             </Typography>
             <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              
             </IconButton>
           </Toolbar>
         </AppBar>

@@ -89,7 +89,7 @@ const Graph = () => {
       layout: {
         name: 'grid'
       },
-      wheelSensitivity: 0.1 // zoom sensitivity
+      wheelSensitivity: 0.05 // zoom sensitivity
     });
     setCy(cyInstance);
     fetchGraph(cyInstance);
