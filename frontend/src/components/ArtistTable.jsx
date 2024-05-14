@@ -8,50 +8,34 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
-const sample = [
-  ['3D Model', 'Digital Asset', 150, 'High-poly character model', '2024-04-01'],
-  ['Texture Pack', 'Digital Asset', 50, '4K texture maps', '2024-03-15'],
-  ['Animation Clip', 'Digital Asset', 75, 'Walk cycle animation', '2024-02-20'],
-  ['Software License', 'Software', 500, 'Maya 2024', '2024-01-10'],
-  ['Rendering Engine', 'Software', 1000, 'Arnold Renderer', '2024-05-05'],
+const sampleArtists = [
+  ['Vincent van Gogh', 'Modeler'],
+  ['Pablo Picasso', 'Texture Artist'],
+  ['Leonardo da Vinci', 'Animator'],
+  ['Claude Monet', 'Lighting Artist'],
+  ['Salvador Dali', 'Effects Artist'],
 ];
 
-function createData(id, name, category, size, description, acquisitionDate) {
-  return { id, name, category, size, description, acquisitionDate };
+function createArtistData(id, name, role) {
+  return { id, name, role };
 }
 
 const columns = [
   {
     width: 200,
-    label: 'Asset Name',
+    label: 'Artist Name',
     dataKey: 'name',
   },
   {
-    width: 150,
-    label: 'Category',
-    dataKey: 'category',
-  },
-  {
-    width: 150,
-    label: 'size\u00A0(mb)',
-    dataKey: 'size',
-    numeric: true,
-  },
-  {
     width: 200,
-    label: 'Description',
-    dataKey: 'description',
-  },
-  {
-    width: 150,
-    label: 'Acquisition Date',
-    dataKey: 'acquisitionDate',
+    label: 'Role',
+    dataKey: 'role',
   },
 ];
 
 const rows = Array.from({ length: 200 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
+  const randomSelection = sampleArtists[Math.floor(Math.random() * sampleArtists.length)];
+  return createArtistData(index, ...randomSelection);
 });
 
 const VirtuosoTableComponents = {
@@ -101,7 +85,7 @@ function rowContent(_index, row) {
   );
 }
 
-export default function VirtualizedTable() {
+export default function ArtistTable() {
   return (
     <Paper style={{ height: 400, width: '100%' }}>
       <TableVirtuoso
