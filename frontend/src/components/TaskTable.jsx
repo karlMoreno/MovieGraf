@@ -8,50 +8,39 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
-const sample = [
-  ['3D Model', 'Digital Asset', 150, 'High-poly character model', '2024-04-01'],
-  ['Texture Pack', 'Digital Asset', 50, '4K texture maps', '2024-03-15'],
-  ['Animation Clip', 'Digital Asset', 75, 'Walk cycle animation', '2024-02-20'],
-  ['Software License', 'Software', 500, 'Maya 2024', '2024-01-10'],
-  ['Rendering Engine', 'Software', 1000, 'Arnold Renderer', '2024-05-05'],
+// Sample data for tasks and their progress states
+const sampleTasks = [
+  ['Animation', 'Complete'],
+  ['Compositing', 'InProgress'],
+  ['Concept Art', 'NotStarted'],
+  ['Lighting', 'InProgress'],
+  ['Model3D', 'Complete'],
+  ['Rendering', 'NotStarted'],
+  ['Rigging', 'Complete'],
+  ['Texturing', 'InProgress'],
+  ['UVMapping', 'NotStarted'],
 ];
 
-function createData(id, name, category, size, description, acquisitionDate) {
-  return { id, name, category, size, description, acquisitionDate };
+function createTaskData(id, task, progress) {
+  return { id, task, progress };
 }
 
 const columns = [
   {
     width: 200,
-    label: 'Asset Name',
-    dataKey: 'name',
+    label: 'Task',
+    dataKey: 'task',
   },
   {
     width: 150,
-    label: 'Category',
-    dataKey: 'category',
-  },
-  {
-    width: 150,
-    label: 'size\u00A0(mb)',
-    dataKey: 'size',
-    numeric: true,
-  },
-  {
-    width: 200,
-    label: 'Description',
-    dataKey: 'description',
-  },
-  {
-    width: 150,
-    label: 'Acquisition Date',
-    dataKey: 'acquisitionDate',
+    label: 'Progress State',
+    dataKey: 'progress',
   },
 ];
 
 const rows = Array.from({ length: 200 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
+  const randomSelection = sampleTasks[Math.floor(Math.random() * sampleTasks.length)];
+  return createTaskData(index, ...randomSelection);
 });
 
 const VirtuosoTableComponents = {
@@ -101,7 +90,7 @@ function rowContent(_index, row) {
   );
 }
 
-export default function VirtualizedTable() {
+export default function TasksTable() {
   return (
     <Paper style={{ height: 400, width: '100%' }}>
       <TableVirtuoso

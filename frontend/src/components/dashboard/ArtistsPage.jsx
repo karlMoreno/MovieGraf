@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
-import VirtualizedTable from "../VirtualizedTable";
+import VirtualizedTable from "../ArtistTable";
 
 export default function AssetPage() {
   const theme = useTheme();

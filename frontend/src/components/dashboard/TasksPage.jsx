@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer'
-import VirtualizedTable from "../VirtualizedTable";
+import VirtualizedTable from "../TaskTable";
 import TasksForm from '../forms/TasksForm'
 
 export default function AssetPage() {
