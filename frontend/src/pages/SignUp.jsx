@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link as MuiLink } from '@mui/material/Link'; // Rename MUI Link if still needed
-import { Link } from 'react-router-dom'; // React Router Link for navigation
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,8 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-// Additional component code remains unchanged
-
+const defaultTheme = createTheme();
 
 function Copyright(props) {
   return (
@@ -30,16 +28,15 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+export default function SignUp() {
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
-
-  export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    // Collect the form data
     const formData = {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
@@ -47,7 +44,6 @@ const defaultTheme = createTheme();
       password: data.get('password'),
     };
 
-    // Use fetch API to send the POST request
     try {
       const response = await fetch('http://localhost:3002/api/signup/user-create', {
         method: 'POST',
@@ -60,18 +56,16 @@ const defaultTheme = createTheme();
       if (response.ok) {
         const result = await response.json();
         console.log('Signup Success:', result);
-        // Handle success, such as redirecting to another page or showing a success message
+        setSuccessMessage('Signup successful! Redirecting...');
+        setTimeout(() => navigate('/signin'), 2000); // Redirect to signin page after 2 seconds
       } else {
         throw new Error('Failed to sign up');
       }
     } catch (error) {
       console.error('Signup Error:', error);
-      // Optionally handle errors, such as showing an error message to the user
+      setError('Failed to sign up. Please try again.');
     }
   };
-
-  // Remaining component code...
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -157,6 +151,8 @@ const defaultTheme = createTheme();
                 </Link>
               </Grid>
             </Grid>
+            {successMessage && <div>{successMessage}</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />
