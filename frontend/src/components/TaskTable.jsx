@@ -8,6 +8,20 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
+// Function to get the color based on the progress state
+const getProgressColor = (progressState) => {
+  switch (progressState) {
+    case 'NotStarted':
+      return 'red';
+    case 'InProgress':
+      return 'orange';
+    case 'Complete':
+      return 'green';
+    default:
+      return 'black';
+  }
+};
+
 // Sample data for tasks and their progress states
 const sampleTasks = [
   ['Animation', 'Complete'],
@@ -83,7 +97,22 @@ function rowContent(_index, row) {
           key={column.dataKey}
           align={column.numeric || false ? 'right' : 'left'}
         >
-          {row[column.dataKey]}
+          {column.dataKey === 'progress' ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <span>{row[column.dataKey]}</span>
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  backgroundColor: getProgressColor(row[column.dataKey]),
+                  marginLeft: 8, // Adjust this value to control the spacing
+                }}
+              ></div>
+            </div>
+          ) : (
+            row[column.dataKey]
+          )}
         </TableCell>
       ))}
     </React.Fragment>
