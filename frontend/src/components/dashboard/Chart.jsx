@@ -65,6 +65,7 @@ const Graph = () => {
   const [newNode, setNewNode] = useState({ id: '', label: '', type: 'Task' });
   const [newEdge, setNewEdge] = useState({ source: '', target: '', label: '' });
   const [edgeModalOpen, setEdgeModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const cyInstance = cytoscape({
@@ -74,49 +75,17 @@ const Graph = () => {
         {
           selector: 'node',
           style: {
-            'background-color': '#666',
-            'width': '70px',
-            'height': '35px',
+            'shape': 'ellipse', // Circle shape
+            'background-color': 'data(color)',
+            'width': '50px',
+            'height': '50px',
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'color': '#000'
-          }
-        },
-        {
-          selector: 'node[type="Task"]',
-          style: {
-            'shape': 'rectangle',
-            'width': '70px',
-            'height': '35px',
-            'background-color': '#2E8B57'
-          }
-        },
-        {
-          selector: 'node[type="Participant"]',
-          style: {
-            'shape': 'hexagon',
-            'width': '70px',
-            'height': '35px',
-            'background-color': '#4682B4'
-          }
-        },
-        {
-          selector: 'node[type="Asset"]',
-          style: {
-            'shape': 'square',
-            'width': '70px',
-            'height': '35px',
-            'background-color': '#FFD700'
-          }
-        },
-        {
-          selector: 'node[type="Context"]',
-          style: {
-            'shape': 'ellipse',
-            'width': '70px',
-            'height': '35px',
-            'background-color': '#FF6347'
+            'color': '#000',
+            'font-size': '10px', // Adjust font size to fit inside the circle
+            'text-wrap': 'wrap',
+            'text-max-width': '45px'
           }
         },
         {
@@ -124,11 +93,13 @@ const Graph = () => {
           style: {
             'line-color': '#808080',
             'target-arrow-color': '#808080',
-            'width': 4,
+            'width': 2,
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
             'color': '#000',
+            'font-size': '6px', 
+            'min-zoomed-font-size': 10, 
             'text-background-opacity': 1,
             'text-background-color': '#fff',
             'text-background-shape': 'rectangle',
@@ -139,32 +110,34 @@ const Graph = () => {
           }
         },
         {
-          selector: 'edge[label="PERFORMED_BY"]',
-          style: {
-            'line-color': '#00FFFF',
-            'target-arrow-color': '#00FFFF'
-          }
-        },
-        {
-          selector: 'edge[label="PRODUCED_BY"]',
-          style: {
-            'line-color': '#FF00FF',
-            'target-arrow-color': '#FF00FF'
-          }
-        },
-        {
           selector: 'node:selected',
           style: {
-            'background-color': 'red',
-            'border-width': 2,
-            'border-color': '#FFF'
+            'border-width': 4,
+            'border-color': '#00FFFF', 
+            'background-color': 'data(color)', 
+          }
+        },
+        {
+          selector: '.faded',
+          style: {
+            'opacity': 0.1,
+            'transition-property': 'opacity',
+            'transition-duration': '0.5s'
+          }
+        },
+        {
+          selector: '.highlighted',
+          style: {
+            'opacity': 1,
+            'transition-property': 'opacity',
+            'transition-duration': '0.5s'
           }
         }
       ],
       layout: {
         name: 'grid'
       },
-      wheelSensitivity: 0.1 // zoom sensitivity
+      wheelSensitivity: 0.8 // zoom sensitivity
     });
 
     cyInstance.on('tap', 'node', (event) => {
@@ -191,7 +164,8 @@ const Graph = () => {
         data: {
           id: node.identity.low.toString(),
           label: node.properties.name,
-          type: node.labels[0]
+          type: node.labels[0],
+          color: getColorForType(node.labels[0]) // Assign a color based on type
         }
       }));
       const formattedEdges = data.edges.map(edge => ({
@@ -215,6 +189,21 @@ const Graph = () => {
     }
   };
 
+  const getColorForType = (type) => {
+    switch (type) {
+      case 'Task':
+        return '#2E8B57'; // Green
+      case 'Participant':
+        return '#4682B4'; // Blue
+      case 'Asset':
+        return '#FFD700'; // Yellow
+      case 'Context':
+        return '#FF6347'; // Red
+      default:
+        return '#666'; // Default color
+    }
+  };
+
   const handleAddNode = (type) => {
     const newNodeId = new Date().getTime().toString();
     setNewNode({ id: newNodeId, label: labels[type][0], type });
@@ -228,7 +217,8 @@ const Graph = () => {
         data: {
           id: newNode.id,
           label: newNode.label,
-          type: newNode.type
+          type: newNode.type,
+          color: getColorForType(newNode.type) // Assign color based on type
         },
         position: {
           x: Math.random() * 800,
@@ -290,8 +280,31 @@ const Graph = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (!searchQuery) {
+      cy.elements().removeClass('faded').addClass('highlighted');
+      return;
+    }
+    
+    const matchingNodes = cy.nodes().filter(node => node.data('label').toLowerCase().includes(searchQuery.toLowerCase()));
+    const connectedEdges = matchingNodes.connectedEdges();
+    cy.elements().addClass('faded');
+    matchingNodes.removeClass('faded').addClass('highlighted');
+    connectedEdges.removeClass('faded').addClass('highlighted');
+  };
+
   return (
     <div>
+      <div style={{ marginBottom: '10px' }}>
+        <input 
+          type="text" 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search for a node label..."
+          style={{ padding: '8px', width: '300px', marginRight: '10px' }}
+        />
+        <button onClick={handleSearch} style={{ padding: '8px' }}>Search</button>
+      </div>
       <div id="cy" style={{ width: '100%', height: '600px' }} />
       <button onClick={() => handleAddNode('Task')}>Create Task</button>
       <button onClick={() => handleAddNode('Participant')}>Create Participant</button>
