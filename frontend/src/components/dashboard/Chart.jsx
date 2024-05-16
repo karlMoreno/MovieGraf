@@ -98,11 +98,11 @@ const Graph = () => {
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
-            'color': '#000',
+            'color': '#fff', // Set the font color to white
             'font-size': '6px', 
             'min-zoomed-font-size': 10, 
             'text-background-opacity': 1,
-            'text-background-color': '#fff',
+            'text-background-color': '#000', // Set the background color to black
             'text-background-shape': 'rectangle',
             'text-border-opacity': 0,
             'text-border-width': 1,
