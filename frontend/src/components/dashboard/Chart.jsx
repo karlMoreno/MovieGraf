@@ -33,7 +33,7 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'white',
+  backgroundColor: 'black',
   padding: '20px',
   boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
   zIndex: 1000
@@ -83,7 +83,7 @@ const Graph = () => {
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'color': '#000',
+            'color': '#000', // Keep the font color black
             'font-size': '10px', // Adjust font size to fit inside the circle
             'text-wrap': 'wrap',
             'text-max-width': '45px'
