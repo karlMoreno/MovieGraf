@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const driver = require('../database/db.js');
 
-const session = driver.session();
+
 
 // router.get('/graph', async (req, res) => {
     
@@ -26,7 +26,7 @@ const session = driver.session();
   
   router.post('/node', async (req, res) => {
     const { label } = req.body;
-    
+    const session = driver.session();
     try {
       await session.run('CREATE (n:Node {label: $label}) RETURN n', { label });
       res.status(201).send('Node created');
@@ -39,7 +39,7 @@ const session = driver.session();
   
   router.post('/edge', async (req, res) => {
     const { fromId, toId, label } = req.body;
-    
+    const session = driver.session();
     try {
       await session.run('MATCH (a:Node), (b:Node) WHERE id(a) = $fromId AND id(b) = $toId CREATE (a)-[r:RELATES {label: $label}]->(b) RETURN r', {
         fromId,
