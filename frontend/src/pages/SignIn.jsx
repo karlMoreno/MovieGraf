@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';  // For navigation
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { MuiLink } from '@mui/material'; // For any simple hyperlinks (if needed) 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -19,13 +19,35 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const loginDetails = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+  
+    try {
+      const response = await fetch('http://localhost:3002/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginDetails),
+      });
+      const json = await response.json();
+      if (json.success) {
+        setSuccessMessage('Sign in successful! Redirecting...');
+        setTimeout(() => navigate('/projects'), 2000); // Redirect to dashboard after 2 seconds
+      } else {
+        setError('Invalid Credentials');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -107,6 +129,8 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
+              {successMessage && <div>{successMessage}</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
             </Box>
           </Box>
         </Grid>
