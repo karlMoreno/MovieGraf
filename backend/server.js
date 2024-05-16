@@ -4,6 +4,10 @@ const port = 3002;
 const cors = require('cors');
 const mainRouter = require('./routes/index.js'); 
 const driver = require('./database/db.js');
+const protect = require("./session/protect");
+const sessionInstance = require("./session/session");
+const session = driver.session();
+const bcrypt = require('bcrypt')
 
 console.log("Starting server...");
 
@@ -11,6 +15,7 @@ console.log("Starting server...");
 
 app.use(cors()); 
 app.use(express.json());
+app.use(sessionInstance);
 // Log every request to the server:
 app.use((req, res, next) => {
   console.log(`Received request on ${req.method} ${req.path}`);
@@ -20,8 +25,38 @@ app.use((req, res, next) => {
 });
 app.use('/api', mainRouter); 
 
+
+
+// Login endpoint
+app.post('/login', async (req, res) => {
+  console.log("Login attempt.");
+  const { email, password } = req.body;
+  const result = await session.run(
+    'MATCH (u:User {email: $email}) RETURN u.password',
+    { email }
+  );
+  if (result.records.length === 0) {
+    throw new Error('User not found');
+  }
+  else{
+
+    const hashedPassword = result.records[0].get('u.password');
+
+    console.log(password);
+    console.log(hashedPassword);
+    
+    const match = await bcrypt.compare(password, hashedPassword);
+    if (match) {
+        req.session.email = email; // Save user id to the session
+    res.json({ success: true, message: 'Logged in successfully' });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+  }
+});
+
 app.get('/graph', async (req, res) => {
-  const session = driver.session();
+    
   try {
     const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
     console.log(result);
@@ -40,36 +75,10 @@ app.get('/graph', async (req, res) => {
   }
 });
 
-app.post('/node', async (req, res) => {
-  const { label } = req.body;
-  const session = driver.session();
-  try {
-    await session.run('CREATE (n:Node {label: $label}) RETURN n', { label });
-    res.status(201).send('Node created');
-  } catch (error) {
-    res.status(500).send(error.message);
-  } finally {
-    await session.close();
-  }
-});
+// const dashRouter = require("./routes/dashboard");
 
-app.post('/edge', async (req, res) => {
-  const { fromId, toId, label } = req.body;
-  const session = driver.session();
-  try {
-    await session.run('MATCH (a:Node), (b:Node) WHERE id(a) = $fromId AND id(b) = $toId CREATE (a)-[r:RELATES {label: $label}]->(b) RETURN r', {
-      fromId,
-      toId,
-      label
-    });
-    res.status(201).send('Edge created');
-  } catch (error) {
-    res.status(500).send(error.message);
-  } finally {
-    await session.close();
-  }
-});
-
+// // protected
+// app.use("/dashboard", protect, dashRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
