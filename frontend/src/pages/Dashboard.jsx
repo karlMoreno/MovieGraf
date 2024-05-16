@@ -9,24 +9,20 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import Link from "@mui/material/Link";  // Import Link from Material-UI
 import {
   MainListItems,
   secondaryListItems,
 } from "../components/dashboard/listItems";
 import Chart from "../components/dashboard/Chart";
-
 import { Navigate, useNavigate } from "react-router-dom";
 import AssetPage from "../components/dashboard/AssetsPage";
-import ArtistsPage from "../components/dashboard/ArtistsPage"
-import TasksPage from "../components/dashboard/TasksPage"
+import ArtistsPage from "../components/dashboard/ArtistsPage";
+import TasksPage from "../components/dashboard/TasksPage";
 
 function Copyright(props) {
   return (
@@ -92,11 +88,15 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -109,7 +109,7 @@ export default function Dashboard() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -139,9 +139,6 @@ export default function Dashboard() {
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              
-            </IconButton>
           </Toolbar>
         </AppBar>
 
@@ -170,9 +167,9 @@ export default function Dashboard() {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+              theme.palette.mode === "dark"
+                ? theme.palette.grey[900]
+                : theme.palette.grey[100],
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
@@ -198,7 +195,6 @@ export default function Dashboard() {
             {currentPage === "assets" && <AssetPage />}
             {currentPage === "artists" && <ArtistsPage />}
             {currentPage === "tasks" && <TasksPage />}
-
 
             <Copyright sx={{ pt: 4 }} />
           </Container>
