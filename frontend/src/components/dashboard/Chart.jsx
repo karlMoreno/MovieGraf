@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import cytoscape from 'cytoscape';
 import { Button } from '@mui/material';
 import axios from 'axios';
+
 axios.defaults.baseURL = 'http://localhost:3002';
 
 // Define labels for each node type based on the ontology
@@ -304,15 +305,15 @@ const Graph = () => {
           placeholder="Search for a node label..."
           style={{ padding: '8px', width: '300px', marginRight: '10px' }}
         />
-        <button onClick={handleSearch} style={{ padding: '8px' }}>Search</button>
+        <Button variant="contained"onClick={handleSearch} style={{ padding: '8px' }}>Search</Button>
       </div>
       <div id="cy" style={{ width: '100%', height: '600px' }} />
-      <button onClick={() => handleAddNode('Task')}>Create Task</button>
-      <button onClick={() => handleAddNode('Participant')}>Create Participant</button>
-      <button onClick={() => handleAddNode('Asset')}>Create Asset</button>
-      <button onClick={() => handleAddNode('Context')}>Create Context</button>
-      <button onClick={handleDeleteNode}>Delete</button>
-      <button onClick={handleAddEdge}>Add Edge</button>
+      <Button variant="outlined" onClick={() => handleAddNode('Task')}>Create Task</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Participant')}>Create Participant</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Asset')}>Create Asset</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Context')}>Create Context</Button>
+      <Button variant="outlined" onClick={handleDeleteNode}>Delete</Button>
+      <Button variant="outlined" onClick={handleAddEdge}>Add Edge</Button>
 
       {modalOpen && (
         <div className="modal" style={modalStyle}>
