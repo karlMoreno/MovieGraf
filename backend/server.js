@@ -29,6 +29,7 @@ app.use('/api', mainRouter);
 
 // Login endpoint
 app.post('/login', async (req, res) => {
+
   console.log("Login attempt.");
   const { email, password } = req.body;
   const result = await session.run(
@@ -56,7 +57,6 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/graph', async (req, res) => {
-    
   try {
     const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
     console.log(result);
@@ -70,8 +70,6 @@ app.get('/graph', async (req, res) => {
     res.json({ nodes: Array.from(nodes), edges });
   } catch (error) {
     res.status(500).send(error.message);
-  } finally {
-    await session.close();
   }
 });
 
