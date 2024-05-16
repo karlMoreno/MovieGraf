@@ -13,7 +13,7 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const logoStyle = {
-  width: '140px',
+  width: '190px',
   height: 'auto',
   cursor: 'pointer',
 };
@@ -44,35 +44,22 @@ function AppAppBar() {
       <AppBar
         position="fixed"
         sx={{
-          boxShadow: 0,
-          bgcolor: 'transparent',
-          backgroundImage: 'none',
           mt: 2,
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth={false}>
           <Toolbar
-            variant="regular"
+            variant="dense"
             sx={(theme) => ({
+              
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              flexShrink: 0,
-              borderRadius: '999px',
-              bgcolor:
-                theme.palette.mode === 'dark'
-                  ? 'rgba(255, 255, 255, 0.4)'
-                  : 'rgba(0, 0, 0, 0.4)',
-              backdropFilter: 'blur(24px)',
-              maxHeight: 40,
-              border: '1px solid',
-              borderColor: 'divider',
-              boxShadow:
-                theme.palette.mode === 'dark'
-                  ? `0 0 1px rgba(85, 166, 246, 0.1), 1px 1.5px 2px -1px rgba(85, 166, 246, 0.15), 4px 4px 12px -2.5px rgba(85, 166, 246, 0.15)`
-                  : '0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)',
+              justifyContent: 'space-evenly',
+              bgcolor :'transparent',
+              maxHeight: 80,
             })}
           >
+            
             <Box
               sx={{
                 flexGrow: 1,
@@ -93,19 +80,19 @@ function AppAppBar() {
                
                 
                 <MenuItem
-                  onClick={() => scrollToSection('About Us')}
+                  onClick={() => scrollToSection('aboutus')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary" fontFamily="sans-serif">
+                  <Typography variant="contained" color="white" fontFamily="monospace" fontWeight= "bold">
                     About Us
                   </Typography>
                 </MenuItem>
                 
                 <MenuItem
-                  onClick={() => scrollToSection('faq')}
+                  onClick={() => scrollToSection('ontology')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body" color="text.primary" fontFamily="sans-serif">
+                  <Typography variant="contained" color="white" fontFamily="monospace"fontWeight= "bold">
                     Ontology
                   </Typography>
                 </MenuItem>
@@ -120,27 +107,27 @@ function AppAppBar() {
             >
               <Button
                 color="primary"
-                variant="text"
-                size="small"
+                variant="contained"
+                size="large"
                 component="a"
                 href="/SignIn"
                 target="_blank"
                 fontFamily="sans-serif"
               >
-                 <Typography fontFamily="sans-serif">
+                 <Typography color="white" fontFamily="monospace"fontWeight= "bold">
                 Sign in
                 </Typography>
               </Button>
               <Button
                 color="primary"
                 variant="contained"
-                size="small"
+                size="large"
                 component="a"
                 href="/SignUp"
                 target="_blank"
-                fontFamily="sans-serif"
+                fontFamily="monospace"
               >
-                <Typography fontFamily="sans-serif">
+                <Typography color="white" fontFamily="monospace"fontWeight= "bold">
                 Sign up
                 </Typography>
               </Button>
@@ -173,21 +160,22 @@ function AppAppBar() {
                     }}
                   >
                   </Box>
-                  <MenuItem onClick={() => scrollToSection('About Us')}>
-                    <Typography variant="body2" color="text.primary" fontFamily="sans-serif">
+                  <MenuItem onClick={() => scrollToSection('aboutus')}>
+                    <Typography variant="body2" fontFamily="sans-serif">
                     About Us
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('Ontology')}>Ontology</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('ontology')}></MenuItem>
+
                   <Divider />
                   <MenuItem>
                     <Button
-                      color="primary"
+                      color="blue"
                       variant="contained"
                       component="a"
                       href="/material-ui/getting-started/templates/sign-up/"
                       target="_blank"
-                      fontFamily = "sans-serif"
+                      fontFamily = "monospace"
                       sx={{ width: '100%' }}
                     >
                       Sign up

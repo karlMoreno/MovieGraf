@@ -77,7 +77,7 @@ export default function AboutUs() {
             textAlign: { sm: 'left', md: 'center' },
           }}
         >
-          <Typography component="h1" variant="h4" fontFamily="sans-serif" fontWeight="bold">
+          <Typography component="h1" variant="h4" fontFamily="monospace" fontWeight="bold">
             Meet Our Team!
           </Typography>
         </Box>
@@ -101,10 +101,10 @@ export default function AboutUs() {
               >
                 <Box sx={{ opacity: '50%' }}>{item.icon}</Box>
                 <div>
-                  <Typography fontWeight="medium" gutterBottom>
+                  <Typography variant="h5" fontFamily="monospace" fontWeight="medium" gutterBottom>
                     {item.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
+                  <Typography variant="h5" fontFamily="monospace" sx={{ color: 'grey.400' }}>
                     {item.description}
                   </Typography>
                 </div>

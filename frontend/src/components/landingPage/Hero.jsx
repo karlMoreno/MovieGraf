@@ -35,10 +35,10 @@ export default function Hero() {
               component="span"
               variant="title"
               sx={{
-                fontSize: 'clamp(3rem, 10vw, 4rem)',
                 color: (theme) =>
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
-                fontFamily: "sans-serif"
+                fontFamily: "monospace",
+                fontWeight: "bold"
               }}
             >
               MovieGraf
@@ -48,11 +48,13 @@ export default function Hero() {
             textAlign="center"
             color="text.secondary"
             sx={{ alignSelf: 'center', width: { sm: '100%', md: '80%' },
-            fontFamily: "sans-serif"
+            fontFamily: "monospace",
+            variant: "h4",
+            fontWeight: "bold",
            }}
             
           >
-            Utilizing the Ontology for Media Creation and Graph Theory to optimize your projects.
+            Utilizing the Ontology for Media Creation and Graph Databases to optimize your projects.
           </Typography>
         </Stack>
         <Box

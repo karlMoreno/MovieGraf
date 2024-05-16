@@ -32,7 +32,8 @@ export default function Ontology() {
       <Typography
         component="h2"
         variant="h4"
-        fontFamily="sans-serif"
+        fontFamily="monospace"
+        fontWeight="bold"
         color="text.primary"
         sx={{
           width: { sm: '100%', md: '60%' },
@@ -51,7 +52,8 @@ export default function Ontology() {
             aria-controls="panel1d-content"
             id="panel1d-header"
           >
-            <Typography component="h3" variant="subtitle2" fontFamily="sans-serif">
+            <Typography component="h3" variant="subtitle2"  fontFamily="monospace"
+              fontWeight="bold">
               What is an ontology?
             </Typography>
           </AccordionSummary>
@@ -59,8 +61,9 @@ export default function Ontology() {
             <Typography
               variant="body2"
               gutterBottom
-              fontFamily="sans-serif"
-              sx={{ maxWidth: { sm: '100%', md: '70%' } }}
+              fontFamily="monospace"
+              fontWeight="bold"
+              sx={{ maxWidth: { sm: '200%', md: '70%' } }}
             >
               An ontology is a set of concepts and sections in within a specific topic that specifies
               their attributes and relationships.
@@ -77,14 +80,16 @@ export default function Ontology() {
             aria-controls="panel2d-content"
             id="panel2d-header"
           >
-            <Typography component="h3" variant="subtitle2" fontFamily="sans-serif">
+            <Typography component="h3" variant="subtitle2"  fontFamily="monospace"
+              fontWeight="bold">
               How does this ontology apply to MovieGraf?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography
               variant="body2"
-              fontFamily="sans-serif"
+              fontFamily="monospace"
+              fontWeight="bold"
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
@@ -104,7 +109,7 @@ export default function Ontology() {
             aria-controls="panel3d-content"
             id="panel3d-header"
           >
-            <Typography component="h3" variant="subtitle2"fontFamily="sans-serif">
+            <Typography component="h5" variant="subtitle2"fontFamily="monospace" fontWeight="bold">
               What is the Ontology of Media Creation?
             </Typography>
           </AccordionSummary>
@@ -112,7 +117,8 @@ export default function Ontology() {
             <Typography
               variant="body2"
               gutterBottom
-              fontFamily="sans-serif"
+              fontFamily="monospace"
+              fontWeight="bold"
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
               The Ontology of Media Creation is the ontology we used as the basis of this project. More details about this ontology
@@ -131,7 +137,8 @@ export default function Ontology() {
             aria-controls="panel4d-content"
             id="panel4d-header"
           >
-            <Typography component="h3" variant="subtitle2"fontFamily="sans-serif">
+            <Typography component="h3" variant="subtitle2" fontFamily="monospace"
+              fontWeight="bold">
               Is this project open-source?
             </Typography>
           </AccordionSummary>
@@ -139,7 +146,8 @@ export default function Ontology() {
             <Typography
               variant="body2"
               gutterBottom
-              fontFamily="sans-serif"
+              fontFamily="monospace"
+              fontWeight="bold"
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
               Yes, this project is open source and can be used and modified by anyone!
