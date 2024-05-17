@@ -14,6 +14,12 @@ import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 
 const items = [
   {
+    icon: <AutoFixHighRoundedIcon />,
+    title: 'Jeroen Lapre',
+    description:
+      'Creator/Mentor',
+  },
+  {
     icon: <ConstructionRoundedIcon />,
     title: 'Karl Moreno',
     description:
