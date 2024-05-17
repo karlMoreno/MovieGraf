@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import cytoscape from 'cytoscape';
+import { Button } from '@mui/material';
 import axios from 'axios';
+
 axios.defaults.baseURL = 'http://localhost:3002';
 
 // Define labels for each node type based on the ontology
@@ -32,7 +34,7 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'white',
+  backgroundColor: 'black',
   padding: '20px',
   boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
   zIndex: 1000
@@ -82,7 +84,7 @@ const Graph = () => {
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'color': '#000',
+            'color': '#000', // Keep the font color black
             'font-size': '10px', // Adjust font size to fit inside the circle
             'text-wrap': 'wrap',
             'text-max-width': '45px'
@@ -97,11 +99,11 @@ const Graph = () => {
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
-            'color': '#000',
+            'color': '#fff', // Set the font color to white
             'font-size': '6px', 
             'min-zoomed-font-size': 10, 
             'text-background-opacity': 1,
-            'text-background-color': '#fff',
+            'text-background-color': '#000', // Set the background color to black
             'text-background-shape': 'rectangle',
             'text-border-opacity': 0,
             'text-border-width': 1,
@@ -303,15 +305,15 @@ const Graph = () => {
           placeholder="Search for a node label..."
           style={{ padding: '8px', width: '300px', marginRight: '10px' }}
         />
-        <button onClick={handleSearch} style={{ padding: '8px' }}>Search</button>
+        <Button variant="contained"onClick={handleSearch} style={{ padding: '8px' }}>Search</Button>
       </div>
       <div id="cy" style={{ width: '100%', height: '600px' }} />
-      <button onClick={() => handleAddNode('Task')}>Create Task</button>
-      <button onClick={() => handleAddNode('Participant')}>Create Participant</button>
-      <button onClick={() => handleAddNode('Asset')}>Create Asset</button>
-      <button onClick={() => handleAddNode('Context')}>Create Context</button>
-      <button onClick={handleDeleteNode}>Delete</button>
-      <button onClick={handleAddEdge}>Add Edge</button>
+      <Button variant="outlined" onClick={() => handleAddNode('Task')}>Create Task</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Participant')}>Create Participant</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Asset')}>Create Asset</Button>
+      <Button variant="outlined" onClick={() => handleAddNode('Context')}>Create Context</Button>
+      <Button variant="outlined" onClick={handleDeleteNode}>Delete</Button>
+      <Button variant="outlined" onClick={handleAddEdge}>Add Edge</Button>
 
       {modalOpen && (
         <div className="modal" style={modalStyle}>

@@ -17,8 +17,6 @@ async function verifyConnection() {
     console.log("Connection to the Neo4j database was successful.");
   } catch (error) {
     console.error("Failed to connect to the Neo4j database:", error.message);
-  } finally {
-    await session.close();
   }
 }
 
