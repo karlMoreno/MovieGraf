@@ -33,11 +33,12 @@ export default function Hero() {
           <Typography variant="h1" sx={{ textAlign: 'center', fontSize: 'clamp(3.5rem, 10vw, 4rem)' }}>
             <Typography
               component="span"
-              variant="h1"
+              variant="title"
               sx={{
-                fontSize: 'clamp(3rem, 10vw, 4rem)',
                 color: (theme) =>
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+                fontFamily: "monospace",
+                fontWeight: "bold"
               }}
             >
               MovieGraf
@@ -46,9 +47,28 @@ export default function Hero() {
           <Typography
             textAlign="center"
             color="text.secondary"
-            sx={{ alignSelf: 'center', width: { sm: '100%', md: '80%' } }}
+            sx={{ alignSelf: 'center', width: { sm: '100%', md: '80%' },
+            fontFamily: "monospace",
+            variant: "h4",
+            fontWeight: "bold",
+           }}
+            
           >
-            Utilizing the Ontology for Media Creation and Graph Theory to optimize your projects.
+            Utilizing the Ontology for Media Creation and Graph Databases to optimize your projects.
+ 
+          </Typography>
+          <Typography
+            textAlign="center"
+            color="text.secondary"
+            sx={{ alignSelf: 'center', width: { sm: '100%', md: '80%' },
+            fontFamily: "monospace",
+            variant: "h4",
+            fontWeight: "bold",
+           }}
+            
+          >
+            Based on an original concept by Jeroen Lapré
+ 
           </Typography>
         </Stack>
         <Box
