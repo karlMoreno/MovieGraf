@@ -1,0 +1,28 @@
+.timeline-container {
+    margin: 20px;
+    padding: 10px;
+    width: 100%;
+    background-color: #1f1f1f;
+  }
+  
+  .clip-list {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+  }
+  
+  .clip {
+    padding: 10px;
+    margin: 5px;
+    background-color: #0a0101;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .video-player {
+    margin-top: 20px;
+    max-width: 640px;
+  }
+  
