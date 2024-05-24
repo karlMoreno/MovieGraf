@@ -59,14 +59,15 @@ const ModelViewForm = () => {
         <div className="container">
             <input type="file" onChange={handleModelUpload} accept=".glb, .gltf, .obj" />
             <Suspense fallback={<div>Loading model...</div>}>
-                <Canvas className="canvas" shadows camera={{ position: [3, 3, 3], fov: 75 }}>
-                    <ambientLight intensity={0.5} />
-                    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} castShadow />
-                    <pointLight position={[-10, -10, -10]} />
-                    <OrbitControls />
-                    {modelUrl ? <Model modelUrl={modelUrl} /> : null}
-                </Canvas>
-            </Suspense>
+    <Canvas className="canvas" shadows camera={{ position: [3, 3, 3], fov: 75 }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[0, 10, 0]} intensity={0.75} castShadow />
+        <pointLight position={[10, 10, 10]} intensity={0.5} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} />
+        <OrbitControls />
+        {modelUrl ? <Model modelUrl={modelUrl} /> : null}
+    </Canvas>
+</Suspense>
         </div>
     );
 };
