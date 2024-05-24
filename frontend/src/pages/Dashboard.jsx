@@ -23,6 +23,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import AssetPage from "../components/dashboard/AssetsPage";
 import ArtistsPage from "../components/dashboard/ArtistsPage";
 import TasksPage from "../components/dashboard/TasksPage";
+import TimelinePage from "../components/dashboard/TimelinePage";
+import ModelViewerPage from "../components/dashboard/ModelViewerPage"
 
 function Copyright(props) {
   return (
@@ -195,6 +197,8 @@ export default function Dashboard() {
             {currentPage === "assets" && <AssetPage />}
             {currentPage === "artists" && <ArtistsPage />}
             {currentPage === "tasks" && <TasksPage />}
+            {currentPage === "timeline" && <TimelinePage />}
+            {currentPage === "model" && <ModelViewerPage />}
 
             <Copyright sx={{ pt: 4 }} />
           </Container>

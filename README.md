@@ -86,8 +86,11 @@ To get the frontend up and running, follow these steps:
    
 
    npm install @mui/x-date-pickers
-    npm install date-fns@2
-    npm install @mui/x-date-pickers @mui/lab date-fns
+   npm install date-fns@2
+   npm install @mui/x-date-pickers @mui/lab date-fns
+
+   npm install three @react-three/fiber @react-three/drei
+   npm install react-beautiful-dnd
 
 
 
