@@ -1,0 +1,47 @@
+/* darkTable.css */
+
+.ant-table {
+    background-color: #1d1d1d !important;
+    color: #ffffff !important;
+  }
+  
+  .ant-table-thead > tr > th {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+  }
+  
+  .ant-table-tbody > tr > td {
+    background-color: #1d1d1d !important;
+    color: #ffffff !important;
+    height: 150px; /* Increase cell height */
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
+  }
+  
+  .ant-table-bordered .ant-table-container {
+    border: 1px solid #444444 !important;
+  }
+  
+  .ant-table-pagination {
+    background-color: #1d1d1d !important;
+    color: #ffffff !important;
+  }
+  
+  .ant-table-pagination .ant-pagination-item {
+    background-color: #333333 !important;
+    border: 1px solid #444444 !important;
+  }
+  
+  .ant-table-pagination .ant-pagination-item-active {
+    background-color: #444444 !important;
+    border-color: #555555 !important;
+  }
+  
+  .ant-table-pagination .ant-pagination-item a {
+    color: #ffffff !important;
+  }
+  
+  .ant-table-pagination .ant-pagination-item-active a {
+    color: #90caf9 !important;
+  }
+  
