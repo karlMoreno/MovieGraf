@@ -10,9 +10,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/landingPage/AppAppBar';
 import Hero from '../components/landingPage/Hero';
-import LogoCollection from '../components/landingPage/LogoCollection';
-import Highlights from '../components/landingPage/Highlights';
-import FAQ from '../components/landingPage/FAQ';
+import Highlights from '../components/landingPage/AboutUs';
+import FAQ from '../components/landingPage/Ontology';
 import Footer from '../components/landingPage/Footer';
 import getLPTheme from './getLPTheme';
 import ReactPlayer from 'react-player';
@@ -36,7 +35,6 @@ export default function LandingPage() {
       
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
-        <LogoCollection />
         <Divider />
         <Divider />
         <Highlights />

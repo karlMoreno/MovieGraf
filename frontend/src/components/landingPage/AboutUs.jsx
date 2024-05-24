@@ -14,47 +14,53 @@ import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 
 const items = [
   {
-    icon: <SettingsSuggestRoundedIcon />,
-    title: 'Adaptable performance',
+    icon: <AutoFixHighRoundedIcon />,
+    title: 'Jeroen Lapre',
     description:
-      'Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.',
+      'Creator/Mentor',
   },
   {
     icon: <ConstructionRoundedIcon />,
-    title: 'Built to last',
+    title: 'Karl Moreno',
     description:
-      'Experience unmatched durability that goes above and beyond with lasting investment.',
+      'Back-End Developer',
   },
   {
-    icon: <ThumbUpAltRoundedIcon />,
-    title: 'Great user experience',
+    icon: <ConstructionRoundedIcon />,
+    title: 'Carlos Campos Lozano',
     description:
-      'Integrate our product into your routine with an intuitive and easy-to-use interface.',
+      'Back-End Developer',
+  },
+  {
+    icon: <ConstructionRoundedIcon />,
+    title: 'Sean Ryan',
+    description:
+      'Back-End Developer',
   },
   {
     icon: <AutoFixHighRoundedIcon />,
-    title: 'Innovative functionality',
+    title: 'Jessica Christine Rosero',
     description:
-      'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
+      'Front-End Developer',
   },
   {
-    icon: <SupportAgentRoundedIcon />,
-    title: 'Reliable support',
+    icon: <AutoFixHighRoundedIcon />,
+    title: 'Isaiah Paul-Mcglothin',
     description:
-      'Count on our responsive customer support, offering assistance that goes beyond the purchase.',
+      'Front-End Developer',
   },
   {
-    icon: <QueryStatsRoundedIcon />,
-    title: 'Precision in every detail',
+    icon: <AutoFixHighRoundedIcon />,
+    title: 'Kayla Young',
     description:
-      'Enjoy a meticulously crafted product where small touches make a significant impact on your overall experience.',
+      'Front-End Developer',
   },
 ];
 
-export default function Highlights() {
+export default function AboutUs() {
   return (
     <Box
-      id="highlights"
+      id="aboutus"
       sx={{
         pt: { xs: 4, sm: 12 },
         pb: { xs: 8, sm: 16 },
@@ -77,13 +83,8 @@ export default function Highlights() {
             textAlign: { sm: 'left', md: 'center' },
           }}
         >
-          <Typography component="h2" variant="h4">
-            Highlights
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'grey.400' }}>
-            Explore why our product stands out: adaptability, durability,
-            user-friendly design, and innovation. Enjoy reliable customer support and
-            precision in every detail.
+          <Typography component="h1" variant="h4" fontFamily="monospace" fontWeight="bold">
+            Meet Our Team!
           </Typography>
         </Box>
         <Grid container spacing={2.5}>
@@ -106,10 +107,10 @@ export default function Highlights() {
               >
                 <Box sx={{ opacity: '50%' }}>{item.icon}</Box>
                 <div>
-                  <Typography fontWeight="medium" gutterBottom>
+                  <Typography variant="h5" fontFamily="monospace" fontWeight="medium" gutterBottom>
                     {item.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'grey.400' }}>
+                  <Typography variant="h5" fontFamily="monospace" sx={{ color: 'grey.400' }}>
                     {item.description}
                   </Typography>
                 </div>
