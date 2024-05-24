@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import cytoscape from 'cytoscape';
-import { Button } from '@mui/material';
+import { Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3002';
 
-// Define labels for each node type based on the ontology
 const labels = {
   Task: [
     "Write Script", "Previsualize", "Create Set", "Shoot", 
@@ -68,24 +67,25 @@ const Graph = () => {
   const [newEdge, setNewEdge] = useState({ source: '', target: '', label: '' });
   const [edgeModalOpen, setEdgeModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     const cyInstance = cytoscape({
       container: document.getElementById('cy'),
-      elements: [], // No initial elements
+      elements: [],
       style: [
         {
           selector: 'node',
           style: {
-            'shape': 'ellipse', // Circle shape
+            'shape': 'ellipse',
             'background-color': 'data(color)',
             'width': '50px',
             'height': '50px',
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'color': '#000', // Keep the font color black
-            'font-size': '10px', // Adjust font size to fit inside the circle
+            'color': '#000',
+            'font-size': '10px',
             'text-wrap': 'wrap',
             'text-max-width': '45px'
           }
@@ -99,11 +99,11 @@ const Graph = () => {
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(label)',
-            'color': '#fff', // Set the font color to white
+            'color': '#fff',
             'font-size': '6px', 
             'min-zoomed-font-size': 10, 
             'text-background-opacity': 1,
-            'text-background-color': '#000', // Set the background color to black
+            'text-background-color': '#000',
             'text-background-shape': 'rectangle',
             'text-border-opacity': 0,
             'text-border-width': 1,
@@ -137,7 +137,7 @@ const Graph = () => {
         }
       ],
       layout: {
-        name: 'cose', // Change layout to cose for a more web-like structure
+        name: 'cose',
         fit: true,
         padding: 30,
         nodeRepulsion: 2048,
@@ -150,7 +150,7 @@ const Graph = () => {
         coolingFactor: 0.99,
         minTemp: 1.0
       },
-      wheelSensitivity: 0.8 // zoom sensitivity
+      wheelSensitivity: 0.8
     });
 
     cyInstance.on('tap', 'node', (event) => {
@@ -178,7 +178,7 @@ const Graph = () => {
           id: node.identity.low.toString(),
           label: node.properties.name,
           type: node.labels[0],
-          color: getColorForType(node.labels[0]) // Assign a color based on type
+          color: getColorForType(node.labels[0])
         }
       }));
       const formattedEdges = data.edges.map(edge => ({
@@ -191,9 +191,6 @@ const Graph = () => {
         }
       }));
 
-      console.log("Formatted Nodes:", formattedNodes);
-      console.log("Formatted Edges:", formattedEdges);
-
       cyInstance.add(formattedNodes);
       cyInstance.add(formattedEdges);
       cyInstance.layout({ name: 'cose' }).run();
@@ -205,15 +202,15 @@ const Graph = () => {
   const getColorForType = (type) => {
     switch (type) {
       case 'Task':
-        return '#2E8B57'; // Green
+        return '#2E8B57';
       case 'Participant':
-        return '#4682B4'; // Blue
+        return '#4682B4';
       case 'Asset':
-        return '#FFD700'; // Yellow
+        return '#FFD700';
       case 'Context':
-        return '#FF6347'; // Red
+        return '#FF6347';
       default:
-        return '#666'; // Default color
+        return '#666';
     }
   };
 
@@ -231,7 +228,7 @@ const Graph = () => {
           id: newNode.id,
           label: newNode.label,
           type: newNode.type,
-          color: getColorForType(newNode.type) // Assign color based on type
+          color: getColorForType(newNode.type)
         },
         position: {
           x: Math.random() * 800,
@@ -287,36 +284,53 @@ const Graph = () => {
       cy.add(edgeToAdd);
       cy.layout({ name: 'cose' }).run();
       setEdgeModalOpen(false);
-      setSelectedNodes([]); // Reset selection after manually adding an edge
+      setSelectedNodes([]);
     } catch (error) {
       console.error('Error adding edge:', error);
     }
   };
 
   const handleSearch = () => {
-    if (!searchQuery) {
-      cy.elements().removeClass('faded').addClass('highlighted');
-      return;
-    }
-    
-    const matchingNodes = cy.nodes().filter(node => node.data('label').toLowerCase().includes(searchQuery.toLowerCase()));
-    const connectedEdges = matchingNodes.connectedEdges();
+    cy.elements().removeClass('highlighted faded');
+
+    const nodesToHighlight = cy.nodes().filter(node => {
+      const matchesQuery = searchQuery ? node.data('label').toLowerCase().includes(searchQuery.toLowerCase()) : true;
+      const matchesCategory = selectedCategory ? node.data('type') === selectedCategory : true;
+      return matchesQuery && matchesCategory;
+    });
+
+    const connectedEdges = nodesToHighlight.connectedEdges();
     cy.elements().addClass('faded');
-    matchingNodes.removeClass('faded').addClass('highlighted');
+    nodesToHighlight.removeClass('faded').addClass('highlighted');
     connectedEdges.removeClass('faded').addClass('highlighted');
   };
 
   return (
     <div>
-      <div style={{ marginBottom: '10px' }}>
-        <input 
-          type="text" 
+      <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
+        <TextField 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search for a node label..."
-          style={{ padding: '8px', width: '300px', marginRight: '10px' }}
+          variant="outlined"
+          size="small"
+          style={{ marginRight: '10px' }}
         />
-        <Button variant="contained"onClick={handleSearch} style={{ padding: '8px' }}>Search</Button>
+        <FormControl variant="outlined" size="small" style={{ marginRight: '10px', minWidth: 150 }}>
+          <InputLabel>Category</InputLabel>
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            label="Category"
+          >
+            <MenuItem value="">All Categories</MenuItem>
+            <MenuItem value="Task">Task</MenuItem>
+            <MenuItem value="Participant">Participant</MenuItem>
+            <MenuItem value="Asset">Asset</MenuItem>
+            <MenuItem value="Context">Context</MenuItem>
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={handleSearch}>Search</Button>
       </div>
       <div id="cy" style={{ width: '100%', height: '600px' }} />
       <Button variant="outlined" onClick={() => handleAddNode('Task')}>Create Task</Button>
