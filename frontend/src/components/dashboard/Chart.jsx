@@ -137,7 +137,18 @@ const Graph = () => {
         }
       ],
       layout: {
-        name: 'grid'
+        name: 'cose', // Change layout to cose for a more web-like structure
+        fit: true,
+        padding: 30,
+        nodeRepulsion: 2048,
+        idealEdgeLength: 100,
+        edgeElasticity: 100,
+        nestingFactor: 5,
+        gravity: 80,
+        numIter: 1000,
+        initialTemp: 200,
+        coolingFactor: 0.99,
+        minTemp: 1.0
       },
       wheelSensitivity: 0.8 // zoom sensitivity
     });
@@ -185,7 +196,7 @@ const Graph = () => {
 
       cyInstance.add(formattedNodes);
       cyInstance.add(formattedEdges);
-      cyInstance.layout({ name: 'grid' }).run();
+      cyInstance.layout({ name: 'cose' }).run();
     } catch (error) {
       console.error('Error fetching graph data:', error);
     }
@@ -229,7 +240,7 @@ const Graph = () => {
       };
 
       cy.add(nodeToAdd);
-      cy.layout({ name: 'grid' }).run();
+      cy.layout({ name: 'cose' }).run();
       setModalOpen(false);
     } catch (error) {
       console.error('Error adding node:', error);
@@ -274,7 +285,7 @@ const Graph = () => {
       };
 
       cy.add(edgeToAdd);
-      cy.layout({ name: 'grid' }).run();
+      cy.layout({ name: 'cose' }).run();
       setEdgeModalOpen(false);
       setSelectedNodes([]); // Reset selection after manually adding an edge
     } catch (error) {
