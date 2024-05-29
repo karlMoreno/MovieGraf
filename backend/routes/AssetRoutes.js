@@ -9,10 +9,10 @@ const {
 
 const router = express.Router();
 
-router.post('/assets', createAssetHandler);
-router.get('/assets/:id', getAssetByIdHandler);
-router.get('/assets', getAllAssetsHandler);
-router.put('/assets/:id', updateAssetHandler);
-router.delete('/assets/:id', deleteAssetHandler);
+router.post('/assets-create', createAssetHandler);
+router.get('/assets-get/:id', getAssetByIdHandler);
+router.get('/assets-get-all', getAllAssetsHandler);
+router.put('/assets-update/:id', updateAssetHandler);
+router.delete('/assets-delete/:id', deleteAssetHandler);
 
 module.exports = router;

@@ -21,7 +21,7 @@ async function verifyConnection() {
   try {
     // Run a simple query to verify the connection
     await session.run("RETURN 1");
-    console.log("Connection to the Neo4j database was successful.");
+    console.log("Connection to the Neo4j database was successful.")
   } catch (error) {
     console.error("Failed to connect to the Neo4j database:", error.message);
   }

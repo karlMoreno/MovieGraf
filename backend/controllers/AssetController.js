@@ -1,4 +1,4 @@
-const { createAsset, getAssetById, getAllAssets, updateAsset, deleteAsset } = require('../models/asset');
+const { createAsset, getAssetById, getAllAssets, updateAsset, deleteAsset } = require('../models/AssetModel');
 
 const createAssetHandler = async (req, res) => {
   const assetData = req.body;
