@@ -1,5 +1,7 @@
 # MovieGraf
 
+## Under Construction
+
 MovieGraf is a web application designed to provide comprehensive insights into the world of movies. It integrates with Neo4j to deliver powerful data visualizations and user-driven analytics.
 
 ## Getting Started
