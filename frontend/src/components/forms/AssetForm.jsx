@@ -10,6 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import axios from 'axios';  // Import axios for API calls
 
 export default function AssetForm({ onClose }) {
   const [name, setName] = useState("");
@@ -17,10 +18,26 @@ export default function AssetForm({ onClose }) {
   const [status, setStatus] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(JSON.stringify({ name, type, status, file: file ? file.name : 'No file' }));
-    onClose(); // Close the drawer after form submission
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('type', type);
+    formData.append('status', status);
+    if (file) {
+      formData.append('file', file);
+    }
+
+    try {
+      await axios.post('http://localhost:3002/api/assets-create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      onClose();  // Close the drawer after form submission
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   const handleFileChange = (event) => {
@@ -40,8 +57,7 @@ export default function AssetForm({ onClose }) {
         marginTop: "80px",
       }}
     >
-      <Stack spacing={2}  // Apply spacing uniformly
-      >
+      <Stack spacing={2}>
         <Typography variant="h6" gutterBottom>
           Add an Asset
         </Typography>

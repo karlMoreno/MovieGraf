@@ -10,6 +10,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.18",
     "@mui/x-charts": "^7.5.1",
+    "@mui/x-data-grid": "^7.5.1",
     "@mui/x-date-pickers": "^7.5.1",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.6",
@@ -28,6 +29,7 @@
     "react-scripts": "^5.0.1",
     "react-virtuoso": "^4.7.10",
     "three": "^0.164.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

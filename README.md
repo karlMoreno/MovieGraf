@@ -47,6 +47,8 @@ To get the backend up and running, follow these steps:
 
    npm install bcrypt
 
+   npm install multer
+
 
 
    ```
@@ -94,6 +96,11 @@ To get the frontend up and running, follow these steps:
    npm install react-beautiful-dnd
 
    npm install antd
+
+   npm install @mui/x-data-grid
+   npm install uuid
+
+
 
 
 

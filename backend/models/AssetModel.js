@@ -1,3 +1,4 @@
+const neo4j = require('neo4j-driver');
 const driver = require('../database/db');
 
 const createAsset = async ({ name, type, status, file }) => {

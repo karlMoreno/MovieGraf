@@ -2,10 +2,12 @@ const { createAsset, getAssetById, getAllAssets, updateAsset, deleteAsset } = re
 const { createUser } = require('./user');
 
 module.exports = {
+  //AssetsModel
   createAsset,
   getAssetById,
   getAllAssets,
   updateAsset,
   deleteAsset,
+  //AssetsModel
   createUser,
 };
