@@ -14,7 +14,7 @@ console.log("Starting server...");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Define the upload folder
+    cb(null, path.join(__dirname, 'uploads')); // Define the upload folder
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionInstance);
 
 // Ensure static files from uploads are accessible
-app.use('./uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Log every request to the server:
 app.use((req, res, next) => {
@@ -42,12 +42,16 @@ app.use((req, res, next) => {
 
 const mainRouter = require('./routes/index.js');
 const assetRoutes = require('./routes/AssetRoutes.js');
+const taskRoutes = require('./routes/TaskRoutes.js');
 
-// Apply the upload middleware to specific routes
 app.use('/api', mainRouter);
 app.post('/api/assets-create', upload.single('file'), assetRoutes);
 app.put('/api/assets-update/:id', upload.single('file'), assetRoutes);
 app.use('/api', assetRoutes);
+
+app.post('/api/tasks-create', upload.single('thumbnail'), taskRoutes);
+app.put('/api/tasks-update/:id', upload.single('thumbnail'), taskRoutes);
+app.use('/api', taskRoutes);
 
 // Login endpoint
 app.post('/login', async (req, res) => {

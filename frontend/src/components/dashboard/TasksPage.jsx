@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
-import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer'
-import VirtualizedTable from "../TaskTable";
-import TasksForm from '../forms/TasksForm'
+import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer';
+import TasksCrudGrid from "../TasksCrudGrid";
+import TasksForm from '../forms/TasksForm';
 
-export default function AssetPage() {
+export default function TasksPage() {
   const theme = useTheme();
 
   return (
@@ -13,7 +13,7 @@ export default function AssetPage() {
         Tasks Page
       </div>
       <SwipeableTemporaryDrawer contentComponent={<TasksForm />} />
-      <VirtualizedTable></VirtualizedTable> 
+      <TasksCrudGrid />
     </div>
   );
 }

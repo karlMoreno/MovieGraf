@@ -6,9 +6,12 @@ const userRoutes = require("./UserRoutes"); // This is capitalized because i kep
 // const productRoutes = require('./productRoutes'); // Additional route files // this is just an example
 
 const assetRoutes = require("./AssetRoutes");
+const taskRoutes = require("./TaskRoutes");
+
 
 router.use('/', userRoutes);
 // router.use('/products', productRoutes); // Implementing more routes // this is just an example
+router.use('/', taskRoutes);
 
 router.use('/',assetRoutes);
 module.exports = router;
