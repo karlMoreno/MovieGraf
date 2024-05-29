@@ -1,11 +1,18 @@
 
 const neo4j = require("neo4j-driver");
+
+// DRIVER FOR AURADB DATABASE
+// const driver = neo4j.driver(
+//   "neo4j+s://41fa529a.databases.neo4j.io",
+//   neo4j.auth.basic("neo4j", "xMLNL3rvo0CU7hQ2rFwjSZ305b0moKkEGYdAaCDKQFc"),
+//   {
+//     /* encrypted: 'ENCRYPTION_OFF' */
+//   }
+// );
+
 const driver = neo4j.driver(
-  "neo4j+s://41fa529a.databases.neo4j.io",
-  neo4j.auth.basic("neo4j", "xMLNL3rvo0CU7hQ2rFwjSZ305b0moKkEGYdAaCDKQFc"),
-  {
-    /* encrypted: 'ENCRYPTION_OFF' */
-  }
+  'neo4j://localhost:7687', // Adjust this to your Neo4j connection string
+  neo4j.auth.basic('neo4j', 'testtest') // Adjust this to your Neo4j credentials
 );
 
 // Attempt to verify the database connection
