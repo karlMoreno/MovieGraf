@@ -1,5 +1,11 @@
 const {signUp} = require("./UserController");
+const {  createAssetHandler, getAssetByIdHandler, getAllAssetsHandler, updateAssetHandler, deleteAssetHandler,} = require("./AssetController")
 
 module.exports = {
-  signUp
+  signUp,
+  createAssetHandler,
+  getAssetByIdHandler,
+  getAllAssetsHandler,
+  updateAssetHandler,
+  deleteAssetHandler,
 };
