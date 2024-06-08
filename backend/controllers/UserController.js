@@ -1,6 +1,21 @@
-const {createUser, signInUser} = require('../models')
+/**
+ * User Controller
+ * 
+ * This file contains the controller functions for handling user-related operations such as sign-up and sign-in.
+ * It interacts with the User model to create users and authenticate them.
+ * 
+ * Functions:
+ * - signUp: Handles the registration of a new user.
+ * - signIn: Handles the authentication of a user and returns a JWT token.
+ * 
+ * Imports:
+ * - createUser: Function from the User model to create a new user.
+ * - signInUser: Function from the User model to authenticate a user.
+ * 
+ * Author: Karl Moreno
+ */
 
-
+const { createUser, signInUser } = require('../models');
 
 
 /**

@@ -1,17 +1,17 @@
-// routes/index.js
 const express = require('express');
 const router = express.Router();
 
-const userRoutes = require("./UserRoutes"); // This is capitalized because i kept getting errors for it idk why its probs cuz of imports on other files
-// const productRoutes = require('./productRoutes'); // Additional route files // this is just an example
+const userRoutes = require('./UserRoutes'); // Correct capitalization
+const assetRoutes = require('./AssetRoutes'); // Correct capitalization
+const taskRoutes = require('./TaskRoutes'); // Correct capitalization
 
-const assetRoutes = require("./AssetRoutes");
-const taskRoutes = require("./TaskRoutes");
+// User routes
+router.use('/user', userRoutes);
 
+// Task routes
+router.use('/tasks', taskRoutes);
 
-router.use('/', userRoutes);
-// router.use('/products', productRoutes); // Implementing more routes // this is just an example
-router.use('/', taskRoutes);
+// Asset routes
+router.use('/assets', assetRoutes);
 
-router.use('/',assetRoutes);
 module.exports = router;
