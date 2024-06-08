@@ -1,3 +1,11 @@
+/**
+ * User Model
+ * 
+ * This file defines the User model with properties such as firstName, lastName, email, and password.
+ * The password is hashed before being saved to the database.
+ * 
+ * Author: Karl Moreno
+ */
 
 const driver = require('../database/db');
 const bcrypt = require('bcrypt')

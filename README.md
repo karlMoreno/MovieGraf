@@ -123,3 +123,27 @@ This application is a Node.js web application that uses Neo4j for data storage. 
 - **routes**: Contains the API routes
 - **middleware**: Contains the authentication middleware
 
+
+# Workflow
+
+## Step 1: User Sign-Up
+1. User sends a POST request to `/signup` with firstName, lastName, email, and password.
+2. The `createUser` function hashes the password and stores the user in the database.
+3. A success message and the created user are returned.
+
+## Step 2: User Sign-In
+1. User sends a POST request to `/signin` with email and password.
+2. The `signInUser` function verifies the credentials and returns a JWT and user ID.
+3. The JWT is stored on the client-side for future requests.
+
+## Step 3: Creating a Project
+1. Authenticated user sends a POST request to `/projects` with project details.
+2. The `createProject` function creates a project and associates it with the user.
+3. A success message and the created project are returned.
+
+## Step 4: Retrieving Projects
+1. Authenticated user sends a GET request to `/projects`.
+2. The `getUserProjects` function retrieves all projects for the user.
+3. The projects are returned and displayed on the client-side.
+
+
