@@ -3,6 +3,9 @@ const { createUser } = require('./user');
 const { createTask, getTaskById, getAllTasks, updateTask, deleteTask } = require('./TaskModel')
 
 module.exports = {
+  //UserModel
+  createUser,
+  //UserModel
   //AssetsModel
   createAsset,
   getAssetById,
@@ -10,7 +13,6 @@ module.exports = {
   updateAsset,
   deleteAsset,
   //AssetsModel
-  createUser,
   //tasks models
   createTask, 
   getTaskById, 
