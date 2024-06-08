@@ -3,6 +3,8 @@ const driver = require('../database/db');
 const bcrypt = require('bcrypt')
 
 
+
+
 const createUser = async ({firstName, lastName, email, password}) => {
     const session = driver.session({database:"neo4j"});
     const hashedPassword = await bcrypt.hash(password,10);

@@ -49,6 +49,9 @@ To get the backend up and running, follow these steps:
 
    npm install multer
 
+   npm install jsonwebtoken
+
+
 
 
    ```
@@ -101,24 +104,22 @@ To get the frontend up and running, follow these steps:
    npm install uuid
 
 
-
-
-
-
    ```
 
 
 
-### For Interacting with neo4j desktop here are some useful queries
+# Application Overview
 
-Query to View All Nodes and Relationships
+This application is a Node.js web application that uses Neo4j for data storage. It includes user authentication, project management, and a structured route system.
 
-````bash
-   // this is for Finding everything in the database
-   MATCH (n)
-   OPTIONAL MATCH (n)-[r]->(m)
-   RETURN n, r, m
+- **Database**: Neo4j
+- **Backend Framework**: Express
+- **Authentication**: JWT (JSON Web Tokens)
 
+## Structure
 
-    ```
-````
+- **models**: Contains the database models
+- **controllers**: Contains the business logic
+- **routes**: Contains the API routes
+- **middleware**: Contains the authentication middleware
+
