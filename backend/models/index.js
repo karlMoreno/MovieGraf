@@ -1,10 +1,11 @@
 const { createAsset, getAssetById, getAllAssets, updateAsset, deleteAsset } = require('./AssetModel');
-const { createUser } = require('./user');
+const { createUser,signInUser } = require('./UserModel');
 const { createTask, getTaskById, getAllTasks, updateTask, deleteTask } = require('./TaskModel')
 
 module.exports = {
   //UserModel
   createUser,
+  signInUser,
   //UserModel
   //AssetsModel
   createAsset,

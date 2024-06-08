@@ -41,6 +41,15 @@ const createUser = async ({firstName, lastName, email, password}) => {
 };
 
 
+
+/**
+ * Signs in a user
+ * @param {Object} userDetails - The details of the user to sign in
+ * @param {string} userDetails.email - The email of the user
+ * @param {string} userDetails.password - The password of the user
+ * @returns {Object} - An object containing the JWT and user ID
+ */
+
 const signInUser = async({email, password}) =>{
     const session = driver.session({database:'neo4j'});
     try {

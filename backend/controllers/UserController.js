@@ -1,4 +1,13 @@
-const {createUser} = require('../models/UserModel')
+const {createUser, signInUser} = require('../models')
+
+
+
+
+/**
+ * Handles user sign-up
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 
 const signUp = async (req,res) => {
     const {firstName, lastName, email, password} = req.body;
@@ -20,4 +29,33 @@ const signUp = async (req,res) => {
     }
 }
 
-module.exports = {signUp};
+
+/**
+ * Handles user sign-in
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+
+const signIn = async(req,res) => {
+    const {email, password} = req.body;
+    try{
+        const {token,userId} = await signInUser({email,password});
+        res.status(200).json({
+            success: true,
+            message: "User signed in successfully",
+            token,
+            userId
+        });
+    } catch (error){
+        res.status(400).json({
+            sucess: false,
+            message: "Failed to sign in",
+            error: error.message
+        });
+    }
+};
+
+
+
+
+module.exports = {signUp,signIn};
