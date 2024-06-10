@@ -22,6 +22,13 @@ const { signUp, signIn } = require("../controllers");
 router.post("/signup", signUp);
 router.post("/signin", signIn);
 
+
+// Example of a protected route
+// router.get('/profile', auth, (req, res) => {
+//     // req.user contains the decoded JWT payload (e.g., userId)
+//     res.json({ message: 'This is a protected route', user: req.user });
+//   });
+
 module.exports = router;
 
 
