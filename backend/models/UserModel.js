@@ -12,6 +12,8 @@ const driver = require('../database/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+
 /**
  * Creates a new user
  * @param {Object} userDetails - The details of the user to create
@@ -65,7 +67,7 @@ const signInUser = async({email, password}) =>{
         if(!isMatch){
             throw new Error("Invalid Credentials - Wrong Password");
         }
-        const token = jwt.sign({userId: user.email}, "secretKey", {expiresIn: "1h"}); // 1 hour for testing purposes subject to change
+        const token = jwt.sign({userId: user.email}, JWT_SECRET, {expiresIn: "1h"}); // 1 hour for testing purposes subject to change
         return {token, userId: user.email}
     } finally{
         await session.close();
