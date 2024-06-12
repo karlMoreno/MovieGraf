@@ -12,7 +12,7 @@ const createProject = async (projectDetails, userId) => {
     const result = await session.run(
       `
       MATCH (u:User {email: $userId})
-      CREATE (p:Project {name: $name, description: $description})
+      CREATE (p:Project {name: $name, userId: $userId})
       CREATE (u)-[:OWNS]->(p)
       RETURN p
       `,
@@ -54,7 +54,7 @@ const getProjectsByUser = async (userId) => {
     const session = driver.session({ database: 'neo4j' });
     try {
       const result = await session.run(
-        'MATCH (p:Project) WHERE ID(p) = $projectId SET p += $updateData RETURN p',
+        'MATCH (p:Project) WHERE ID(p) = $projectId SET p.name = $name RETURN p',
         { projectId: parseInt(projectId), updateData }
       );
       const project = result.records[0].get('p').properties;
