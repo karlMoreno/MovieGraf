@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const logger = require('./middleware/logger'); // Import the logger middleware
-const upload = require('./config/multerConfig'); // Import Multer configuration
+// const upload = require('./config/multerConfig'); // Import Multer configuration
 const driver = require('./database/db'); // Ensure driver is imported correctly
 
 const app = express();

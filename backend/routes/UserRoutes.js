@@ -19,9 +19,14 @@ const express = require("express");
 const router = express.Router();
 const { signUp, signIn } = require("../controllers");
 
-router.post("/signup", signUp);
-router.post("/signin", signIn);
-
+router.post('/signup', (req, res) => {
+    console.log("Reached signup route");
+    signUp(req, res);
+  }); 
+  router.post('/signin', (req, res) => {
+    console.log("Reached signin route");
+    signIn(req, res);
+  });
 
 // Example of a protected route
 // router.get('/profile', auth, (req, res) => {
