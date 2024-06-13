@@ -1,84 +1,65 @@
-const express = require("express");
+
+/**
+ * server.js
+ * 
+ * This file sets up the Express server for the application. It includes middleware configuration,
+ * static file serving, route handling, and database connections.
+ * 
+ * Functionality:
+ * - Initializes the Express application.
+ * - Configures middleware for CORS, JSON parsing, and URL-encoded data parsing.
+ * - Serves static files from the 'uploads' directory.
+ * - Uses custom logger middleware for logging requests.
+ * - Imports and uses the main router for handling API routes.
+ * - Defines a specific endpoint for Neo4j graph data retrieval.
+ * - Starts the server on the specified port.
+ * 
+ * Key Modules:
+ * - express: The core framework used to build the server.
+ * - cors: Middleware for enabling Cross-Origin Resource Sharing (CORS).
+ * - path: Utility module for working with file and directory paths.
+ * - logger: Custom middleware for logging incoming requests.
+ * - driver: Database driver for connecting to Neo4j.
+ * - mainRouter: The main router for handling API routes.
+ * 
+ * Endpoints:
+ * - GET /graph: Retrieves and returns graph data from the Neo4j database.
+ * 
+ * Author: Karl Moreno
+ */
+
+
+const express = require('express');
 const cors = require('cors');
-const multer = require('multer');
 const path = require('path');
-const sessionInstance = require("./session/session");
-const driver = require('./database/db.js');
-const protect = require("./session/protect");
-const bcrypt = require('bcrypt');
+const logger = require('./middleware/logger'); // Import the logger middleware
+// const upload = require('./config/multerConfig'); // Import Multer configuration
+const driver = require('./database/db'); // Ensure driver is imported correctly
 
 const app = express();
 const port = 3002;
 
 console.log("Starting server...");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads')); // Define the upload folder
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage: storage });
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(sessionInstance);
 
 // Ensure static files from uploads are accessible
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Log every request to the server:
-app.use((req, res, next) => {
-  console.log(`Received request on ${req.method} ${req.path}`);
-  console.log('Headers:', req.headers);
-  console.log('Body:', req.body);
-  next();
-});
+// Use custom logger middleware
+app.use(logger);
 
-const mainRouter = require('./routes/index.js');
-const assetRoutes = require('./routes/AssetRoutes.js');
-const taskRoutes = require('./routes/TaskRoutes.js');
-
+// Import and use routes
+const mainRouter = require('./routes');
 app.use('/api', mainRouter);
-app.post('/api/assets-create', upload.single('file'), assetRoutes);
-app.put('/api/assets-update/:id', upload.single('file'), assetRoutes);
-app.use('/api', assetRoutes);
 
-app.post('/api/tasks-create', upload.single('thumbnail'), taskRoutes);
-app.put('/api/tasks-update/:id', upload.single('thumbnail'), taskRoutes);
-app.use('/api', taskRoutes);
-
-// Login endpoint
-app.post('/login', async (req, res) => {
-  console.log("Login attempt.");
-  const { email, password } = req.body;
-  const result = await session.run(
-    'MATCH (u:User {email: $email}) RETURN u.password',
-    { email }
-  );
-  if (result.records.length === 0) {
-    res.status(404).json({ error: 'User not found' });
-  } else {
-    const hashedPassword = result.records[0].get('u.password');
-    const match = await bcrypt.compare(password, hashedPassword);
-    if (match) {
-      req.session.email = email; // Save user id to the session
-      res.json({ success: true, message: 'Logged in successfully' });
-    } else {
-      res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-  }
-});
-
+// Graph endpoint
 app.get('/graph', async (req, res) => {
+  const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
-    console.log(result);
     const nodes = new Set();
     const edges = [];
     result.records.forEach(record => {
@@ -89,6 +70,8 @@ app.get('/graph', async (req, res) => {
     res.json({ nodes: Array.from(nodes), edges });
   } catch (error) {
     res.status(500).send(error.message);
+  } finally {
+    await session.close();
   }
 });
 

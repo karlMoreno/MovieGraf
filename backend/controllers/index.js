@@ -1,15 +1,29 @@
-const {signUp} = require("./UserController");
-const { createAssetHandler, getAssetByIdHandler, getAllAssetsHandler, updateAssetHandler, deleteAssetHandler,} = require("./AssetController")
+const { 
+  signUp,
+  signIn
+ } = require("./UserController");
+const {
+  createAssetHandler,
+  getAssetByIdHandler,
+  getAllAssetsHandler,
+  updateAssetHandler,
+  deleteAssetHandler,
+} = require("./AssetController");
 const {
   createTaskHandler,
   getTaskByIdHandler,
   getAllTasksHandler,
   updateTaskHandler,
   deleteTaskHandler,
-} = require("./TaskController")
+} = require("./TaskController");
+
+const {addProject, getProjects, editProject, removeProject} = require("./ProjectController")
 
 module.exports = {
+  //UserController
   signUp,
+  signIn,
+  //UserController
   //AssetController
   createAssetHandler,
   getAssetByIdHandler,
@@ -17,11 +31,17 @@ module.exports = {
   updateAssetHandler,
   deleteAssetHandler,
   //AssetController
-    createTaskHandler,
-    getTaskByIdHandler,
-    getAllTasksHandler,
-    updateTaskHandler,
-    deleteTaskHandler,
-  
-
+  //TaskController
+  createTaskHandler,
+  getTaskByIdHandler,
+  getAllTasksHandler,
+  updateTaskHandler,
+  deleteTaskHandler,
+  //TaskController
+  //Project Controller
+  addProject,
+  getProjects,
+  editProject,
+  removeProject,
+  //Project Controller
 };

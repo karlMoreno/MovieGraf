@@ -18,7 +18,11 @@
     "date-fns": "^2.30.0",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "neo4j-driver": "^5.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.3"
   }
 }
