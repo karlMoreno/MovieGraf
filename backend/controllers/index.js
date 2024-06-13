@@ -17,6 +17,8 @@ const {
   deleteTaskHandler,
 } = require("./TaskController");
 
+const {addProject, getProjects, editProject, removeProject} = require("./ProjectController")
+
 module.exports = {
   //UserController
   signUp,
@@ -36,4 +38,10 @@ module.exports = {
   updateTaskHandler,
   deleteTaskHandler,
   //TaskController
+  //Project Controller
+  addProject,
+  getProjects,
+  editProject,
+  removeProject,
+  //Project Controller
 };
