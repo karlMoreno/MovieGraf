@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -9,31 +9,60 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
   },
 });
 
 export default function Projects() {
-  const [projects, setProjects] = React.useState([
-    { id: 1, name: "MovieGraf" },
-    { id: 2, name: "Project Gemini" },
-    { id: 3, name: "Project Apollo" },
-    { id: 4, name: "Project Shuttle" }
-  ]);
+  const [projects, setProjects] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const [newProjectName, setNewProjectName] = React.useState('');
+  const [newProjectName, setNewProjectName] = React.useState("");
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const fetchProjects = async () => {
+      const token = localStorage.getItem("jwtToken");
+      if (!token) {
+        navigate("/signin");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://localhost:3002/api/projects/list",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          setProjects(data.projects);
+        } else {
+          navigate("/signin");
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        navigate("/signin");
+      }
+    };
+
+    fetchProjects();
+  }, [navigate]);
 
   const handleProjectClick = (projectId) => {
     navigate(`/projects/${projectId}`);
@@ -51,14 +80,65 @@ export default function Projects() {
     setNewProjectName(event.target.value);
   };
 
-  const handleNewProjectSubmit = () => {
-    const newProject = { id: projects.length + 1, name: newProjectName };
-    setProjects([...projects, newProject]);
-    handleClose();
+  const handleNewProjectSubmit = async () => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3002/api/projects/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: newProjectName }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setProjects([...projects, data.project]);
+        handleClose();
+      } else {
+        console.error("Error creating project:", data.message);
+      }
+    } catch (error) {
+      console.error("Error creating project:", error);
+    }
   };
 
-  const handleDeleteProject = (projectId) => {
-    setProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
+  const handleDeleteProject = async (projectId) => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/projects/delete/${projectId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.id !== projectId)
+        );
+      } else {
+        console.error("Error deleting project:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
   };
 
   return (
@@ -89,19 +169,25 @@ export default function Projects() {
                       alignItems: "center",
                       justifyContent: "center",
                       height: 140,
-                      cursor: 'pointer',
-                      position: 'relative'
+                      cursor: "pointer",
+                      position: "relative",
                     }}
                   >
-                    <Typography component="h2" variant="h6" color="inherit" noWrap onClick={() => handleProjectClick(project.id)}>
+                    <Typography
+                      component="h2"
+                      variant="h6"
+                      color="inherit"
+                      noWrap
+                      onClick={() => handleProjectClick(project.id)}
+                    >
                       {project.name}
                     </Typography>
                     <IconButton
                       color="secondary"
-                      sx={{ position: 'absolute', top: 8, right: 8 }}
+                      sx={{ position: "absolute", top: 8, right: 8 }}
                       onClick={() => handleDeleteProject(project.id)}
                     >
-                      <DeleteIcon style={{ color: 'white' }} />
+                      <DeleteIcon style={{ color: "white" }} />
                     </IconButton>
                   </Paper>
                 </Grid>
@@ -115,14 +201,23 @@ export default function Projects() {
                     alignItems: "center",
                     justifyContent: "center",
                     height: 140,
-                    cursor: 'pointer',
+                    cursor: "pointer",
                   }}
                   onClick={handleClickOpen} // Open dialog when clicking on "New Project"
                 >
-                  <IconButton color="primary" aria-label="add new project" component="span">
+                  <IconButton
+                    color="primary"
+                    aria-label="add new project"
+                    component="span"
+                  >
                     <AddCircleOutlineIcon style={{ fontSize: 40 }} />
                   </IconButton>
-                  <Typography component="h2" variant="h6" color="inherit" noWrap>
+                  <Typography
+                    component="h2"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                  >
                     New Project
                   </Typography>
                 </Paper>
