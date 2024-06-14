@@ -52,24 +52,33 @@ const getProjects = async (req, res) => {
  * @param {Object} res - Express response object
  */
 const editProject = async (req, res) => {
-  const { projectId } = req.params;
-  const updateData = req.body;
-  try {
-    const project = await updateProject(projectId, updateData);
-    res.status(200).json({
-      success: true,
-      message: 'Project updated successfully',
-      project
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to update project',
-      error: error.message
-    });
-  }
-};
-
+    const { projectId } = req.params;
+    const updateData = req.body;
+    try {
+      console.log(`Received update request for project ID: ${projectId} with data:`, updateData); // Debug log
+  
+      const project = await updateProject(projectId, updateData);
+      if (project) {
+        res.status(200).json({
+          success: true,
+          message: 'Project updated successfully',
+          project
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Project not found'
+        });
+      }
+    } catch (error) {
+      console.error('Error updating project:', error); // Debug log
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update project',
+        error: error.message
+      });
+    }
+  };
 /**
  * Handles deleting a project
  * @param {Object} req - Express request object

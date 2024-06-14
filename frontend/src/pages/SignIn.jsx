@@ -22,6 +22,7 @@ export default function SignInSide() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,8 +31,8 @@ export default function SignInSide() {
       password: data.get('password'),
     };
   
-    try {
-      const response = await fetch('http://localhost:3002/login', {
+   try {
+      const response = await fetch('http://localhost:3002/api/user/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,8 +41,10 @@ export default function SignInSide() {
       });
       const json = await response.json();
       if (json.success) {
-        setSuccessMessage('Sign in successful! Redirecting...');
-        setTimeout(() => navigate('/projects'), 2000); // Redirect to dashboard after 2 seconds
+        // Store the token in local storage
+        localStorage.setItem('jwtToken', json.token);
+        // Navigate to the user's projects page with the token in the URL
+        navigate(`/projects?token=${json.token}`);
       } else {
         setError('Invalid Credentials');
       }

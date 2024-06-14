@@ -18,19 +18,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
  * @param {Function} next - Express next middleware function
  */
 
-const auth = (req,res,next) =>{
-    const token = req.header('Authorization')?.replace('Bearer', '');
-    if(!token){
-        return res.status(401).json({error: "Access denied to token provided"});
+const auth = (req, res, next) => {
+    const authHeader = req.header('Authorization');
+    console.log("Authorization Header:", authHeader);
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
+  
+    const token = authHeader.replace('Bearer ', '');
+    console.log("Token received:", token);
+  
     try {
-        const decoded = jwt.verify(token,JWT_SECRET)
-        req.user = decoded; // Attach the decoded user information to the request object
-        next(); // Proceed to the next middleware or route handler
-
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log("Token decoded:", decoded);
+      req.user = decoded; // Attach the decoded user information to the request object
+      next(); // Pass control to the next middleware or route handler
     } catch (error) {
-        res.status(400).json({error: 'Invalid Token'})
+      console.error("Token verification failed:", error);
+      res.status(400).json({ error: 'Invalid token.' });
     }
-};
+  };
 
 module.exports = auth;

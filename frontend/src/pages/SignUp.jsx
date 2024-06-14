@@ -33,6 +33,18 @@ export default function SignUp() {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
+  const isValidEmail = (email) => {
+    // Regular expression to check if email is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    // Regular expression to check if password is at least 8 characters, has one uppercase, one lowercase, one digit and one special character
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -44,8 +56,18 @@ export default function SignUp() {
       password: data.get('password'),
     };
 
+    if (!isValidEmail(formData.email)) {
+      setError('Invalid email address.');
+      return;
+    }
+
+    if (!isValidPassword(formData.password)) {
+      setError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3002/api/signup/user-create', {
+      const response = await fetch('http://localhost:3002/api/user/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,6 +149,7 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  helperText="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
                 />
               </Grid>
               <Grid item xs={12}>
