@@ -10,13 +10,13 @@ import Paper from "@mui/material/Paper";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const darkTheme = createTheme({
   palette: {
@@ -64,8 +64,8 @@ export default function Projects() {
     fetchProjects();
   }, [navigate]);
 
-  const handleProjectClick = (projectId) => {
-    navigate(`/projects/${projectId}`);
+  const handleProjectClick = () => {
+    navigate(`/dashboard`);
   };
 
   const handleClickOpen = () => {
@@ -172,20 +172,23 @@ export default function Projects() {
                       cursor: "pointer",
                       position: "relative",
                     }}
+                    onClick={() => handleProjectClick(project.id)}
                   >
                     <Typography
                       component="h2"
                       variant="h6"
                       color="inherit"
                       noWrap
-                      onClick={() => handleProjectClick(project.id)}
                     >
                       {project.name}
                     </Typography>
                     <IconButton
                       color="secondary"
                       sx={{ position: "absolute", top: 8, right: 8 }}
-                      onClick={() => handleDeleteProject(project.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteProject(project.id);
+                      }}
                     >
                       <DeleteIcon style={{ color: "white" }} />
                     </IconButton>
