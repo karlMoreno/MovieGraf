@@ -16,6 +16,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const darkTheme = createTheme({
   palette: {
@@ -24,41 +25,15 @@ const darkTheme = createTheme({
 });
 
 export default function Projects() {
-  const [projects, setProjects] = React.useState([]);
+  const [projects, setProjects] = React.useState([
+    { id: 1, name: "MovieGraf" },
+    { id: 2, name: "Project Gemini" },
+    { id: 3, name: "Project Apollo" },
+    { id: 4, name: "Project Shuttle" }
+  ]);
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState('');
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    const fetchProjects = async () => {
-      const token = localStorage.getItem('jwtToken');
-      if (!token) {
-        navigate('/signin');
-        return;
-      }
-
-      try {
-        const response = await fetch('http://localhost:3002/api/projects/list', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (data.success) {
-          setProjects(data.projects);
-        } else {
-          navigate('/signin');
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        navigate('/signin');
-      }
-    };
-
-    fetchProjects();
-  }, [navigate]);
 
   const handleProjectClick = (projectId) => {
     navigate(`/projects/${projectId}`);
@@ -76,33 +51,14 @@ export default function Projects() {
     setNewProjectName(event.target.value);
   };
 
-  const handleNewProjectSubmit = async () => {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) {
-      navigate('/signin');
-      return;
-    }
+  const handleNewProjectSubmit = () => {
+    const newProject = { id: projects.length + 1, name: newProjectName };
+    setProjects([...projects, newProject]);
+    handleClose();
+  };
 
-    try {
-      const response = await fetch('http://localhost:3002/api/projects/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: newProjectName }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setProjects([...projects, data.project]);
-        handleClose();
-      } else {
-        console.error('Error creating project:', data.message);
-      }
-    } catch (error) {
-      console.error('Error creating project:', error);
-    }
+  const handleDeleteProject = (projectId) => {
+    setProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
   };
 
   return (
@@ -134,12 +90,19 @@ export default function Projects() {
                       justifyContent: "center",
                       height: 140,
                       cursor: 'pointer',
+                      position: 'relative'
                     }}
-                    onClick={() => handleProjectClick(project.id)}
                   >
-                    <Typography component="h2" variant="h6" color="inherit" noWrap>
+                    <Typography component="h2" variant="h6" color="inherit" noWrap onClick={() => handleProjectClick(project.id)}>
                       {project.name}
                     </Typography>
+                    <IconButton
+                      color="secondary"
+                      sx={{ position: 'absolute', top: 8, right: 8 }}
+                      onClick={() => handleDeleteProject(project.id)}
+                    >
+                      <DeleteIcon style={{ color: 'white' }} />
+                    </IconButton>
                   </Paper>
                 </Grid>
               ))}
