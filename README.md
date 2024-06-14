@@ -150,3 +150,31 @@ This application is a Node.js web application that uses Neo4j for data storage. 
 3. The projects are returned and displayed on the client-side.
 
 
+# Tech Debt
+
+*“He who pays his debts gets richer.”* – French Proverb
+
+
+This section outlines the current technical debt within the project and tasks that need to be addressed. Developers can refer to this list to prioritize and manage the ongoing improvements and fixes.
+
+1. **User Management**
+   - 1a. Add users via email.
+   - 1b. Users can either own or be working on a project.
+   - 1c. Ability to add users to a project.
+   - 1d. Deleting users must delete their projects and remove other users from those projects.
+
+2. **Authentication and Authorization**
+   - 2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).
+   - 2b. For the sign-up page, implement a robust email checker.
+   - 2c. Ensure sign-up leads to the projects page, not the sign-in page.
+
+3. **API Configuration**
+   - 3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.
+
+4. **Password Management**
+   - 4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.
+
+5. **Dashboard**
+   - 5a. Make the dashboard unique to each project, ensuring that users see only the relevant data for their selected project.
+
+Feel free to add any additional tech debt items as they arise and update the status of ongoing tasks.
