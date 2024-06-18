@@ -152,7 +152,7 @@ This application is a Node.js web application that uses Neo4j for data storage. 
 3. The projects are returned and displayed on the client-side.
 
 
-# Tech Debt
+# Technical Backlog
 
 *“He who pays his debts gets richer.”* – French Proverb
 
