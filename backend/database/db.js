@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 const neo4j = require("neo4j-driver");
 
 // DRIVER FOR AURADB DATABASE
@@ -10,9 +10,13 @@ const neo4j = require("neo4j-driver");
 //   }
 // );s
 
+
+console.log('NEO4J_URI:', process.env.NEO4J_URI); // Debugging line
+console.log('NEO4J_USERNAME:', process.env.NEO4J_USERNAME); // Debugging line
+
 const driver = neo4j.driver(
-  'neo4j://localhost:7687', // Adjust this to your Neo4j connection string
-  neo4j.auth.basic('neo4j', 'testtest') // Adjust this to your Neo4j credentials
+  process.env.NEO4J_URI,
+  neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD)
 );
 
 // Attempt to verify the database connection

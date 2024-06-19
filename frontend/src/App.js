@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 import Projects from './pages/Projects';
 import AssetPage from './components/dashboard/AssetsPage'
+// require('dotenv').config();
+
 
 function App() {
 

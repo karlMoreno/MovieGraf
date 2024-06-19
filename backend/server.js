@@ -4,7 +4,7 @@
  * 
  * This file sets up the Express server for the application. It includes middleware configuration,
  * static file serving, route handling, and database connections.
- * 
+ *
  * Functionality:
  * - Initializes the Express application.
  * - Configures middleware for CORS, JSON parsing, and URL-encoded data parsing.
@@ -35,6 +35,7 @@ const path = require('path');
 const logger = require('./middleware/logger'); // Import the logger middleware
 // const upload = require('./config/multerConfig'); // Import Multer configuration
 const driver = require('./database/db'); // Ensure driver is imported correctly
+require('dotenv').config();
 
 const app = express();
 const port = 3002;

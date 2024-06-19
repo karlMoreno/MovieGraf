@@ -12,8 +12,9 @@ const driver = require('../database/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+require('dotenv').config();
 
+const JWT_SECRET = process.env.JWT_SECRET;
 /**
  * Creates a new user
  * @param {Object} userDetails - The details of the user to create
