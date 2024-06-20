@@ -179,4 +179,8 @@ This section outlines the current technical debt within the project and tasks th
 5. **Dashboard**
    - 5a. Make the dashboard unique to each project, ensuring that users see only the relevant data for their selected project.
 
+6. **Projects Page**
+   -6a. Delete icons must delete a single projects
+   -6b. Add a loading screen for projects 
+
 Feel free to add any additional tech debt items as they arise and update the status of ongoing tasks.

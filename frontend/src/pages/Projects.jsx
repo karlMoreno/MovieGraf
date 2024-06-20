@@ -118,7 +118,7 @@ export default function Projects() {
 
     try {
       const response = await fetch(
-        `http://localhost:3002/api/projects/delete/${projectId}`,
+        `${process.env.REACT_APP_API_URL}/api/projects/delete/${projectId}`,
         {
           method: "DELETE",
           headers: {
