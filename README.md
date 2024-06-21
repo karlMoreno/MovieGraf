@@ -171,7 +171,7 @@ This section outlines the current technical debt within the project and tasks th
    - 2c. Ensure sign-up leads to the projects page, not the sign-in page.
 
 3. **API Configuration**
-   - ~~ 3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations. ~~
+   - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
 
 4. **Password Management**
    - 4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.
