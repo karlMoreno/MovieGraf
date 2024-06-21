@@ -170,6 +170,7 @@ This section outlines the current technical debt within the project and tasks th
    - ~~2b. For the sign-up page, implement a robust email checker.~~
    - ~~2c. Ensure sign-up leads to the projects page, not the sign-in page.~~
    - 2d. Send Email Verification request
+   - 2e. Test if a user already exists
 
 3. ~~**API Configuration**~~
    - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
@@ -182,6 +183,9 @@ This section outlines the current technical debt within the project and tasks th
 
 6. **Projects Page**
    - 6a. Delete icons must delete a single projects
-   - 6b. Add a loading screen for projects 
+   - 6b. Add a loading screen for projects
+   - 6c. Need navbar for signout and future settings page
+7. **Server Security**
+   - ~~7a. Ensure Web tokens and server passwords are not being passed to github~~
 
 Feel free to add any additional tech debt items as they arise and update the status of ongoing tasks.

@@ -106,8 +106,23 @@ export default function SignUp() {
       if (response.ok) {
         const result = await response.json();
         console.log('Signup Success:', result);
-        setSuccessMessage('Signup successful! Redirecting...');
-        setTimeout(() => navigate('/signin'), 2000);
+
+        // Automatically sign the user in after a successful signup
+        const signInResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/user/signin/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: formData.email, password: formData.password }),
+        });
+
+        if (signInResponse.ok) {
+          const signInResult = await signInResponse.json();
+          localStorage.setItem('jwtToken', signInResult.token);
+          navigate('/projects'); // Redirect to projects page
+        } else {
+          throw new Error('Failed to sign in');
+        }
       } else {
         throw new Error('Failed to sign up');
       }
