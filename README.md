@@ -166,11 +166,12 @@ This section outlines the current technical debt within the project and tasks th
    - 1d. Deleting users must delete their projects and remove other users from those projects.
 
 2. **Authentication and Authorization**
-   - 2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).
+   - ~~2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).~~
    - 2b. For the sign-up page, implement a robust email checker.
    - 2c. Ensure sign-up leads to the projects page, not the sign-in page.
+   - 2d. Send Email Verification request
 
-3. **API Configuration**
+3. ~~**API Configuration**~~
    - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
 
 4. **Password Management**

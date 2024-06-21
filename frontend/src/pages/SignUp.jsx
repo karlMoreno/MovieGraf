@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const defaultTheme = createTheme();
 
@@ -31,18 +33,43 @@ function Copyright(props) {
 export default function SignUp() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [email, setEmail] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordValidations, setPasswordValidations] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+  });
   const navigate = useNavigate();
 
   const isValidEmail = (email) => {
-    // Regular expression to check if email is valid
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const isValidPassword = (password) => {
-    // Regular expression to check if password is at least 8 characters, has one uppercase, one lowercase, one digit and one special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
+    return {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      digit: /\d/.test(password),
+      specialChar: /[@$!%*?&]/.test(password),
+    };
+  };
+
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+    setIsEmailValid(isValidEmail(value));
+  };
+
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    setPassword(value);
+    setPasswordValidations(isValidPassword(value));
   };
 
   const handleSubmit = async (event) => {
@@ -61,8 +88,9 @@ export default function SignUp() {
       return;
     }
 
-    if (!isValidPassword(formData.password)) {
-      setError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+    const validations = isValidPassword(formData.password);
+    if (!Object.values(validations).every(Boolean)) {
+      setError('Password does not meet the criteria.');
       return;
     }
 
@@ -79,7 +107,7 @@ export default function SignUp() {
         const result = await response.json();
         console.log('Signup Success:', result);
         setSuccessMessage('Signup successful! Redirecting...');
-        setTimeout(() => navigate('/signin'), 2000); // Redirect to signin page after 2 seconds
+        setTimeout(() => navigate('/signin'), 2000);
       } else {
         throw new Error('Failed to sign up');
       }
@@ -138,6 +166,11 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  InputProps={{
+                    endAdornment: isEmailValid ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -149,8 +182,26 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  helperText="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
+                <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
+                  <Typography variant="caption">
+                    {passwordValidations.length ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />} At least 8 characters
+                  </Typography>
+                  <Typography variant="caption">
+                    {passwordValidations.uppercase ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />} At least one uppercase letter
+                  </Typography>
+                  <Typography variant="caption">
+                    {passwordValidations.lowercase ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />} At least one lowercase letter
+                  </Typography>
+                  <Typography variant="caption">
+                    {passwordValidations.digit ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />} At least one digit
+                  </Typography>
+                  <Typography variant="caption">
+                    {passwordValidations.specialChar ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />} At least one special character (@, $, !, %, *, ?, &)
+                  </Typography>
+                </Box>
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
