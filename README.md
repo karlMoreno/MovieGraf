@@ -167,15 +167,15 @@ This section outlines the current technical debt within the project and tasks th
 
 2. **Authentication and Authorization**
    - ~~2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).~~
-   - 2b. For the sign-up page, implement a robust email checker.
-   - 2c. Ensure sign-up leads to the projects page, not the sign-in page.
+   - ~~2b. For the sign-up page, implement a robust email checker.~~
+   - ~~2c. Ensure sign-up leads to the projects page, not the sign-in page.~~
    - 2d. Send Email Verification request
 
 3. ~~**API Configuration**~~
    - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
 
 4. **Password Management**
-   - 4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.
+   - ~~4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.~~
 
 5. **Dashboard**
    - 5a. Make the dashboard unique to each project, ensuring that users see only the relevant data for their selected project.
