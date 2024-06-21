@@ -165,12 +165,11 @@ This section outlines the current technical debt within the project and tasks th
    - 1c. Ability to add users to a project.
    - 1d. Deleting users must delete their projects and remove other users from those projects.
 
-2. **Authentication and Authorization**
+2. ~~**Authentication and Authorization**~~
    - ~~2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).~~
    - ~~2b. For the sign-up page, implement a robust email checker.~~
    - ~~2c. Ensure sign-up leads to the projects page, not the sign-in page.~~
-   - 2d. Send Email Verification request
-   - 2e. Test if a user already exists
+
 
 3. ~~**API Configuration**~~
    - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
@@ -178,14 +177,15 @@ This section outlines the current technical debt within the project and tasks th
 4. ~~**Password Management**~~
    - ~~4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.~~
 
-5. **Dashboard**
+5. **Assign Unique IDs to Proper Models**
    - 5a. Make the dashboard unique to each project, ensuring that users see only the relevant data for their selected project.
+   - 5b. Delete icons must delete a single project.
+   - 5c. Add a loading screen for projects.
+   - 5d. Need navbar for signout and future settings page.
+   - 5e. Send Email Verification request
+   - 5f. Test if a user already exists
 
-6. **Projects Page**
-   - 6a. Delete icons must delete a single projects
-   - 6b. Add a loading screen for projects
-   - 6c. Need navbar for signout and future settings page
-7. ~~**Server Security**~~
-   - ~~7a. Ensure Web tokens and server passwords are not being passed to github~~
+6. ~~**Server Security**~~
+   - ~~6a. Ensure Web tokens and server passwords are not being passed to github~~
 
 Feel free to add any additional tech debt items as they arise and update the status of ongoing tasks.

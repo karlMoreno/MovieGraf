@@ -39,6 +39,7 @@ export default function Projects() {
       }
 
       try {
+        console.log('Fetching projects...');
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/api/projects/list`,
           {
@@ -50,6 +51,7 @@ export default function Projects() {
           }
         );
         const data = await response.json();
+        console.log('Fetched projects:', data);
         if (data.success) {
           setProjects(data.projects);
         } else {
@@ -64,19 +66,23 @@ export default function Projects() {
     fetchProjects();
   }, [navigate]);
 
-  const handleProjectClick = () => {
+  const handleProjectClick = (projectId) => {
+    console.log('Navigating to project with ID:', projectId);
     navigate(`/dashboard`);
   };
 
   const handleClickOpen = () => {
+    console.log('Opening new project dialog');
     setOpen(true);
   };
 
   const handleClose = () => {
+    console.log('Closing new project dialog');
     setOpen(false);
   };
 
   const handleNewProjectChange = (event) => {
+    console.log('Changing new project name:', event.target.value);
     setNewProjectName(event.target.value);
   };
 
@@ -88,6 +94,7 @@ export default function Projects() {
     }
 
     try {
+      console.log('Submitting new project:', newProjectName);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects/add`, {
         method: "POST",
         headers: {
@@ -98,6 +105,7 @@ export default function Projects() {
       });
 
       const data = await response.json();
+      console.log('New project response:', data);
       if (data.success) {
         setProjects([...projects, data.project]);
         handleClose();
@@ -109,36 +117,8 @@ export default function Projects() {
     }
   };
 
-  const handleDeleteProject = async (projectId) => {
-    const token = localStorage.getItem("jwtToken");
-    if (!token) {
-      navigate("/signin");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/projects/delete/${projectId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-      if (data.success) {
-        setProjects((prevProjects) =>
-          prevProjects.filter((project) => project.id !== projectId)
-        );
-      } else {
-        console.error("Error deleting project:", data.message);
-      }
-    } catch (error) {
-      console.error("Error deleting project:", error);
-    }
+  const handleDeleteProject = (projectId) => {
+    console.log('Delete button clicked for project ID:', projectId);
   };
 
   return (
