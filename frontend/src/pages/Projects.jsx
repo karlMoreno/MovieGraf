@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -68,7 +68,7 @@ export default function Projects() {
 
   const handleProjectClick = (projectId) => {
     console.log('Navigating to project with ID:', projectId);
-    navigate(`/dashboard`);
+    navigate(`/dashboard/${projectId}`);
   };
 
   const handleClickOpen = () => {

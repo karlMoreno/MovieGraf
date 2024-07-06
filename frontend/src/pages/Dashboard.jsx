@@ -13,7 +13,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Link from "@mui/material/Link";  // Import Link from Material-UI
+import Link from "@mui/material/Link"; // Import Link from Material-UI
 import {
   MainListItems,
   secondaryListItems,
@@ -24,7 +24,7 @@ import AssetPage from "../components/dashboard/AssetsPage";
 import ArtistsPage from "../components/dashboard/ArtistsPage";
 import TasksPage from "../components/dashboard/TasksPage";
 import TimelinePage from "../components/dashboard/TimelinePage";
-import ModelViewerPage from "../components/dashboard/ModelViewerPage"
+import ModelViewerPage from "../components/dashboard/ModelViewerPage";
 
 function Copyright(props) {
   return (

@@ -1,66 +1,68 @@
 const neo4j = require('neo4j-driver');
 const driver = require('../database/db');
+const { v4: uuidv4 } = require('uuid');
 
-const createAsset = async ({ name, type, status, file }) => {
+const createTask = async ({ name, type, status, file }) => {
+  const session = driver.session({ database: "neo4j" });
+  const taskId = uuidv4();
+  try {
+    const result = await session.run(
+      'CREATE (t:Task {id: $taskId, name: $name, type: $type, status: $status, file: $file}) RETURN t',
+      { taskId, name, type, status, file }
+    );
+    const task = result.records[0]?.get('t').properties;
+    return task;
+  } finally {
+    await session.close();
+  }
+};
+
+const getTaskById = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'CREATE (a:Asset {name: $name, type: $type, status: $status, file: $file}) RETURN a',
-      { name, type, status, file }
+      'MATCH (t:Task {id: $id}) RETURN t',
+      { id }
     );
-    const asset = result.records[0]?.get('a').properties;
-    return asset;
+    const task = result.records[0]?.get('t').properties;
+    return task;
   } finally {
     await session.close();
   }
 };
 
-const getAssetById = async (id) => {
+const getAllTasks = async () => {
+  const session = driver.session({ database: "neo4j" });
+  try {
+    const result = await session.run('MATCH (t:Task) RETURN t');
+    const tasks = result.records.map(record => record.get('t').properties);
+    return tasks;
+  } finally {
+    await session.close();
+  }
+};
+
+const updateTask = async (id, { name, type, status, file }) => {
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'MATCH (a:Asset) WHERE ID(a) = $id RETURN a',
-      { id: neo4j.int(id) }
+      'MATCH (t:Task {id: $id}) SET t.name = $name, t.type = $type, t.status = $status, t.file = $file RETURN t',
+      { id, name, type, status, file }
     );
-    const asset = result.records[0]?.get('a').properties;
-    return asset;
+    const task = result.records[0]?.get('t').properties;
+    return task;
   } finally {
     await session.close();
   }
 };
 
-const getAllAssets = async () => {
+const deleteTask = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
-    const result = await session.run('MATCH (a:Asset) RETURN a');
-    const assets = result.records.map(record => record.get('a').properties);
-    return assets;
+    await session.run('MATCH (t:Task {id: $id}) DELETE t', { id });
   } finally {
     await session.close();
   }
 };
 
-const updateAsset = async (id, { name, type, status, file }) => {
-  const session = driver.session({ database: "neo4j" });
-  try {
-    const result = await session.run(
-      'MATCH (a:Asset) WHERE ID(a) = $id SET a.name = $name, a.type = $type, a.status = $status, a.file = $file RETURN a',
-      { id: neo4j.int(id), name, type, status, file }
-    );
-    const asset = result.records[0]?.get('a').properties;
-    return asset;
-  } finally {
-    await session.close();
-  }
-};
-
-const deleteAsset = async (id) => {
-  const session = driver.session({ database: "neo4j" });
-  try {
-    await session.run('MATCH (a:Asset) WHERE ID(a) = $id DELETE a', { id: neo4j.int(id) });
-  } finally {
-    await session.close();
-  }
-};
-
-module.exports = { createAsset, getAssetById, getAllAssets, updateAsset, deleteAsset };
+module.exports = { createTask, getTaskById, getAllTasks, updateTask, deleteTask };
