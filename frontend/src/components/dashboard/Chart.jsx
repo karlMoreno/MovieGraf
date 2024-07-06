@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import cytoscape from 'cytoscape';
 import { Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer';
+import AssetForm from '../forms/AssetForm';
+import TasksForm from '../forms/TasksForm';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3002';
@@ -28,37 +31,6 @@ const relationshipLabels = [
   "Produced By", "Performed By", "Portrayed By", "Depicted By"
 ];
 
-const modalStyle = {
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  backgroundColor: 'black',
-  padding: '20px',
-  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-  zIndex: 1000
-};
-
-const modalHeadingStyle = {
-  marginTop: 0
-};
-
-const modalLabelStyle = {
-  display: 'block',
-  margin: '10px 0'
-};
-
-const modalSelectStyle = {
-  width: '100%',
-  padding: '8px',
-  margin: '5px 0 10px 0'
-};
-
-const modalButtonStyle = {
-  marginRight: '10px',
-  padding: '10px 20px'
-};
-
 const Graph = () => {
   const [cy, setCy] = useState(null);
   const [selectedNodes, setSelectedNodes] = useState([]);
@@ -68,6 +40,8 @@ const Graph = () => {
   const [edgeModalOpen, setEdgeModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [assetDrawerOpen, setAssetDrawerOpen] = useState(false);
+  const [taskDrawerOpen, setTaskDrawerOpen] = useState(false);
 
   useEffect(() => {
     const cyInstance = cytoscape({
@@ -214,34 +188,18 @@ const Graph = () => {
     }
   };
 
-  const handleAddNode = (type) => {
-    const newNodeId = new Date().getTime().toString();
-    setNewNode({ id: newNodeId, label: labels[type][0], type });
-    setModalOpen(true);
+  const handleOpenDrawer = (type) => {
+    if (type === 'Task') {
+      setTaskDrawerOpen(true);
+    } else if (type === 'Asset') {
+      setAssetDrawerOpen(true);
+    }
   };
 
-  const handleSaveNode = () => {
-    try {
-      const nodeToAdd = {
-        group: 'nodes',
-        data: {
-          id: newNode.id,
-          label: newNode.label,
-          type: newNode.type,
-          color: getColorForType(newNode.type)
-        },
-        position: {
-          x: Math.random() * 800,
-          y: Math.random() * 600
-        }
-      };
-
-      cy.add(nodeToAdd);
-      cy.layout({ name: 'cose' }).run();
-      setModalOpen(false);
-    } catch (error) {
-      console.error('Error adding node:', error);
-    }
+  const handleCloseDrawer = () => {
+    setAssetDrawerOpen(false);
+    setTaskDrawerOpen(false);
+    window.location.reload(); // Reload the page to see the changes
   };
 
   const handleDeleteNode = () => {
@@ -333,52 +291,13 @@ const Graph = () => {
         <Button variant="contained" color="primary" onClick={handleSearch}>Search</Button>
       </div>
       <div id="cy" style={{ width: '100%', height: '600px' }} />
-      <Button variant="outlined" onClick={() => handleAddNode('Task')}>Create Task</Button>
-      <Button variant="outlined" onClick={() => handleAddNode('Participant')}>Create Participant</Button>
-      <Button variant="outlined" onClick={() => handleAddNode('Asset')}>Create Asset</Button>
-      <Button variant="outlined" onClick={() => handleAddNode('Context')}>Create Context</Button>
+      <Button variant="outlined" onClick={() => handleOpenDrawer('Asset')}>Create Asset</Button>
+      <Button variant="outlined" onClick={() => handleOpenDrawer('Task')}>Create Task</Button>
       <Button variant="outlined" onClick={handleDeleteNode}>Delete</Button>
       <Button variant="outlined" onClick={handleAddEdge}>Add Edge</Button>
 
-      {modalOpen && (
-        <div className="modal" style={modalStyle}>
-          <h2 style={modalHeadingStyle}>Create {newNode.type} Node</h2>
-          <label style={modalLabelStyle}>
-            Label:
-            <select
-              value={newNode.label}
-              onChange={(e) => setNewNode({ ...newNode, label: e.target.value })}
-              style={modalSelectStyle}
-            >
-              {labels[newNode.type].map(label => (
-                <option key={label} value={label}>{label}</option>
-              ))}
-            </select>
-          </label>
-          <button onClick={handleSaveNode} style={modalButtonStyle}>Save</button>
-          <button onClick={() => setModalOpen(false)} style={modalButtonStyle}>Cancel</button>
-        </div>
-      )}
-
-      {edgeModalOpen && (
-        <div className="modal" style={modalStyle}>
-          <h2 style={modalHeadingStyle}>Create Relationship</h2>
-          <label style={modalLabelStyle}>
-            Label:
-            <select
-              value={newEdge.label}
-              onChange={(e) => setNewEdge({ ...newEdge, label: e.target.value })}
-              style={modalSelectStyle}
-            >
-              {relationshipLabels.map(label => (
-                <option key={label} value={label}>{label}</option>
-              ))}
-            </select>
-          </label>
-          <button onClick={handleSaveEdge} style={modalButtonStyle}>Save</button>
-          <button onClick={() => setEdgeModalOpen(false)} style={modalButtonStyle}>Cancel</button>
-        </div>
-      )}
+      <SwipeableTemporaryDrawer contentComponent={<AssetForm onClose={handleCloseDrawer} />} open={assetDrawerOpen} onClose={handleCloseDrawer} />
+      <SwipeableTemporaryDrawer contentComponent={<TasksForm onClose={handleCloseDrawer} />} open={taskDrawerOpen} onClose={handleCloseDrawer} />
     </div>
   );
 };
