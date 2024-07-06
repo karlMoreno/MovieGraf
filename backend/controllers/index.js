@@ -19,6 +19,8 @@ const {
 
 const {addProject, getProjects, editProject, removeProject} = require("./ProjectController")
 
+const { createSceneHandler, getSceneByIdHandler, getAllScenesHandler, updateSceneHandler, deleteSceneHandler } = require("./SceneController");
+
 module.exports = {
   //UserController
   signUp,
@@ -44,4 +46,11 @@ module.exports = {
   editProject,
   removeProject,
   //Project Controller
+  //Scene Controller
+  createSceneHandler, 
+  getSceneByIdHandler,
+  getAllScenesHandler, 
+  updateSceneHandler, 
+  deleteSceneHandler,
+  //Scene Controller
 };
