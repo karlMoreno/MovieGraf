@@ -6,7 +6,7 @@ const { createProject, getProjectsByUser, updateProject, deleteProject } = requi
  * @param {Object} res - Express response object
  */
 const addProject = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description } = req.body; // description not added yet 
   const { userId } = req.user; // Extract userId from the authenticated user
   try {
     const project = await createProject({ name, description }, userId);

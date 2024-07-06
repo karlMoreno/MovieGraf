@@ -11,6 +11,8 @@
 const driver = require('../database/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
+
 
 require('dotenv').config();
 
@@ -28,10 +30,11 @@ const createUser = async ({firstName, lastName, email, password}) => {
     const session = driver.session({database: "neo4j"});
     const hashedPassword = await bcrypt.hash(password, 10);
     const name = `${firstName} ${lastName}`;
+    const userId = uuidv4();
     try {
         const result = await session.run(
-            'CREATE (u:User {firstName: $firstName, lastName: $lastName, email: $email, password: $hashedPassword, name: $name}) RETURN u',
-            { firstName, lastName, email, hashedPassword, name }
+            'CREATE (u:User {id:$userId, firstName: $firstName, lastName: $lastName, email: $email, password: $hashedPassword, name: $name}) RETURN u',
+            { userId, firstName, lastName, email, hashedPassword, name }
         );
         const user = result.records[0]?.get('u').properties;
         return user;

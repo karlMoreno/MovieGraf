@@ -1,4 +1,5 @@
 const driver = require('../database/db');
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * Creates a new project
@@ -8,15 +9,16 @@ const driver = require('../database/db');
  */
 const createProject = async (projectDetails, userId) => {
   const session = driver.session({ database: 'neo4j' });
+  const projectId = uuidv4();
   try {
     const result = await session.run(
       `
       MATCH (u:User {email: $userId})
-      CREATE (p:Project {name: $name, userId: $userId})
+      CREATE (p:Project {id: $projectId,name: $name, userId: $userId})
       CREATE (u)-[:OWNS]->(p)
       RETURN p
       `,
-      { ...projectDetails, userId }
+      { projectId, ...projectDetails, userId }
     );
     const project = result.records[0].get('p').properties;
     return project;
@@ -87,9 +89,9 @@ const deleteProject = async (projectId) => {
       console.log(`Deleting project with ID: ${projectId}`); // Debug log
   
       await session.run(
-        'MATCH (p:Project)-[r]-() WHERE ID(p) = $projectId DELETE r, p',
-        { projectId: parseInt(projectId) }
-      );
+        'MATCH (p:Project {id: $projectId}) DETACH DELETE p',
+        { projectId }
+    );
   
       return { message: 'Project deleted successfully' };
     } catch (error) {
