@@ -4,6 +4,7 @@ import { Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@m
 import SwipeableTemporaryDrawer from '../SwipeableTemporaryDrawer';
 import AssetForm from '../forms/AssetForm';
 import TasksForm from '../forms/TasksForm';
+import LoadingScreen from '../LoadingScreen';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3002';
@@ -42,6 +43,7 @@ const Graph = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [assetDrawerOpen, setAssetDrawerOpen] = useState(false);
   const [taskDrawerOpen, setTaskDrawerOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const cyInstance = cytoscape({
@@ -199,6 +201,7 @@ const Graph = () => {
   const handleCloseDrawer = () => {
     setAssetDrawerOpen(false);
     setTaskDrawerOpen(false);
+    setLoading(true);
     window.location.reload(); // Reload the page to see the changes
   };
 
@@ -265,6 +268,7 @@ const Graph = () => {
 
   return (
     <div>
+      {loading && <LoadingScreen />}
       <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
         <TextField 
           value={searchQuery}
