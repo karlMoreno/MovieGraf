@@ -1,4 +1,4 @@
-const { createScene, getSceneById, getAllScenes, updateScene, deleteScene } = require('../models/scene');
+const { createScene, getSceneById, getAllScenes, updateScene, deleteScene } = require('../models');
 
 const createSceneHandler = async (req, res) => {
   try {
