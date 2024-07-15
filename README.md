@@ -90,6 +90,8 @@ To get the frontend up and running, follow these steps:
 
    npm install @mui/icons-material
 
+   npm install d3
+
    
 
    npm install @mui/x-date-pickers

@@ -28,6 +28,7 @@ export default function Projects() {
   const [projects, setProjects] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState("");
+  const [edgeModalOpen, setEdgeModalOpen] = React.useState(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -117,8 +118,32 @@ export default function Projects() {
     }
   };
 
-  const handleDeleteProject = (projectId) => {
-    console.log('Delete button clicked for project ID:', projectId);
+  const handleDeleteProject = async (projectId) => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    try {
+      console.log('Deleting project with ID:', projectId);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setProjects(projects.filter((project) => project.id !== projectId));
+      } else {
+        console.error("Error deleting project:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
   };
 
   return (

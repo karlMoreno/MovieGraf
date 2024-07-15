@@ -9,36 +9,36 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3002';
 
-const labels = {
-  Task: [
-    "Write Script", "Previsualize", "Create Set", "Shoot", 
-    "Create Editorial Dailies", "Create VFX"
-  ],
-  Participant: [
-    "Director", "Actor", "Art Department", "Person", 
-    "Organization", "Service"
-  ],
-  Asset: [
-    "Image", "Video", "Audio", "Data", "Physical Thing", 
-    "Concept Art", "Storyboard", "Shot", "VFX Image Sequence"
-  ],
-  Context: [
-    "Scene", "Location", "Character", "Prop", "Depiction", 
-    "Slate", "Shot"
-  ]
-};
+// const labels = {
+//   Task: [
+//     "Write Script", "Previsualize", "Create Set", "Shoot", 
+//     "Create Editorial Dailies", "Create VFX"
+//   ],
+//   Participant: [
+//     "Director", "Actor", "Art Department", "Person", 
+//     "Organization", "Service"
+//   ],
+//   Asset: [
+//     "Image", "Video", "Audio", "Data", "Physical Thing", 
+//     "Concept Art", "Storyboard", "Shot", "VFX Image Sequence"
+//   ],
+//   Context: [
+//     "Scene", "Location", "Character", "Prop", "Depiction", 
+//     "Slate", "Shot"
+//   ]
+// };
 
-const relationshipLabels = [
-  "Produced By", "Performed By", "Portrayed By", "Depicted By"
-];
+// const relationshipLabels = [
+//   "Produced By", "Performed By", "Portrayed By", "Depicted By"
+// ];
 
 const Graph = () => {
   const [cy, setCy] = useState(null);
   const [selectedNodes, setSelectedNodes] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [newNode, setNewNode] = useState({ id: '', label: '', type: 'Task' });
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [newNode, setNewNode] = useState({ id: '', label: '', type: 'Task' });
   const [newEdge, setNewEdge] = useState({ source: '', target: '', label: '' });
-  const [edgeModalOpen, setEdgeModalOpen] = useState(false);
+  // const [edgeModalOpen, setEdgeModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [assetDrawerOpen, setAssetDrawerOpen] = useState(false);
@@ -217,7 +217,7 @@ const Graph = () => {
   const handleAddEdge = () => {
     if (selectedNodes.length === 2) {
       setNewEdge({ source: selectedNodes[0], target: selectedNodes[1], label: '' });
-      setEdgeModalOpen(true);
+      // setEdgeModalOpen(true);
     } else {
       alert('Please select exactly two nodes.');
     }
@@ -244,7 +244,7 @@ const Graph = () => {
 
       cy.add(edgeToAdd);
       cy.layout({ name: 'cose' }).run();
-      setEdgeModalOpen(false);
+      // setEdgeModalOpen(false);
       setSelectedNodes([]);
     } catch (error) {
       console.error('Error adding edge:', error);

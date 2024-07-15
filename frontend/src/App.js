@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 import Projects from './pages/Projects';
 import AssetPage from './components/dashboard/AssetsPage'
+import TestPage from './pages/TestPage';
 // require('dotenv').config();
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/dashboard/:projectId" element={<Dashboard />} /> 
         <Route path="/projects" element={<Projects />} />
         <Route path="/assets" element={<AssetPage />} />
+        <Route path="/test" element={<TestPage />} />
         <Route path="/" element={<LandingPage />} />
 
       </Routes>

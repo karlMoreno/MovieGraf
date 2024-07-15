@@ -13,16 +13,16 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Link from "@mui/material/Link"; // Import Link from Material-UI
+import Link from "@mui/material/Link";
 import { MainListItems, secondaryListItems } from "../components/dashboard/listItems";
 import Chart from "../components/dashboard/Chart";
 import { Navigate, useNavigate } from "react-router-dom";
 import AssetPage from "../components/dashboard/AssetsPage";
 import ArtistsPage from "../components/dashboard/ArtistsPage";
 import TasksPage from "../components/dashboard/TasksPage";
-import TimelinePage from "../components/dashboard/TimelinePage";
+import Timeline from "../components/dashboard/TimelinePage";
 import ModelViewerPage from "../components/dashboard/ModelViewerPage";
-import Paper from '@mui/material/Paper'; // Import Paper from Material-UI
+import Paper from '@mui/material/Paper';
 
 function Copyright(props) {
   return (
@@ -137,19 +137,23 @@ export default function Dashboard() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             {currentPage === "dashboard" && (
               <Grid container spacing={3}>
-                <Grid item xs={12} md={8} lg={9}>
+                {/* Chart */}
+                <Grid item xs={12}>
                   <Paper elevation={3} sx={{ padding: 2 }}>
                     <Chart />
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4} lg={3}></Grid>
-                <Grid item xs={12}></Grid>
+                {/* Timeline */}
+                <Grid item xs={12}>
+                  <Paper elevation={3} sx={{ padding: 2 }}>
+                    <Timeline />
+                  </Paper>
+                </Grid>
               </Grid>
             )}
             {currentPage === "assets" && <AssetPage />}
             {currentPage === "artists" && <ArtistsPage />}
             {currentPage === "tasks" && <TasksPage />}
-            {currentPage === "timeline" && <TimelinePage />}
             {currentPage === "model" && <ModelViewerPage />}
             <Copyright sx={{ pt: 4 }} />
           </Container>
