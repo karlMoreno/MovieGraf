@@ -1,25 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
+import { useDrop } from 'react-dnd';
+import Sidebar from './DiagramSidebar';
+import NodeForm from './NodeForm';
 
 const D3Graph = () => {
   const d3Container = useRef(null);
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newNodeType, setNewNodeType] = useState('');
+  const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const fetchGraphData = async () => {
       try {
         const { data } = await axios.get('http://localhost:3002/graph');
-        const nodes = data.nodes.map(node => ({
+        const fetchedNodes = data.nodes.map(node => ({
           id: node.identity.low,
           label: node.properties.name,
           type: node.labels[0]
         }));
-        const links = data.edges.map(edge => ({
+        const fetchedLinks = data.edges.map(edge => ({
           source: edge.start.low,
           target: edge.end.low,
           type: edge.type
         }));
-        renderGraph(nodes, links);
+        setNodes(fetchedNodes);
+        setLinks(fetchedLinks);
+        renderGraph(fetchedNodes, fetchedLinks);
       } catch (error) {
         console.error('Error fetching graph data:', error);
       }
@@ -27,6 +37,19 @@ const D3Graph = () => {
 
     fetchGraphData();
   }, []);
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'node',
+    drop: (item, monitor) => {
+      const offset = monitor.getSourceClientOffset();
+      setNewNodeType(item.type);
+      setNewNodePosition({ x: offset.x, y: offset.y });
+      setShowForm(true);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
 
   const renderGraph = (nodes, links) => {
     const width = window.innerWidth;
@@ -41,12 +64,12 @@ const D3Graph = () => {
       .append("g");
 
     const colorScale = d3.scaleOrdinal()
-      .domain(['Task', 'Participant', 'Asset', 'Context', 'Project']) // Add more types as needed
-      .range(['#2E8B57', '#4682B4', '#FFD700', '#FF6347', '#8A2BE2']); // Corresponding colors for each type
+      .domain(['Task', 'Participant', 'Asset', 'Context', 'Project'])
+      .range(['#2E8B57', '#4682B4', '#FFD700', '#FF6347', '#8A2BE2']);
 
     const simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links).id(d => d.id))
-    //   .force('charge', d3.forceManyBody().strength(-10))
+      .force('charge', d3.forceManyBody().strength(-10))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide().radius(20));
 
@@ -56,7 +79,7 @@ const D3Graph = () => {
       .selectAll('line')
       .data(links)
       .enter().append('line')
-      .attr('stroke-width', d => Math.sqrt(d.value));
+      .attr('stroke-width', 2);
 
     const node = svg.append('g')
       .attr('stroke', '#fff')
@@ -65,7 +88,7 @@ const D3Graph = () => {
       .data(nodes)
       .enter().append('circle')
       .attr('r', 10)
-      .attr('fill', d => colorScale(d.type)) // Use colorScale to set node color based on type
+      .attr('fill', d => colorScale(d.type))
       .call(drag(simulation));
 
     const labels = svg.append('g')
@@ -101,6 +124,27 @@ const D3Graph = () => {
     }
   };
 
+  const saveNode = async (type, name) => {
+    try {
+      const response = await axios.post(`http://localhost:3002/api/${type.toLowerCase()}`, { name });
+      return response.data;
+    } catch (error) {
+      console.error('Error saving node:', error);
+      throw error;
+    }
+  };
+
+  const handleSaveNode = async (nodeData) => {
+    try {
+      const newNode = await saveNode(newNodeType, nodeData.name);
+      const newNodes = [...nodes, { ...newNode, x: newNodePosition.x, y: newNodePosition.y }];
+      setNodes(newNodes);
+      renderGraph(newNodes, links);
+    } catch (error) {
+      console.error('Error saving node:', error);
+    }
+  };
+
   const drag = simulation => {
     const dragstarted = event => {
       if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -126,7 +170,13 @@ const D3Graph = () => {
   };
 
   return (
-    <svg ref={d3Container}></svg>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div ref={drop} style={{ width: '100%', height: '600px', border: '1px solid black' }}>
+        <svg ref={d3Container}></svg>
+      </div>
+      <NodeForm show={showForm} handleClose={() => setShowForm(false)} handleSave={handleSaveNode} />
+    </div>
   );
 };
 
