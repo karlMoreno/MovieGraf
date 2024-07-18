@@ -109,6 +109,8 @@ To get the frontend up and running, follow these steps:
 
    npm install react-dnd react-dnd-html5-backend react-beautiful-dnd @mui/material antd
 
+   npm install react-dnd react-dnd-html5-backend
+
 
 
    ```
