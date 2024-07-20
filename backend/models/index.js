@@ -3,6 +3,7 @@ const { createUser,signInUser } = require('./UserModel');
 const { createTask, getTaskById, getAllTasks, updateTask, deleteTask } = require('./TaskModel')
 const { createProject, getProjectsByUser, updateProject, deleteProject } = require('./ProjectModel')
 const { createScene, getSceneById, getAllScenes, updateScene, deleteScene } = require('./SceneModel');
+const {getGraph} = require('./GraphModel');
 
 module.exports = {
   //UserModel
@@ -36,4 +37,7 @@ module.exports = {
   updateScene, 
   deleteScene,
   //Scene Model
+  //Graph Model
+  getGraph,
+  //Graph Model
 };
