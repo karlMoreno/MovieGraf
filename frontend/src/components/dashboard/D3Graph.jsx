@@ -4,14 +4,19 @@ import axios from 'axios';
 import { useDrop } from 'react-dnd';
 import Sidebar from './DiagramSidebar';
 import NodeForm from './NodeForm';
+import RelationshipForm from './RelationshipsForm'; // Import the relationship form component
 
 const D3Graph = () => {
   const d3Container = useRef(null);
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showRelForm, setShowRelForm] = useState(false);
   const [newNodeType, setNewNodeType] = useState('');
   const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [startNode, setStartNode] = useState(null);
+  const [endNode, setEndNode] = useState(null);
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -89,7 +94,9 @@ const D3Graph = () => {
       .enter().append('circle')
       .attr('r', 10)
       .attr('fill', d => colorScale(d.type))
-      .call(drag(simulation));
+      .call(drag(simulation))
+      .on('mousedown', (event, d) => handleMouseDown(d))
+      .on('mouseup', (event, d) => handleMouseUp(d));
 
     const labels = svg.append('g')
       .selectAll('text')
@@ -169,6 +176,35 @@ const D3Graph = () => {
       .on('end', dragended);
   };
 
+  const handleMouseDown = (node) => {
+    setStartNode(node);
+    setIsDrawing(true);
+  };
+
+  const handleMouseUp = (node) => {
+    if (isDrawing) {
+      setEndNode(node);
+      setIsDrawing(false);
+      setShowRelForm(true);
+    }
+  };
+
+  const handleFormSubmit = async (relationshipData) => {
+    if (startNode && endNode) {
+      try {
+        const response = await axios.post('http://localhost:3002/api/relationships/create', {
+          startNodeId: startNode.id,
+          endNodeId: endNode.id,
+          relationshipData
+        });
+        setShowRelForm(false);
+        window.location.reload(); // Reload to see the new relationship
+      } catch (error) {
+        console.error('Error creating relationship:', error);
+      }
+    }
+  };
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -176,6 +212,7 @@ const D3Graph = () => {
         <svg ref={d3Container}></svg>
       </div>
       <NodeForm show={showForm} handleClose={() => setShowForm(false)} handleSave={handleSaveNode} />
+      {showRelForm && <RelationshipForm onSubmit={handleFormSubmit} />}
     </div>
   );
 };

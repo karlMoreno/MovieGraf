@@ -8,7 +8,7 @@ const createScene = async ({ name, order, projectId }) => {
   try {
     const result = await session.run(
       'MATCH (p:Project {id: $projectId}) ' +
-      'CREATE (s:Scene {id: $sceneId, name: $name, order: $order}) ' +
+      'CREATE (s:Scene {id: $sceneId, name: $name, order: $order, belongsTo: $projectId}) ' +
       'CREATE (p)-[:HAS_SCENE]->(s) ' +
       'RETURN s',
       { sceneId, name, order, projectId }

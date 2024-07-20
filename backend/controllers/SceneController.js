@@ -45,7 +45,12 @@ const deleteSceneHandler = async (req, res) => {
   try {
     const { id } = req.params;
     await deleteScene(id);
-    res.status(204).end();
+    res.status(200).json({
+        success: true,
+        message: "Scene Delted Successfully",
+        id
+
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete scene' });
   }

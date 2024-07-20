@@ -3,10 +3,10 @@ const { createSceneHandler, getSceneByIdHandler, getAllScenesHandler, updateScen
 
 const router = express.Router();
 
-router.post('/scenes', createSceneHandler);
-router.get('/scenes/:id', getSceneByIdHandler);
-router.get('/projects/:projectId/scenes', getAllScenesHandler);
-router.put('/scenes/:id', updateSceneHandler);
-router.delete('/scenes/:id', deleteSceneHandler);
+router.post('/scenes-create', createSceneHandler);
+router.get('/scenes-get/:id', getSceneByIdHandler);
+router.get('/projects/:projectId/scenes-get-all', getAllScenesHandler);
+router.put('/scenes-update/:id', updateSceneHandler);
+router.delete('/scenes-delete/:id', deleteSceneHandler);
 
 module.exports = router;
