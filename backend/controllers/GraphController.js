@@ -1,5 +1,14 @@
-const {getGraph} = require('../models');
+const {getGraph} = require("../models");
 
-const getGraphController = async (req,res) => {
-    
-}
+const fetchGraph = async (req,res) => {
+    try {
+        const graph = await getGraph();
+        res.json(graph);
+    } catch (error) {
+        res.status(500).send(error.message);
+        
+    }
+
+};
+
+module.exports = {fetchGraph};
