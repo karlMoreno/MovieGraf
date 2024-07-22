@@ -14,9 +14,8 @@ const D3Graph = () => {
   const [showRelForm, setShowRelForm] = useState(false);
   const [newNodeType, setNewNodeType] = useState('');
   const [newNodePosition, setNewNodePosition] = useState({ x: 0, y: 0 });
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [startNode, setStartNode] = useState(null);
-  const [endNode, setEndNode] = useState(null);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+  const [tempLinks, setTempLinks] = useState([]); // State to track temporary links
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -34,14 +33,14 @@ const D3Graph = () => {
         }));
         setNodes(fetchedNodes);
         setLinks(fetchedLinks);
-        renderGraph(fetchedNodes, fetchedLinks);
+        renderGraph(fetchedNodes, fetchedLinks, tempLinks);
       } catch (error) {
         console.error('Error fetching graph data:', error);
       }
     };
 
     fetchGraphData();
-  }, []);
+  }, [tempLinks]); // Update the graph whenever tempLinks changes
 
   const [{ isOver }, drop] = useDrop({
     accept: 'node',
@@ -56,7 +55,7 @@ const D3Graph = () => {
     }),
   });
 
-  const renderGraph = (nodes, links) => {
+  const renderGraph = (nodes, links, tempLinks) => {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -74,7 +73,7 @@ const D3Graph = () => {
     defs.append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '-0 -5 10 10')
-      .attr('refX', 13)
+      .attr('refX', 32) // Adjust refX to provide space between node and arrow
       .attr('refY', 0)
       .attr('orient', 'auto')
       .attr('markerWidth', 6)
@@ -90,16 +89,16 @@ const D3Graph = () => {
       .range(['#2E8B57', '#4682B4', '#FFD700', '#FF6347', '#8A2BE2']);
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(125)) 
-      .force('charge', d3.forceManyBody().strength(-10)) 
+      .force('link', d3.forceLink(links.concat(tempLinks)).id(d => d.id).distance(150)) // Include tempLinks
+      .force('charge', d3.forceManyBody().strength(-100))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(50)); 
+      .force('collision', d3.forceCollide().radius(60));
 
     const link = svg.append('g')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
       .selectAll('line')
-      .data(links)
+      .data(links.concat(tempLinks)) // Include tempLinks
       .enter().append('line')
       .attr('stroke-width', 2)
       .attr('marker-end', 'url(#arrowhead)'); // Add arrowhead to the end of the line
@@ -107,7 +106,7 @@ const D3Graph = () => {
     // Add edge labels
     const linkLabels = svg.append('g')
       .selectAll('text')
-      .data(links)
+      .data(links.concat(tempLinks)) // Include tempLinks
       .enter().append('text')
       .attr('dy', 5)
       .attr('text-anchor', 'middle')
@@ -121,21 +120,23 @@ const D3Graph = () => {
       .selectAll('circle')
       .data(nodes)
       .enter().append('circle')
-      .attr('r', 10)
+      .attr('r', 20) // Increase node radius
       .attr('fill', d => colorScale(d.type))
       .call(drag(simulation))
-      .on('mousedown', (event, d) => handleMouseDown(d))
-      .on('mouseup', (event, d) => handleMouseUp(d));
+      .on('contextmenu', (event, d) => {
+        event.preventDefault();
+        handleRightClick(event, d);
+      });
 
     const labels = svg.append('g')
       .selectAll('text')
       .data(nodes)
       .enter().append('text')
-      .attr('dy', -15)
+      .attr('dy', -25) // Adjust position of labels for larger nodes
       .attr('text-anchor', 'middle')
       .text(d => d.label)
       .style('fill', '#fff')
-      .style('font-size', '10px');
+      .style('font-size', '14px');
 
     simulation.on('tick', () => {
       link
@@ -159,8 +160,8 @@ const D3Graph = () => {
     });
 
     function applyBounds(d) {
-      d.x = Math.max(10, Math.min(width - 10, d.x));
-      d.y = Math.max(10, Math.min(height - 10, d.y));
+      d.x = Math.max(30, Math.min(width - 30, d.x));
+      d.y = Math.max(30, Math.min(height - 30, d.y));
     }
   };
 
@@ -179,7 +180,7 @@ const D3Graph = () => {
       const newNode = await saveNode(newNodeType, nodeData.name);
       const newNodes = [...nodes, { ...newNode, x: newNodePosition.x, y: newNodePosition.y }];
       setNodes(newNodes);
-      renderGraph(newNodes, links);
+      renderGraph(newNodes, links, tempLinks); // Update renderGraph call
     } catch (error) {
       console.error('Error saving node:', error);
     }
@@ -209,33 +210,46 @@ const D3Graph = () => {
       .on('end', dragended);
   };
 
-  const handleMouseDown = (node) => {
-    setStartNode(node);
-    setIsDrawing(true);
-  };
+  const handleRightClick = (event, node) => {
+    event.preventDefault();
 
-  const handleMouseUp = (node) => {
-    if (isDrawing) {
-      setEndNode(node);
-      setIsDrawing(false);
+    if (selectedNodes.length === 0) {
+      setSelectedNodes([node]);
+      highlightNode(node, '#ff0000');
+    } else if (selectedNodes.length === 1) {
+      setSelectedNodes([...selectedNodes, node]);
+      highlightNode(node, '#0000ff');
+      drawTemporaryLink(selectedNodes[0], node);
       setShowRelForm(true);
+    } else {
+      clearSelections();
+      setSelectedNodes([node]);
+      highlightNode(node, '#ff0000');
     }
   };
 
-  const handleFormSubmit = async (relationshipData) => {
-    if (startNode && endNode) {
-      try {
-        const response = await axios.post('http://localhost:3002/api/relationships/create', {
-          startNodeId: startNode.id,
-          endNodeId: endNode.id,
-          relationshipData
-        });
-        setShowRelForm(false);
-        window.location.reload(); // Reload to see the new relationship
-      } catch (error) {
-        console.error('Error creating relationship:', error);
-      }
-    }
+  const highlightNode = (node, color) => {
+    d3.selectAll('circle')
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1.5);
+
+    d3.select(d3.select(d3Container.current).selectAll('circle').nodes().find(n => d3.select(n).data()[0].id === node.id))
+      .attr('stroke', color)
+      .attr('stroke-width', 3);
+  };
+
+  const drawTemporaryLink = (source, target) => {
+    setTempLinks([...tempLinks, { source, target, type: 'TEMP' }]);
+  };
+
+  const clearSelections = () => {
+    setSelectedNodes([]);
+    setTempLinks([]);
+    d3.select(d3Container.current).selectAll('line.temp-link').remove();
+    d3.select(d3Container.current)
+      .selectAll('circle')
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1.5);
   };
 
   return (
@@ -245,7 +259,7 @@ const D3Graph = () => {
         <svg ref={d3Container}></svg>
       </div>
       <NodeForm show={showForm} handleClose={() => setShowForm(false)} handleSave={handleSaveNode} />
-      {showRelForm && <RelationshipForm onSubmit={handleFormSubmit} />}
+      {showRelForm && <RelationshipForm onSubmit={() => setShowRelForm(false)} />} {/* Close the form on submit */}
     </div>
   );
 };
