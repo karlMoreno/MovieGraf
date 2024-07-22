@@ -218,7 +218,7 @@ const D3Graph = () => {
       highlightNode(node, '#ff0000');
     } else if (selectedNodes.length === 1) {
       setSelectedNodes([...selectedNodes, node]);
-      highlightNode(node, '#0000ff');
+      highlightNode(node, '#ff0000');
       drawTemporaryLink(selectedNodes[0], node);
       setShowRelForm(true);
     } else {
@@ -229,10 +229,6 @@ const D3Graph = () => {
   };
 
   const highlightNode = (node, color) => {
-    d3.selectAll('circle')
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 1.5);
-
     d3.select(d3.select(d3Container.current).selectAll('circle').nodes().find(n => d3.select(n).data()[0].id === node.id))
       .attr('stroke', color)
       .attr('stroke-width', 3);
