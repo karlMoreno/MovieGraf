@@ -21,7 +21,7 @@ const D3Graph = () => {
   useEffect(() => {
     const fetchGraphData = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3002/graph');
+        const { data } = await axios.get('http://localhost:3002/api/graph/graph-get');
         const fetchedNodes = data.nodes.map(node => ({
           id: node.identity.low,
           label: node.properties.name,
@@ -68,15 +68,32 @@ const D3Graph = () => {
       }))
       .append("g");
 
+    const defs = svg.append('defs');
+
+    // Define arrowhead markers for graph links
+    defs.append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 13)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', '#999')
+      .style('stroke', 'none');
+
     const colorScale = d3.scaleOrdinal()
       .domain(['Task', 'Participant', 'Asset', 'Context', 'Project'])
       .range(['#2E8B57', '#4682B4', '#FFD700', '#FF6347', '#8A2BE2']);
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id))
-      .force('charge', d3.forceManyBody().strength(-10))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(125)) 
+      .force('charge', d3.forceManyBody().strength(-10)) 
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(20));
+      .force('collision', d3.forceCollide().radius(50)); 
 
     const link = svg.append('g')
       .attr('stroke', '#999')
@@ -84,7 +101,19 @@ const D3Graph = () => {
       .selectAll('line')
       .data(links)
       .enter().append('line')
-      .attr('stroke-width', 2);
+      .attr('stroke-width', 2)
+      .attr('marker-end', 'url(#arrowhead)'); // Add arrowhead to the end of the line
+
+    // Add edge labels
+    const linkLabels = svg.append('g')
+      .selectAll('text')
+      .data(links)
+      .enter().append('text')
+      .attr('dy', 5)
+      .attr('text-anchor', 'middle')
+      .text(d => d.type)
+      .style('fill', '#fff')
+      .style('font-size', '10px');
 
     const node = svg.append('g')
       .attr('stroke', '#fff')
@@ -114,6 +143,10 @@ const D3Graph = () => {
         .attr('y1', d => d.source.y)
         .attr('x2', d => d.target.x)
         .attr('y2', d => d.target.y);
+
+      linkLabels
+        .attr('x', d => (d.source.x + d.target.x) / 2)
+        .attr('y', d => (d.source.y + d.target.y) / 2);
 
       node
         .attr('cx', d => d.x)

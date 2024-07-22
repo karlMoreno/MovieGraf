@@ -1,4 +1,4 @@
-const {getGraph} = require("../models");
+const {getGraph} = require("../models/GraphModel");
 
 const fetchGraph = async (req,res) => {
     try {

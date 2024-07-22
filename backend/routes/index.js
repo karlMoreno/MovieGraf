@@ -5,7 +5,8 @@ const userRoutes = require('./UserRoutes');
 const assetRoutes = require('./AssetRoutes'); 
 const taskRoutes = require('./TaskRoutes'); 
 const projectRoutes = require('./ProjectRoutes');
-const sceneRoutes = require('./SceneRoutes')
+const sceneRoutes = require('./SceneRoutes');
+const graphRoutes = require('./GraphRoutes');
 
 // User routes
 router.use('/user', userRoutes);
@@ -21,5 +22,9 @@ router.use('/projects', projectRoutes);
 
 //Scene routes
 router.use('/scenes', sceneRoutes);
+
+//Graph route
+router.use('/graph', graphRoutes);
+
 
 module.exports = router;

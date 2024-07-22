@@ -56,25 +56,25 @@ app.use(logger);
 const mainRouter = require('./routes');
 app.use('/api', mainRouter);
 
-// Graph endpoint
-app.get('/graph', async (req, res) => {
-  const session = driver.session({ database: "neo4j" });
-  try {
-    const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
-    const nodes = new Set();
-    const edges = [];
-    result.records.forEach(record => {
-      nodes.add(record.get('n'));
-      nodes.add(record.get('m'));
-      edges.push(record.get('r'));
-    });
-    res.json({ nodes: Array.from(nodes), edges });
-  } catch (error) {
-    res.status(500).send(error.message);
-  } finally {
-    await session.close();
-  }
-});
+// // Graph endpoint
+// app.get('/graph', async (req, res) => {
+//   const session = driver.session({ database: "neo4j" });
+//   try {
+//     const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
+//     const nodes = new Set();
+//     const edges = [];
+//     result.records.forEach(record => {
+//       nodes.add(record.get('n'));
+//       nodes.add(record.get('m'));
+//       edges.push(record.get('r'));
+//     });
+//     res.json({ nodes: Array.from(nodes), edges });
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   } finally {
+//     await session.close();
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
