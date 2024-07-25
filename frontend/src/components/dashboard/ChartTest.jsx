@@ -45,11 +45,11 @@ const ChartTest = () => {
     setSelectedNodes((prevSelectedNodes) => {
       if (prevSelectedNodes.length === 0) {
         console.log("Selecting first node");
-        highlightNode(node, "#ff0000");
+        highlightNode(node, "#FFFFFF");
         return [node];
       } else if (prevSelectedNodes.length === 1) {
         console.log("Selecting second node");
-        highlightNode(node, "#ff0000");
+        highlightNode(node, "#FFFFFF");
         return [...prevSelectedNodes, node];
       } else {
         console.log("Selecting third node, clearing previous selections");
@@ -72,8 +72,8 @@ const ChartTest = () => {
     console.log("Clearing selections");
     d3.select(d3Container.current)
       .selectAll("circle")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5);
+      .attr("stroke", "none")
+      .attr("stroke-width", 0);
     setSelectedNodes([]); // Clear selected nodes
   };
 
