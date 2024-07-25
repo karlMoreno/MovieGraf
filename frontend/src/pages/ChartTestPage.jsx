@@ -12,7 +12,7 @@ const darkTheme = createTheme({
   },
 });
 
-const TestPage = () => {
+const ChartTestPage = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -40,4 +40,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default ChartTestPage;

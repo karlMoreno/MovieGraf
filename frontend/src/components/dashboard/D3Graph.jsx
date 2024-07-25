@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'; // Import React hook
 import * as d3 from 'd3'; // Import D3 library
 import axios from 'axios'; // Import Axios for HTTP requests
 import { useDrop } from 'react-dnd'; // Import useDrop from react-dnd for drag-and-drop functionality
-import Sidebar from './DiagramSidebar'; // Import Sidebar component
+import DiagramSideBar from './DiagramSidebar'; // Import Sidebar component
 import NodeForm from './NodeForm'; // Import NodeForm component
 import RelationshipForm from './RelationshipsForm'; // Import RelationshipForm component
 
@@ -266,7 +266,7 @@ const D3Graph = () => {
   // Return the main component
   return (
     <div style={{ display: 'flex' }}>
-      <Sidebar /> {/* Sidebar component */}
+      <DiagramSideBar /> {/* Sidebar component */}
       <div ref={drop} style={{ width: '100%', height: '600px', border: '1px solid black' }}>
         <svg ref={d3Container}></svg> {/* D3 container */}
       </div>

@@ -21,7 +21,7 @@ const DraggableNode = ({ type }) => {
   );
 };
 
-const Sidebar = () => (
+const DiagramSideBar = () => (
   <div>
     <h3>Nodes</h3>
     <DraggableNode type="Task" />
@@ -30,4 +30,4 @@ const Sidebar = () => (
   </div>
 );
 
-export default Sidebar;
+export default DiagramSideBar;

@@ -9,6 +9,7 @@ import LandingPage from './pages/LandingPage';
 import Projects from './pages/Projects';
 import AssetPage from './components/dashboard/AssetsPage';
 import TestPage from './pages/TestPage';
+import ChartTestPage from './pages/ChartTestPage';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,6 +23,15 @@ function App() {
         <Route path="/dashboard/:projectId" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/assets" element={<AssetPage />} />
+        <Route 
+          path="/chart-test-page" 
+          element={
+            <DndProvider backend={HTML5Backend}>
+              <ChartTestPage />
+            </DndProvider>
+          } 
+        />
+
         <Route 
           path="/test" 
           element={

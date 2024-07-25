@@ -1,7 +1,7 @@
 import React, { useRef, useState} from 'react';
 import * as d3 from 'd3';
 import {useDrop} from 'react-dnd';
-import SideBar from './DiagramSidebar';
+import DiagramSideBar from './DiagramSidebar';
 
 const ChartTest = () => {
     const d3Container = useRef(null);
@@ -9,18 +9,13 @@ const ChartTest = () => {
 
     const [{isOver}, drop] = useDrop({
         accept: 'node',
-        drop: (item,monitor) => {
+        drop: (item, monitor) => {
             const offset = monitor.getSourceClientOffset();
-            const container = d3Container.current.getBoundingClientReact();
-            const newNode = {
-                id: nodes.length,
-                label: item.type,
-                x: offset.x - container.left,
-                y: offset.y - container.top,
-
-            };
-            setNodes([...nodes,newNode]);
-        },
+            const svg = d3Container.current;
+            const point = d3.pointer(monitor.getClientOffset(), svg);
+            const newNode = { id: nodes.length, type: item.type, x: point[0], y: point[1] };
+            setNodes([...nodes, newNode]);
+          },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         })
@@ -57,7 +52,7 @@ const renderGraph = () => {
 
   return (
     <div style={{ display: 'flex' }}>
-      <Sidebar /> {/* Render the sidebar */}
+      <DiagramSideBar /> {/* Render the sidebar */}
       <div ref={drop} style={{ width: '100%', height: '600px', border: '1px solid black' }}>
         <svg ref={d3Container}></svg> {/* SVG container */}
       </div>
