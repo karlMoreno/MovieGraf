@@ -51,22 +51,13 @@ const ChartTest = () => {
       } else if (prevSelectedNodes.length === 1) {
         console.log("Selecting second node");
         highlightNode(node, "#ff0000");
-        if(node === prevSelectedNodes[0]){
-            clearSelections();
-            console.log("You selected the same node");
-
-        }else{
-            const newLink = { source: prevSelectedNodes[0], target: node };
-            setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
-
-        }
-        
-        
+        const newLink = { source: prevSelectedNodes[0], target: node };
+        setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
+        clearSelections();
         return [...prevSelectedNodes, node];
       } else {
         console.log("Selecting third node, clearing previous selections");
         clearSelections();
-        // highlightNode(node, "#ff0000");
         return [node];
       }
     });
@@ -89,6 +80,28 @@ const ChartTest = () => {
     setSelectedNodes([]); // Clear selected nodes
   };
 
+  // Custom drag behavior - Added this part
+  const drag = d3.drag()
+  .on('start', (event, d) => {
+    console.log("Drag start:", d);
+    d3.select(event.sourceEvent.target).raise().attr('stroke', 'black');
+  })
+  .on('drag', (event, d) => {
+    console.log("Dragging:", d);
+    d.x = event.x;
+    d.y = event.y;
+    d3.select(event.sourceEvent.target)
+      .attr('cx', d.x)
+      .attr('cy', d.y);
+    renderLinks();
+    renderLabels();
+  })
+  .on('end', (event, d) => {
+    console.log("Drag end:", d);
+    d3.select(event.sourceEvent.target).attr('stroke', 'none');
+  });
+
+  // Render the graph - Modified this part
   const renderGraph = () => {
     const svg = d3.select(d3Container.current)
       .attr("width", "100%")
@@ -101,7 +114,7 @@ const ChartTest = () => {
     svg.append('defs').append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '-0 -5 10 10')
-      .attr('refX', 25)
+      .attr('refX', 32)
       .attr('refY', 0)
       .attr('orient', 'auto')
       .attr('markerWidth', 6)
@@ -112,17 +125,7 @@ const ChartTest = () => {
       .style('stroke', 'none');
 
     // Render links
-    svg.selectAll('line')
-      .data(links)
-      .enter()
-      .append('line')
-      .attr('x1', d => d.source.x)
-      .attr('y1', d => d.source.y)
-      .attr('x2', d => d.target.x)
-      .attr('y2', d => d.target.y)
-      .attr('stroke', '#999')
-      .attr('stroke-width', 2)
-      .attr('marker-end', 'url(#arrowhead)');
+    renderLinks(); // Added this call
 
     // Render nodes
     const node = svg.selectAll("circle").data(nodes, (d) => d.id);
@@ -135,11 +138,42 @@ const ChartTest = () => {
       .attr("fill", (d) => colorMap[d.type] || "#FFFFFF") // Node color
       .attr("stroke", "none") // Initial stroke set to 'none'
       .attr("stroke-width", 0) // Initial stroke width set to 0
+      .call(drag) // Apply drag behavior - Added this call
       .on("contextmenu", (event, d) => handleRightClick(event, d)); // Right-click event for highlighting nodes
 
     node.exit().remove(); // Handle exit selection
 
     // Render labels
+    renderLabels(); // Added this call
+  };
+
+  // Render links - Added this function
+  const renderLinks = () => {
+    const svg = d3.select(d3Container.current);
+    const link = svg.selectAll('line').data(links);
+
+    link.enter()
+      .append('line')
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y)
+      .attr('stroke', '#999')
+      .attr('stroke-width', 2)
+      .attr('marker-end', 'url(#arrowhead)');
+
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    link.exit().remove();
+  };
+
+  // Render labels - Added this function
+  const renderLabels = () => {
+    const svg = d3.select(d3Container.current);
     const labels = svg.selectAll("text").data(nodes);
 
     labels.enter()
@@ -150,6 +184,11 @@ const ChartTest = () => {
       .style("fill", "#fff")
       .style("font-size", "14px")
       .text((d) => d.type); // Node label
+
+    labels
+      .attr("x", (d) => d.x)
+      .attr("y", (d) => d.y - 25)
+      .text((d) => d.type);
 
     labels.exit().remove();
   };
