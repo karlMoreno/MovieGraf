@@ -51,9 +51,17 @@ const ChartTest = () => {
       } else if (prevSelectedNodes.length === 1) {
         console.log("Selecting second node");
         highlightNode(node, "#ff0000");
-        const newLink = { source: prevSelectedNodes[0], target: node };
-        setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
-        clearSelections();
+        if(node === prevSelectedNodes[0]){
+            clearSelections();
+            console.log("You selected the same node");
+
+        }else{
+            const newLink = { source: prevSelectedNodes[0], target: node };
+            setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
+
+        }
+        
+        
         return [...prevSelectedNodes, node];
       } else {
         console.log("Selecting third node, clearing previous selections");
@@ -93,7 +101,7 @@ const ChartTest = () => {
     svg.append('defs').append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '-0 -5 10 10')
-      .attr('refX', 32)
+      .attr('refX', 25)
       .attr('refY', 0)
       .attr('orient', 'auto')
       .attr('markerWidth', 6)
