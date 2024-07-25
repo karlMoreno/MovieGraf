@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as d3 from "d3";
 import { useDrop } from "react-dnd";
 import DiagramSideBar from "./DiagramSidebar";
@@ -6,6 +6,7 @@ import DiagramSideBar from "./DiagramSidebar";
 const ChartTest = () => {
   const d3Container = useRef(null);
   const [nodes, setNodes] = useState([]);
+  const [selectedNodes, setSelectedNodes] = useState([]);
 
   const colorMap = {
     Task: "#cc3300", // red
@@ -28,7 +29,7 @@ const ChartTest = () => {
         x: point.x,
         y: point.y,
       };
-      console.log("Adding node:", newNode); // Debugging log
+      console.log("Adding node:", newNode); // Log the new node
       setNodes((prevNodes) => [...prevNodes, newNode]);
     },
     collect: (monitor) => ({
@@ -36,72 +37,84 @@ const ChartTest = () => {
     }),
   });
 
-  // Render the graph with nodes
+  // Handle Selected Nodes Right click for highlighting
+  const handleRightClick = (event, node) => {
+    event.preventDefault();
+    console.log("Right click on node:", node);
+
+    setSelectedNodes((prevSelectedNodes) => {
+      if (prevSelectedNodes.length === 0) {
+        console.log("Selecting first node");
+        highlightNode(node, "#ff0000");
+        return [node];
+      } else if (prevSelectedNodes.length === 1) {
+        console.log("Selecting second node");
+        return [...prevSelectedNodes, node];
+        highlightNode(node, "#ff0000");
+      } else {
+        console.log("Selecting third node, clearing previous selections");
+        clearSelections();
+        highlightNode(node, "#ff0000");
+        return [node];
+      }
+    });
+  };
+
+  const highlightNode = (node, color) => {
+    d3.select(d3Container.current)
+      .selectAll("circle")
+      .filter((d) => d.id === node.id)
+      .attr("stroke", color)
+      .attr("stroke-width", 3);
+  };
+
+  const clearSelections = () => {
+    console.log("Clearing selections");
+    d3.select(d3Container.current)
+      .selectAll("circle")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5);
+    setSelectedNodes([]); // Clear selected nodes
+  };
+
   const renderGraph = () => {
-    const svg = d3
-      .select(d3Container.current)
+    const svg = d3.select(d3Container.current)
       .attr("width", "100%")
       .attr("height", "600");
 
-    // Bind data to circle elements and handle enter, update, and exit selections
     const node = svg.selectAll("circle").data(nodes, (d) => d.id);
 
-    // Enter selection
-    node
-      .enter()
+    node.enter()
       .append("circle")
-      .attr("r", 20)
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y)
-      .attr("fill", (d) => {
-        console.log("Node type:", d.type); // Debugging log
-        return colorMap[d.type] || "#FFFFFF";
-      });
+      .attr("r", 20) // Node radius
+      .attr("cx", (d) => d.x) // Node x position
+      .attr("cy", (d) => d.y) // Node y position
+      .attr("fill", (d) => colorMap[d.type] || "#FFFFFF") // Node color
+      .on("contextmenu", (event, d) => handleRightClick(event, d)); // Right-click event for highlighting nodes
 
-    // Update selection
-    node
-      .attr("r", 20)
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y)
-      .attr("fill", (d) => {
-        console.log("Node type:", d.type); // Debugging log
-        return colorMap[d.type] || "#FFFFFF";
-      });
+    node.exit().remove(); // Handle exit selection
 
-    // Exit selection
-    node.exit().remove();
+    const labels = svg.selectAll("text").data(nodes);
 
-    // Handle text labels
-    const labels = svg.selectAll("text").data(nodes, (d) => d.id);
-
-    // Enter selection for labels
-    labels
-      .enter()
+    labels.enter()
       .append("text")
-      .attr("x", (d) => d.x)
-      .attr("y", (d) => d.y - 25)
+      .attr("x", (d) => d.x) // Label x position
+      .attr("y", (d) => d.y - 25) // Label y position
       .attr("text-anchor", "middle")
       .style("fill", "#fff")
       .style("font-size", "14px")
-      .text((d) => d.type);
+      .text((d) => d.type); // Node label
 
-    // Update selection for labels
-    labels
-      .attr("x", (d) => d.x)
-      .attr("y", (d) => d.y - 25)
-      .attr("text-anchor", "middle")
-      .style("fill", "#fff")
-      .style("font-size", "14px")
-      .text((d) => d.type);
-
-    // Exit selection for labels
     labels.exit().remove();
   };
 
-  // Call renderGraph to update the SVG whenever nodes change
-  React.useEffect(() => {
+  useEffect(() => {
     renderGraph();
   }, [nodes]);
+
+  useEffect(() => {
+    console.log("Updated selectedNodes state:", selectedNodes);
+  }, [selectedNodes]);
 
   return (
     <div style={{ display: "flex" }}>
