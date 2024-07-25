@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -28,6 +28,7 @@ export default function Projects() {
   const [projects, setProjects] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState("");
+  const [edgeModalOpen, setEdgeModalOpen] = React.useState(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -39,8 +40,9 @@ export default function Projects() {
       }
 
       try {
+        console.log('Fetching projects...');
         const response = await fetch(
-          "http://localhost:3002/api/projects/list",
+          `${process.env.REACT_APP_API_URL}/api/projects/list`,
           {
             method: "GET",
             headers: {
@@ -50,6 +52,7 @@ export default function Projects() {
           }
         );
         const data = await response.json();
+        console.log('Fetched projects:', data);
         if (data.success) {
           setProjects(data.projects);
         } else {
@@ -64,19 +67,23 @@ export default function Projects() {
     fetchProjects();
   }, [navigate]);
 
-  const handleProjectClick = () => {
-    navigate(`/dashboard`);
+  const handleProjectClick = (projectId) => {
+    console.log('Navigating to project with ID:', projectId);
+    navigate(`/dashboard/${projectId}`);
   };
 
   const handleClickOpen = () => {
+    console.log('Opening new project dialog');
     setOpen(true);
   };
 
   const handleClose = () => {
+    console.log('Closing new project dialog');
     setOpen(false);
   };
 
   const handleNewProjectChange = (event) => {
+    console.log('Changing new project name:', event.target.value);
     setNewProjectName(event.target.value);
   };
 
@@ -88,7 +95,8 @@ export default function Projects() {
     }
 
     try {
-      const response = await fetch("http://localhost:3002/api/projects/add", {
+      console.log('Submitting new project:', newProjectName);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,6 +106,7 @@ export default function Projects() {
       });
 
       const data = await response.json();
+      console.log('New project response:', data);
       if (data.success) {
         setProjects([...projects, data.project]);
         handleClose();
@@ -117,22 +126,18 @@ export default function Projects() {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/projects/delete/${projectId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      console.log('Deleting project with ID:', projectId);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
       if (data.success) {
-        setProjects((prevProjects) =>
-          prevProjects.filter((project) => project.id !== projectId)
-        );
+        setProjects(projects.filter((project) => project.id !== projectId));
       } else {
         console.error("Error deleting project:", data.message);
       }

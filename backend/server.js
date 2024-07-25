@@ -4,7 +4,7 @@
  * 
  * This file sets up the Express server for the application. It includes middleware configuration,
  * static file serving, route handling, and database connections.
- * 
+ *
  * Functionality:
  * - Initializes the Express application.
  * - Configures middleware for CORS, JSON parsing, and URL-encoded data parsing.
@@ -35,6 +35,7 @@ const path = require('path');
 const logger = require('./middleware/logger'); // Import the logger middleware
 // const upload = require('./config/multerConfig'); // Import Multer configuration
 const driver = require('./database/db'); // Ensure driver is imported correctly
+require('dotenv').config();
 
 const app = express();
 const port = 3002;
@@ -55,25 +56,25 @@ app.use(logger);
 const mainRouter = require('./routes');
 app.use('/api', mainRouter);
 
-// Graph endpoint
-app.get('/graph', async (req, res) => {
-  const session = driver.session({ database: "neo4j" });
-  try {
-    const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
-    const nodes = new Set();
-    const edges = [];
-    result.records.forEach(record => {
-      nodes.add(record.get('n'));
-      nodes.add(record.get('m'));
-      edges.push(record.get('r'));
-    });
-    res.json({ nodes: Array.from(nodes), edges });
-  } catch (error) {
-    res.status(500).send(error.message);
-  } finally {
-    await session.close();
-  }
-});
+// // Graph endpoint
+// app.get('/graph', async (req, res) => {
+//   const session = driver.session({ database: "neo4j" });
+//   try {
+//     const result = await session.run('MATCH (n)-[r]->(m) RETURN n, r, m');
+//     const nodes = new Set();
+//     const edges = [];
+//     result.records.forEach(record => {
+//       nodes.add(record.get('n'));
+//       nodes.add(record.get('m'));
+//       edges.push(record.get('r'));
+//     });
+//     res.json({ nodes: Array.from(nodes), edges });
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   } finally {
+//     await session.close();
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

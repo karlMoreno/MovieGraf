@@ -1,12 +1,14 @@
 const neo4j = require('neo4j-driver');
 const driver = require('../database/db');
+const { v4: uuidv4 } = require('uuid');
 
 const createAsset = async ({ name, type, status, file }) => {
   const session = driver.session({ database: "neo4j" });
+  const id = uuidv4(); // Generate a UUID for the new asset
   try {
     const result = await session.run(
-      'CREATE (a:Asset {name: $name, type: $type, status: $status, file: $file}) RETURN a',
-      { name, type, status, file }
+      'CREATE (a:Asset {id: $id, name: $name, type: $type, status: $status, file: $file}) RETURN a',
+      { id, name, type, status, file }
     );
     const asset = result.records[0]?.get('a').properties;
     return asset;
@@ -19,8 +21,8 @@ const getAssetById = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'MATCH (a:Asset) WHERE ID(a) = $id RETURN a',
-      { id: neo4j.int(id) }
+      'MATCH (a:Asset {id: $id}) RETURN a',
+      { id }
     );
     const asset = result.records[0]?.get('a').properties;
     return asset;
@@ -44,8 +46,8 @@ const updateAsset = async (id, { name, type, status, file }) => {
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'MATCH (a:Asset) WHERE ID(a) = $id SET a.name = $name, a.type = $type, a.status = $status, a.file = $file RETURN a',
-      { id: neo4j.int(id), name, type, status, file }
+      'MATCH (a:Asset {id: $id}) SET a.name = $name, a.type = $type, a.status = $status, a.file = $file RETURN a',
+      { id, name, type, status, file }
     );
     const asset = result.records[0]?.get('a').properties;
     return asset;
@@ -57,7 +59,7 @@ const updateAsset = async (id, { name, type, status, file }) => {
 const deleteAsset = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
-    await session.run('MATCH (a:Asset) WHERE ID(a) = $id DELETE a', { id: neo4j.int(id) });
+    await session.run('MATCH (a:Asset {id: $id}) DELETE a', { id });
   } finally {
     await session.close();
   }

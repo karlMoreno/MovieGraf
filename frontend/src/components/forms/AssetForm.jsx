@@ -10,7 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from 'axios';  // Import axios for API calls
+import axios from 'axios';
 
 export default function AssetForm({ onClose }) {
   const [name, setName] = useState("");
@@ -29,12 +29,12 @@ export default function AssetForm({ onClose }) {
     }
 
     try {
-      await axios.post('http://localhost:3002/api/assets-create', formData, {
+      await axios.post('http://localhost:3002/api/assets/assets-create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      onClose();  // Close the drawer after form submission
+      onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
     }

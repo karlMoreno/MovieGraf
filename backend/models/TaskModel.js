@@ -1,11 +1,14 @@
+const neo4j = require('neo4j-driver');
 const driver = require('../database/db');
+const { v4: uuidv4 } = require('uuid');
 
 const createTask = async ({ title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }) => {
   const session = driver.session({ database: "neo4j" });
+  const taskId = uuidv4(); // Generate a unique identifier for the task
   try {
     const result = await session.run(
-      'CREATE (t:Task {title: $title, description: $description, assignedTo: $assignedTo, progressState: $progressState, startDate: $startDate, endDate: $endDate, priority: $priority, thumbnail: $thumbnail}) RETURN t',
-      { title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }
+      'CREATE (t:Task {id: $taskId, title: $title, description: $description, assignedTo: $assignedTo, progressState: $progressState, startDate: $startDate, endDate: $endDate, priority: $priority, thumbnail: $thumbnail}) RETURN t',
+      { taskId, title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }
     );
     const task = result.records[0]?.get('t').properties;
     return task;
@@ -18,8 +21,8 @@ const getTaskById = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'MATCH (t:Task) WHERE ID(t) = $id RETURN t',
-      { id: neo4j.int(id) }
+      'MATCH (t:Task {id: $id}) RETURN t',
+      { id }
     );
     const task = result.records[0]?.get('t').properties;
     return task;
@@ -43,8 +46,8 @@ const updateTask = async (id, { title, description, assignedTo, progressState, s
   const session = driver.session({ database: "neo4j" });
   try {
     const result = await session.run(
-      'MATCH (t:Task) WHERE ID(t) = $id SET t.title = $title, t.description = $description, t.assignedTo = $assignedTo, t.progressState = $progressState, t.startDate = $startDate, t.endDate = $endDate, t.priority = $priority, t.thumbnail = $thumbnail RETURN t',
-      { id: neo4j.int(id), title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }
+      'MATCH (t:Task {id: $id}) SET t.title = $title, t.description = $description, t.assignedTo = $assignedTo, t.progressState = $progressState, t.startDate = $startDate, t.endDate = $endDate, t.priority = $priority, t.thumbnail = $thumbnail RETURN t',
+      { id, title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }
     );
     const task = result.records[0]?.get('t').properties;
     return task;
@@ -56,7 +59,7 @@ const updateTask = async (id, { title, description, assignedTo, progressState, s
 const deleteTask = async (id) => {
   const session = driver.session({ database: "neo4j" });
   try {
-    await session.run('MATCH (t:Task) WHERE ID(t) = $id DELETE t', { id: neo4j.int(id) });
+    await session.run('MATCH (t:Task {id: $id}) DELETE t', { id });
   } finally {
     await session.close();
   }

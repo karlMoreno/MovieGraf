@@ -12,8 +12,6 @@ import {
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from '@mui/material/styles';
-
 
 export default function TasksForm({ onClose }) {
   const [title, setTitle] = useState("");
@@ -25,10 +23,38 @@ export default function TasksForm({ onClose }) {
   const [priority, setPriority] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(JSON.stringify({ title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail: file ? file.name : 'No file' }));
-    onClose(); // Close the drawer after form submission
+    
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('assignedTo', assignedTo);
+    formData.append('progressState', progressState);
+    formData.append('startDate', startDate ? startDate.toISOString() : '');
+    formData.append('endDate', endDate ? endDate.toISOString() : '');
+    formData.append('priority', priority);
+    if (file) {
+      formData.append('thumbnail', file);
+    }
+
+    try {
+      const response = await fetch('http://localhost:3002/api/tasks/tasks-create', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create Task');
+      }
+
+      console.log('Task created successfully');
+      onClose(); // Close the drawer after form submission
+      window.location.reload(); // Reload the page to see the changes
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Error creating Task');
+    }
   };
 
   const handleFileChange = (event) => {
@@ -49,8 +75,7 @@ export default function TasksForm({ onClose }) {
           marginTop: "80px",
         }}
       >
-        <Stack spacing={2}  // Apply spacing uniformly
-        >
+        <Stack spacing={2}>
           <Typography variant="h6" gutterBottom>
             Create New Task
           </Typography>
