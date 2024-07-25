@@ -10,12 +10,15 @@ const ChartTest = () => {
     const [{isOver}, drop] = useDrop({
         accept: 'node',
         drop: (item, monitor) => {
-            const offset = monitor.getSourceClientOffset();
+            const offset = monitor.getClientOffset();
             const svg = d3Container.current;
-            const point = d3.pointer(monitor.getClientOffset(), svg);
-            const newNode = { id: nodes.length, type: item.type, x: point[0], y: point[1] };
+            const svgPoint = svg.createSVGPoint();
+            svgPoint.x = offset.x;
+            svgPoint.y = offset.y;
+            const point = svgPoint.matrixTransform(svg.getScreenCTM().inverse());
+            const newNode = { id: nodes.length, type: item.type, x: point.x, y: point.y };
             setNodes([...nodes, newNode]);
-          },
+        },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         })
