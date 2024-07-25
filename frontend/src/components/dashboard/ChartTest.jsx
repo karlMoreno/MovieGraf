@@ -49,12 +49,12 @@ const ChartTest = () => {
         return [node];
       } else if (prevSelectedNodes.length === 1) {
         console.log("Selecting second node");
-        return [...prevSelectedNodes, node];
         highlightNode(node, "#ff0000");
+        return [...prevSelectedNodes, node];
       } else {
         console.log("Selecting third node, clearing previous selections");
         clearSelections();
-        highlightNode(node, "#ff0000");
+        // highlightNode(node, "#ff0000");
         return [node];
       }
     });
