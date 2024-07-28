@@ -48,7 +48,7 @@ const ChartTest = () => {
         console.log("Selecting first node");
         highlightNode(node, "#ff0000");
         return [node];
-      } else if (prevSelectedNodes.length === 1) {
+      } else if (prevSelectedNodes.length === 1 && node !== prevSelectedNodes[0]) {
         console.log("Selecting second node");
         highlightNode(node, "#ff0000");
         const newLink = { source: prevSelectedNodes[0], target: node };
@@ -56,7 +56,7 @@ const ChartTest = () => {
         clearSelections();
         return [...prevSelectedNodes, node];
       } else {
-        console.log("Selecting third node, clearing previous selections");
+        console.log("You probably selected the same node twice");
         clearSelections();
         return [node];
       }
