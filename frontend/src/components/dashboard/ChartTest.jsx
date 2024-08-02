@@ -80,28 +80,60 @@ const ChartTest = () => {
     setSelectedNodes([]); // Clear selected nodes
   };
 
-  // Custom drag behavior - Added this part
+  // Custom drag behavior with requestAnimationFrame
   const drag = d3.drag()
-  .on('start', (event, d) => {
-    console.log("Drag start:", d);
-    d3.select(event.sourceEvent.target).raise().attr('stroke', 'black');
-  })
-  .on('drag', (event, d) => {
-    console.log("Dragging:", d);
-    d.x = event.x;
-    d.y = event.y;
-    d3.select(event.sourceEvent.target)
+    .on('start', (event, d) => {
+      console.log("Drag start:", d);
+      d3.select(event.sourceEvent.target).raise().attr('stroke', 'black');
+    })
+    .on('drag', (event, d) => {
+      console.log("Dragging:", d);
+      d.x = event.x;
+      d.y = event.y;
+      d3.select(event.sourceEvent.target)
+        .attr('cx', d.x)
+        .attr('cy', d.y);
+
+      // Throttle rendering updates using requestAnimationFrame
+      if (!dragging) {
+        dragging = true;
+        window.requestAnimationFrame(() => {
+          updatePositions(d);
+          dragging = false;
+        });
+      }
+    })
+    .on('end', (event, d) => {
+      console.log("Drag end:", d);
+      d3.select(event.sourceEvent.target).attr('stroke', 'none');
+    });
+
+  let dragging = false; // Flag to control rendering updates
+
+  const updatePositions = (d) => {
+    const svg = d3.select(d3Container.current);
+
+    // Update node position
+    svg.selectAll('circle')
+      .filter((node) => node.id === d.id)
       .attr('cx', d.x)
       .attr('cy', d.y);
-    renderLinks();
-    renderLabels();
-  })
-  .on('end', (event, d) => {
-    console.log("Drag end:", d);
-    d3.select(event.sourceEvent.target).attr('stroke', 'none');
-  });
 
-  // Render the graph - Modified this part
+    // Update label position
+    svg.selectAll('text')
+      .filter((node) => node.id === d.id)
+      .attr('x', d.x)
+      .attr('y', d.y - 25);
+
+    // Update link positions
+    svg.selectAll('line')
+      .attr('x1', (link) => link.source.x)
+      .attr('y1', (link) => link.source.y)
+      .attr('x2', (link) => link.target.x)
+      .attr('y2', (link) => link.target.y);
+  };
+
+  // Render the graph
   const renderGraph = () => {
     const svg = d3.select(d3Container.current)
       .attr("width", "100%")
@@ -125,7 +157,7 @@ const ChartTest = () => {
       .style('stroke', 'none');
 
     // Render links
-    renderLinks(); // Added this call
+    renderLinks();
 
     // Render nodes
     const node = svg.selectAll("circle").data(nodes, (d) => d.id);
@@ -138,16 +170,16 @@ const ChartTest = () => {
       .attr("fill", (d) => colorMap[d.type] || "#FFFFFF") // Node color
       .attr("stroke", "none") // Initial stroke set to 'none'
       .attr("stroke-width", 0) // Initial stroke width set to 0
-      .call(drag) // Apply drag behavior - Added this call
+      .call(drag) // Apply drag behavior
       .on("contextmenu", (event, d) => handleRightClick(event, d)); // Right-click event for highlighting nodes
 
     node.exit().remove(); // Handle exit selection
 
     // Render labels
-    renderLabels(); // Added this call
+    renderLabels();
   };
 
-  // Render links - Added this function
+  // Render links
   const renderLinks = () => {
     const svg = d3.select(d3Container.current);
     const link = svg.selectAll('line').data(links);
@@ -171,7 +203,7 @@ const ChartTest = () => {
     link.exit().remove();
   };
 
-  // Render labels - Added this function
+  // Render labels
   const renderLabels = () => {
     const svg = d3.select(d3Container.current);
     const labels = svg.selectAll("text").data(nodes);
