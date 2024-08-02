@@ -2,12 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import * as d3 from "d3";
 import { useDrop } from "react-dnd";
 import DiagramSideBar from "./DiagramSidebar";
+import NodeForm from './testForms/testNodeForm'; // Assume you have a NodeForm component
+import RelationshipForm from './testForms/testRelationshipsForm'; // Assume you have a RelationshipForm component
 
 const ChartTest = () => {
   const d3Container = useRef(null);
   const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [showNodeForm, setShowNodeForm] = useState(false);
+  const [showRelForm, setShowRelForm] = useState(false);
+  const [newNode, setNewNode] = useState({ type: "", x: 0, y: 0 });
   const [selectedNodes, setSelectedNodes] = useState([]);
-  const [links, setLinks] = useState([]); // State for links
 
   const colorMap = {
     Task: "#cc3300", // red
@@ -31,12 +36,23 @@ const ChartTest = () => {
         y: point.y,
       };
       console.log("Adding node:", newNode); // Log the new node
-      setNodes((prevNodes) => [...prevNodes, newNode]);
+      setNewNode(newNode);
+      setShowNodeForm(true);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
+
+  const handleSaveNode = (nodeAttributes) => {
+    setNodes((prevNodes) => [...prevNodes, { ...newNode, ...nodeAttributes }]);
+    setShowNodeForm(false);
+  };
+
+  const handleSaveLink = (linkAttributes) => {
+    setLinks((prevLinks) => [...prevLinks, linkAttributes]);
+    setShowRelForm(false);
+  };
 
   // Handle Selected Nodes Right click for highlighting
   const handleRightClick = (event, node) => {
@@ -51,10 +67,11 @@ const ChartTest = () => {
       } else if (prevSelectedNodes.length === 1 && node !== prevSelectedNodes[0]) {
         console.log("Selecting second node");
         highlightNode(node, "#ff0000");
-        const newLink = { source: prevSelectedNodes[0], target: node };
+        const newLink = { source: prevSelectedNodes[0], target: node, type: "relationship" };
         setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
+        setShowRelForm(true);
         clearSelections();
-        return [...prevSelectedNodes, node];
+        return [];
       } else {
         console.log("You probably selected the same node twice");
         clearSelections();
@@ -80,7 +97,6 @@ const ChartTest = () => {
     setSelectedNodes([]); // Clear selected nodes
   };
 
-  // Custom drag behavior with requestAnimationFrame
   const drag = d3.drag()
     .on('start', (event, d) => {
       console.log("Drag start:", d);
@@ -229,10 +245,6 @@ const ChartTest = () => {
     renderGraph();
   }, [nodes, links]);
 
-  useEffect(() => {
-    console.log("Updated selectedNodes state:", selectedNodes);
-  }, [selectedNodes]);
-
   return (
     <div style={{ display: "flex" }}>
       <DiagramSideBar /> {/* Render the sidebar */}
@@ -242,6 +254,20 @@ const ChartTest = () => {
       >
         <svg ref={d3Container}></svg> {/* SVG container */}
       </div>
+      {showNodeForm && (
+        <NodeForm
+          show={showNodeForm}
+          handleClose={() => setShowNodeForm(false)}
+          handleSave={handleSaveNode}
+        />
+      )}
+      {showRelForm && (
+        <RelationshipForm
+          show={showRelForm}
+          handleClose={() => setShowRelForm(false)}
+          handleSave={handleSaveLink}
+        />
+      )}
     </div>
   );
 };
