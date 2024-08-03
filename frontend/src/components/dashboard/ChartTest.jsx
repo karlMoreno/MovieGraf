@@ -11,6 +11,7 @@ const ChartTest = () => {
   const [links, setLinks] = useState([]); // State for links
   const [showAssetForm, setShowAssetForm] = useState(false); // State for AssetForm visibility
   const [newNode, setNewNode] = useState(null); // State for new node being edited
+  const [assets, setAssets] = useState([]); // State to store asset data
 
   const colorMap = {
     Task: "#cc3300", // red
@@ -239,6 +240,15 @@ const ChartTest = () => {
     console.log("Updated selectedNodes state:", selectedNodes);
   }, [selectedNodes]);
 
+  useEffect(() => {
+    console.log("Current assets:", assets); // Log current assets array whenever it changes
+  }, [assets]);
+
+  const handleSaveAsset = (assetData) => {
+    console.log("Saving asset:", assetData); // Log the asset data
+    setAssets((prevAssets) => [...prevAssets, assetData]); // Store the asset data in the state
+  };
+
   return (
     <div style={{ display: "flex" }}>
       <DiagramSideBar /> {/* Render the sidebar */}
@@ -251,6 +261,7 @@ const ChartTest = () => {
       {showAssetForm && (
         <AssetForm
           onClose={() => setShowAssetForm(false)}
+          onSave={handleSaveAsset} // Pass the handleSaveAsset function as a prop
         />
       )}
     </div>
