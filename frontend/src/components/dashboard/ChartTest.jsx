@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import DiagramSideBar from "./DiagramSidebar";
 import AssetForm from "../forms/AssetForm";
 import TasksForm from "../forms/TasksForm";
-import RelationshipForm from "../forms/RelationshipsForm";
+import RelationshipForm from "../forms/RelationshipForm";
 
 const ChartTest = () => {
   const d3Container = useRef(null);
@@ -72,7 +72,6 @@ const ChartTest = () => {
         highlightNode(node, "#ff0000");
         setNewLink({ source: prevSelectedNodes[0], target: node }); // Set the new link
         setShowRelationshipForm(true); // Show the RelationshipForm
-        clearSelections();
         return [...prevSelectedNodes, node];
       } else {
         console.log("You probably selected the same node twice");
@@ -140,12 +139,13 @@ const ChartTest = () => {
 
     // Update label position
     svg.selectAll('text')
-      .filter((node) => node.id === d.id)
+      .filter((node) => node && node.id === d.id)
       .attr('x', d.x)
       .attr('y', d.y - 25);
 
     // Update link positions
     svg.selectAll('line')
+      .filter((link) => link.source && link.target)
       .attr('x1', (link) => link.source.x)
       .attr('y1', (link) => link.source.y)
       .attr('x2', (link) => link.target.x)
@@ -153,8 +153,9 @@ const ChartTest = () => {
 
     // Update link labels
     svg.selectAll(".link-label")
-      .attr("x", d => (d.source.x + d.target.x) / 2)
-      .attr("y", d => (d.source.y + d.target.y) / 2);
+      .filter((link) => link.source && link.target)
+      .attr("x", (d) => (d.source.x + d.target.x) / 2)
+      .attr("y", (d) => (d.source.y + d.target.y) / 2);
   };
 
   // Render the graph
@@ -292,11 +293,13 @@ const ChartTest = () => {
   const handleSaveAsset = (assetData) => {
     console.log("Saving asset:", assetData); // Log the asset data
     setAssets((prevAssets) => [...prevAssets, assetData]); // Store the asset data in the state
+    setShowAssetForm(false);
   };
 
   const handleSaveTask = (taskData) => {
     console.log("Saving task:", taskData); // Log the task data
     setTasks((prevTasks) => [...prevTasks, taskData]); // Store the task data in the state
+    setShowTaskForm(false);
   };
 
   const handleSaveRelationship = (relationshipType) => {
@@ -306,6 +309,7 @@ const ChartTest = () => {
       setLinks((prevLinks) => [...prevLinks, labeledLink]); // Store the link with label in the state
       setRelationships((prevRelationships) => [...prevRelationships, labeledLink]); // Store in relationships array
       setNewLink(null);
+      setShowRelationshipForm(false);
     }
   };
 

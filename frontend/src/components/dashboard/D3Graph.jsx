@@ -4,7 +4,7 @@ import axios from 'axios'; // Import Axios for HTTP requests
 import { useDrop } from 'react-dnd'; // Import useDrop from react-dnd for drag-and-drop functionality
 import DiagramSideBar from './DiagramSidebar'; // Import Sidebar component
 import NodeForm from './NodeForm'; // Import NodeForm component
-import RelationshipForm from '../forms/RelationshipsForm'; // Import RelationshipForm component
+import RelationshipForm from '../forms/RelationshipForm'; // Import RelationshipForm component
 
 const D3Graph = () => {
   const d3Container = useRef(null); // Create a ref for the D3 container

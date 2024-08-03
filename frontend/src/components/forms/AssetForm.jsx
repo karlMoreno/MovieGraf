@@ -9,22 +9,33 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const relationships = [
-  "Asset",
-  "CreativeWork",
-  "NarrativeScene",
-  "Task",
-  "Participant"
-];
-
-export default function RelationshipForm({ onClose, onSave }) {
-  const [relationshipType, setRelationshipType] = useState("");
+export default function AssetForm({ onClose, onSave }) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSave(relationshipType);
-    onClose();
+    const formData = {
+      name,
+      type,
+      status,
+      file
+    };
+
+    console.log("Form Data:", formData); // Log form data
+    onSave(formData); // Pass form data to parent component
+    onClose(); // Close the form
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
   };
 
   return (
@@ -39,20 +50,61 @@ export default function RelationshipForm({ onClose, onSave }) {
     >
       <Stack spacing={2}>
         <Typography variant="h6" gutterBottom>
-          Create Relationship
+          Add an Asset
         </Typography>
-        <FormControl fullWidth>
-          <InputLabel>Relationship Type</InputLabel>
-          <Select
-            value={relationshipType}
-            label="Relationship Type"
-            onChange={(e) => setRelationshipType(e.target.value)}
+        {file && (
+          <img
+            src={URL.createObjectURL(file)}
+            alt="Thumbnail"
+            style={{ width: "100%", marginBottom: 16 }}
+          />
+        )}
+        <label htmlFor="upload-button-file">
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
           >
-            {relationships.map((relationship) => (
-              <MenuItem key={relationship} value={relationship}>
-                {relationship}
-              </MenuItem>
-            ))}
+            Upload file
+            <input
+              type="file"
+              hidden
+              onChange={handleFileChange}
+            />
+          </Button>
+        </label>
+        <TextField
+          label="Name"
+          variant="outlined"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <FormControl fullWidth>
+          <InputLabel>Type</InputLabel>
+          <Select
+            value={type}
+            label="Type"
+            onChange={(e) => setType(e.target.value)}
+          >
+            <MenuItem value="Character">Character</MenuItem>
+            <MenuItem value="Environment">Environment</MenuItem>
+            <MenuItem value="Prop">Prop</MenuItem>
+            <MenuItem value="Reference">Reference</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>Status</InputLabel>
+          <Select
+            value={status}
+            label="Status"
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <MenuItem value="NotStarted">NotStarted</MenuItem>
+            <MenuItem value="InProgress">InProgress</MenuItem>
+            <MenuItem value="Complete">Complete</MenuItem>
           </Select>
         </FormControl>
         <Button type="submit" variant="contained" color="primary" fullWidth>
