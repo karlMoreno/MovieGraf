@@ -4,6 +4,7 @@ import { useDrop } from "react-dnd";
 import DiagramSideBar from "./DiagramSidebar";
 import AssetForm from "../forms/AssetForm";
 import TasksForm from "../forms/TasksForm";
+import RelationshipForm from "../forms/RelationshipsForm";
 
 const ChartTest = () => {
   const d3Container = useRef(null);
@@ -12,12 +13,14 @@ const ChartTest = () => {
   const [links, setLinks] = useState([]); // State for links
   const [showAssetForm, setShowAssetForm] = useState(false); // State for AssetForm visibility
   const [showTaskForm, setShowTaskForm] = useState(false); // State for TaskForm visibility
+  const [showRelationshipForm, setShowRelationshipForm] = useState(false); // State for RelationshipForm visibility
   const [newNode, setNewNode] = useState(null); // State for new node being edited
   const [assets, setAssets] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [scenes, setScenes] = useState([]);
   const [artists, setArtists] = useState([]);
   const [relationships, setRelationships] = useState([]);
+  const [newLink, setNewLink] = useState(null); // State for new link being created
 
   const colorMap = {
     Task: "#cc3300", // red
@@ -67,8 +70,8 @@ const ChartTest = () => {
       } else if (prevSelectedNodes.length === 1 && node !== prevSelectedNodes[0]) {
         console.log("Selecting second node");
         highlightNode(node, "#ff0000");
-        const newLink = { source: prevSelectedNodes[0], target: node };
-        setLinks((prevLinks) => [...prevLinks, newLink]); // Add new link
+        setNewLink({ source: prevSelectedNodes[0], target: node }); // Set the new link
+        setShowRelationshipForm(true); // Show the RelationshipForm
         clearSelections();
         return [...prevSelectedNodes, node];
       } else {
@@ -147,6 +150,11 @@ const ChartTest = () => {
       .attr('y1', (link) => link.source.y)
       .attr('x2', (link) => link.target.x)
       .attr('y2', (link) => link.target.y);
+
+    // Update link labels
+    svg.selectAll(".link-label")
+      .attr("x", d => (d.source.x + d.target.x) / 2)
+      .attr("y", d => (d.source.y + d.target.y) / 2);
   };
 
   // Render the graph
@@ -217,6 +225,26 @@ const ChartTest = () => {
       .attr('y2', d => d.target.y);
 
     link.exit().remove();
+
+    // Render link labels
+    const linkLabels = svg.selectAll(".link-label").data(links);
+
+    linkLabels.enter()
+      .append("text")
+      .attr("class", "link-label")
+      .attr("x", d => (d.source.x + d.target.x) / 2)
+      .attr("y", d => (d.source.y + d.target.y) / 2)
+      .attr("text-anchor", "middle")
+      .style("fill", "#fff")
+      .style("font-size", "12px")
+      .text(d => d.type);
+
+    linkLabels
+      .attr("x", d => (d.source.x + d.target.x) / 2)
+      .attr("y", d => (d.source.y + d.target.y) / 2)
+      .text(d => d.type);
+
+    linkLabels.exit().remove();
   };
 
   // Render labels
@@ -257,6 +285,10 @@ const ChartTest = () => {
     console.log("Current tasks:", tasks); // Log current tasks array whenever it changes
   }, [tasks]);
 
+  useEffect(() => {
+    console.log("Current relationships:", relationships); // Log current relationships array whenever it changes
+  }, [relationships]);
+
   const handleSaveAsset = (assetData) => {
     console.log("Saving asset:", assetData); // Log the asset data
     setAssets((prevAssets) => [...prevAssets, assetData]); // Store the asset data in the state
@@ -265,6 +297,16 @@ const ChartTest = () => {
   const handleSaveTask = (taskData) => {
     console.log("Saving task:", taskData); // Log the task data
     setTasks((prevTasks) => [...prevTasks, taskData]); // Store the task data in the state
+  };
+
+  const handleSaveRelationship = (relationshipType) => {
+    if (newLink) {
+      const labeledLink = { ...newLink, type: relationshipType };
+      console.log("Saving relationship:", labeledLink); // Log the relationship
+      setLinks((prevLinks) => [...prevLinks, labeledLink]); // Store the link with label in the state
+      setRelationships((prevRelationships) => [...prevRelationships, labeledLink]); // Store in relationships array
+      setNewLink(null);
+    }
   };
 
   return (
@@ -286,6 +328,12 @@ const ChartTest = () => {
         <TasksForm
           onClose={() => setShowTaskForm(false)}
           onSave={handleSaveTask} // Pass the handleSaveTask function as a prop
+        />
+      )}
+      {showRelationshipForm && (
+        <RelationshipForm
+          onClose={() => setShowRelationshipForm(false)}
+          onSave={handleSaveRelationship} // Pass the handleSaveRelationship function as a prop
         />
       )}
     </div>

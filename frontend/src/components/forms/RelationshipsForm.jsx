@@ -1,48 +1,64 @@
-// RelationshipForm.jsx
-import React, { useState } from 'react';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
+  Stack,
+} from "@mui/material";
 
-const RelationshipForm = ({ onSubmit }) => {
-  const [relationshipType, setRelationshipType] = useState('');
-  const [relationshipProperties, setRelationshipProperties] = useState('');
+const relationships = [
+  "Asset",
+  "CreativeWork",
+  "NarrativeScene",
+  "Task",
+  "Participant"
+];
 
-  const handleSubmit = () => {
-    onSubmit({
-      type: relationshipType,
-      properties: JSON.parse(relationshipProperties || '{}')
-    });
+export default function RelationshipForm({ onClose, onSave }) {
+  const [relationshipType, setRelationshipType] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSave(relationshipType);
+    onClose();
   };
 
   return (
-    <Dialog open={true} onClose={() => onSubmit(null)}>
-      <DialogTitle>Define Relationship</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Relationship Type"
-          fullWidth
-          value={relationshipType}
-          onChange={(e) => setRelationshipType(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Relationship Properties (JSON)"
-          fullWidth
-          value={relationshipProperties}
-          onChange={(e) => setRelationshipProperties(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => onSubmit(null)} color="primary">
-          Cancel
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        maxWidth: 400,
+        margin: "auto",
+        padding: "20px",
+        marginTop: "80px",
+      }}
+    >
+      <Stack spacing={2}>
+        <Typography variant="h6" gutterBottom>
+          Create Relationship
+        </Typography>
+        <FormControl fullWidth>
+          <InputLabel>Relationship Type</InputLabel>
+          <Select
+            value={relationshipType}
+            label="Relationship Type"
+            onChange={(e) => setRelationshipType(e.target.value)}
+          >
+            {relationships.map((relationship) => (
+              <MenuItem key={relationship} value={relationship}>
+                {relationship}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Submit
         </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Create
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </Stack>
+    </form>
   );
-};
-
-export default RelationshipForm;
+}

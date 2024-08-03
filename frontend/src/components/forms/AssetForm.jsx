@@ -9,32 +9,22 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-export default function AssetForm({ onClose, onSave }) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
-  const [file, setFile] = useState(null);
+const relationships = [
+  "Asset",
+  "CreativeWork",
+  "NarrativeScene",
+  "Task",
+  "Participant"
+];
 
-  const handleSubmit = async (event) => {
+export default function RelationshipForm({ onClose, onSave }) {
+  const [relationshipType, setRelationshipType] = useState("");
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const assetData = {
-      name,
-      type,
-      status,
-      file: file ? URL.createObjectURL(file) : null,
-    };
-    console.log("Form Data:", assetData);
-    onSave(assetData);
+    onSave(relationshipType);
     onClose();
-  };
-
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
   };
 
   return (
@@ -49,61 +39,20 @@ export default function AssetForm({ onClose, onSave }) {
     >
       <Stack spacing={2}>
         <Typography variant="h6" gutterBottom>
-          Add an Asset
+          Create Relationship
         </Typography>
-        {file && (
-          <img
-            src={URL.createObjectURL(file)}
-            alt="Thumbnail"
-            style={{ width: "100%", marginBottom: 16 }}
-          />
-        )}
-        <label htmlFor="upload-button-file">
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload file
-            <input
-              type="file"
-              hidden
-              onChange={handleFileChange}
-            />
-          </Button>
-        </label>
-        <TextField
-          label="Name"
-          variant="outlined"
-          fullWidth
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
         <FormControl fullWidth>
-          <InputLabel>Type</InputLabel>
+          <InputLabel>Relationship Type</InputLabel>
           <Select
-            value={type}
-            label="Type"
-            onChange={(e) => setType(e.target.value)}
+            value={relationshipType}
+            label="Relationship Type"
+            onChange={(e) => setRelationshipType(e.target.value)}
           >
-            <MenuItem value="Character">Character</MenuItem>
-            <MenuItem value="Environment">Environment</MenuItem>
-            <MenuItem value="Prop">Prop</MenuItem>
-            <MenuItem value="Reference">Reference</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel>Status</InputLabel>
-          <Select
-            value={status}
-            label="Status"
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <MenuItem value="NotStarted">NotStarted</MenuItem>
-            <MenuItem value="InProgress">InProgress</MenuItem>
-            <MenuItem value="Complete">Complete</MenuItem>
+            {relationships.map((relationship) => (
+              <MenuItem key={relationship} value={relationship}>
+                {relationship}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Button type="submit" variant="contained" color="primary" fullWidth>
