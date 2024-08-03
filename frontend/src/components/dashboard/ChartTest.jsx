@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { useDrop } from "react-dnd";
 import DiagramSideBar from "./DiagramSidebar";
 import AssetForm from "../forms/AssetForm";
+import TasksForm from "../forms/TasksForm";
 
 const ChartTest = () => {
   const d3Container = useRef(null);
@@ -10,8 +11,13 @@ const ChartTest = () => {
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [links, setLinks] = useState([]); // State for links
   const [showAssetForm, setShowAssetForm] = useState(false); // State for AssetForm visibility
+  const [showTaskForm, setShowTaskForm] = useState(false); // State for TaskForm visibility
   const [newNode, setNewNode] = useState(null); // State for new node being edited
-  const [assets, setAssets] = useState([]); // State to store asset data
+  const [assets, setAssets] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [scenes, setScenes] = useState([]);
+  const [artists, setArtists] = useState([]);
+  const [relationships, setRelationships] = useState([]);
 
   const colorMap = {
     Task: "#cc3300", // red
@@ -39,6 +45,9 @@ const ChartTest = () => {
       if (item.type === "Asset") {
         setShowAssetForm(true);  // Show the AssetForm
         setNewNode(newNode);     // Set the new node to be edited
+      } else if (item.type === "Task") {
+        setShowTaskForm(true);  // Show the TaskForm
+        setNewNode(newNode);    // Set the new node to be edited
       }
     },
     collect: (monitor) => ({
@@ -244,9 +253,18 @@ const ChartTest = () => {
     console.log("Current assets:", assets); // Log current assets array whenever it changes
   }, [assets]);
 
+  useEffect(() => {
+    console.log("Current tasks:", tasks); // Log current tasks array whenever it changes
+  }, [tasks]);
+
   const handleSaveAsset = (assetData) => {
     console.log("Saving asset:", assetData); // Log the asset data
     setAssets((prevAssets) => [...prevAssets, assetData]); // Store the asset data in the state
+  };
+
+  const handleSaveTask = (taskData) => {
+    console.log("Saving task:", taskData); // Log the task data
+    setTasks((prevTasks) => [...prevTasks, taskData]); // Store the task data in the state
   };
 
   return (
@@ -262,6 +280,12 @@ const ChartTest = () => {
         <AssetForm
           onClose={() => setShowAssetForm(false)}
           onSave={handleSaveAsset} // Pass the handleSaveAsset function as a prop
+        />
+      )}
+      {showTaskForm && (
+        <TasksForm
+          onClose={() => setShowTaskForm(false)}
+          onSave={handleSaveTask} // Pass the handleSaveTask function as a prop
         />
       )}
     </div>

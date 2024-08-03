@@ -13,7 +13,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-export default function TasksForm({ onClose }) {
+export default function TasksForm({ onClose, onSave }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
@@ -26,35 +26,20 @@ export default function TasksForm({ onClose }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('assignedTo', assignedTo);
-    formData.append('progressState', progressState);
-    formData.append('startDate', startDate ? startDate.toISOString() : '');
-    formData.append('endDate', endDate ? endDate.toISOString() : '');
-    formData.append('priority', priority);
-    if (file) {
-      formData.append('thumbnail', file);
-    }
+    const taskData = {
+      title,
+      description,
+      assignedTo,
+      progressState,
+      startDate: startDate ? startDate.toISOString() : '',
+      endDate: endDate ? endDate.toISOString() : '',
+      priority,
+      file: file ? URL.createObjectURL(file) : null,
+    };
 
-    try {
-      const response = await fetch('http://localhost:3002/api/tasks/tasks-create', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create Task');
-      }
-
-      console.log('Task created successfully');
-      onClose(); // Close the drawer after form submission
-      window.location.reload(); // Reload the page to see the changes
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Error creating Task');
-    }
+    console.log('Task Data:', taskData);
+    onSave(taskData);
+    onClose();
   };
 
   const handleFileChange = (event) => {

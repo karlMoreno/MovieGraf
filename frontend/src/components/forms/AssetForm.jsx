@@ -17,18 +17,17 @@ export default function AssetForm({ onClose, onSave }) {
   const [status, setStatus] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = {
+    const assetData = {
       name,
       type,
       status,
-      file
+      file: file ? URL.createObjectURL(file) : null,
     };
-
-    console.log("Form Data:", formData); // Log form data
-    onSave(formData); // Pass form data to parent component
-    onClose(); // Close the form
+    console.log("Form Data:", assetData);
+    onSave(assetData);
+    onClose();
   };
 
   const handleFileChange = (event) => {
