@@ -10,34 +10,25 @@ import {
   Stack,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from 'axios';
 
-export default function AssetForm({ onClose }) {
+export default function AssetForm({ onClose, onSave }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('type', type);
-    formData.append('status', status);
-    if (file) {
-      formData.append('file', file);
-    }
+    const formData = {
+      name,
+      type,
+      status,
+      file
+    };
 
-    try {
-      await axios.post('http://localhost:3002/api/assets/assets-create', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      onClose();
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
+    console.log("Form Data:", formData); // Log form data
+    onSave(formData); // Pass form data to parent component
+    onClose(); // Close the form
   };
 
   const handleFileChange = (event) => {

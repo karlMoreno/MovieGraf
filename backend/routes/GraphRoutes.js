@@ -3,6 +3,7 @@ const { fetchGraph } = require('../controllers/GraphController');
 const router = express.Router();
 
 
-router.get('/graph-get', fetchGraph);
+//router.get('/graph-get', fetchGraph);
+
 
 module.exports = router;

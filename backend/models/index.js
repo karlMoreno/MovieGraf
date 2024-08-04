@@ -4,6 +4,7 @@ const { createTask, getTaskById, getAllTasks, updateTask, deleteTask } = require
 const { createProject, getProjectsByUser, updateProject, deleteProject } = require('./ProjectModel')
 const { createScene, getSceneById, getAllScenes, updateScene, deleteScene } = require('./SceneModel');
 const {getGraph} = require('./GraphModel');
+const {createRelationship} = require('./RelationshipModel');
 
 module.exports = {
   //UserModel
@@ -40,4 +41,7 @@ module.exports = {
   //Graph Model
   getGraph,
   //Graph Model
+  // Relationship Model
+  createRelationship,
+  //Relationship Model
 };

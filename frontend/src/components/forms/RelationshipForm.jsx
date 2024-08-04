@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Button, FormControl, InputLabel, Select, MenuItem, Typography, Stack } from "@mui/material";
 
 const relationships = [
   "Asset",
@@ -18,7 +9,7 @@ const relationships = [
   "Participant"
 ];
 
-export default function RelationshipForm({ onClose, onSave }) {
+const RelationshipForm = ({ onClose, onSave }) => {
   const [relationshipType, setRelationshipType] = useState("");
 
   const handleSubmit = (event) => {
@@ -61,4 +52,6 @@ export default function RelationshipForm({ onClose, onSave }) {
       </Stack>
     </form>
   );
-}
+};
+
+export default RelationshipForm;
