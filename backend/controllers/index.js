@@ -21,7 +21,7 @@ const {addProject, getProjects, editProject, removeProject} = require("./Project
 
 const { createSceneHandler, getSceneByIdHandler, getAllScenesHandler, updateSceneHandler, deleteSceneHandler } = require("./SceneController");
 
-const {fetchGraph} = require('./GraphController');
+const {saveGraph} = require('./GraphController');
 
 module.exports = {
   //UserController
@@ -56,6 +56,7 @@ module.exports = {
   deleteSceneHandler,
   //Scene Controller
   //Graph Controller
-  fetchGraph,
+  //fetchGraph,
+  saveGraph,
   //Graph Controller
 };
