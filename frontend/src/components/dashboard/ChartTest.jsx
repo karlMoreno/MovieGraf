@@ -313,6 +313,9 @@ const ChartTest = () => {
     }
   };
 
+
+    
+
   return (
     <div style={{ display: "flex" }}>
       <DiagramSideBar /> {/* Render the sidebar */}
