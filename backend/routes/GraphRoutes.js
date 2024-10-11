@@ -1,9 +1,12 @@
 const express = require('express');
-const { fetchGraph } = require('../controllers/GraphController');
 const router = express.Router();
+const graphController = require('../controllers/GraphController');
 
+// Route to save graph data
+router.post('/save-graph', graphController.saveGraph);
 
-//router.get('/graph-get', fetchGraph);
+router.get('/get-graph', graphController.getGraph);
 
+router.delete('/delete-node/:nodeType/:id', graphController.deleteNode);
 
 module.exports = router;
