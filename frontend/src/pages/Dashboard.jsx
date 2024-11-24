@@ -1,3 +1,5 @@
+// Dashboard.jsx
+
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,20 +17,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Link from "@mui/material/Link";
 import { MainListItems, secondaryListItems } from "../components/dashboard/listItems";
-import Chart from "../components/dashboard/Chart";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AssetPage from "../components/dashboard/AssetsPage";
 import ArtistsPage from "../components/dashboard/ArtistsPage";
 import TasksPage from "../components/dashboard/TasksPage";
 import Timeline from "../components/dashboard/TimelinePage";
 import ModelViewerPage from "../components/dashboard/ModelViewerPage";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
+import ChartTest from "../components/dashboard/ChartTest"; // Updated import
+import { DndProvider } from "react-dnd"; // Import DndProvider
+import { HTML5Backend } from "react-dnd-html5-backend"; // Import backend
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="#">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -85,7 +89,7 @@ const Drawer = styled(MuiDrawer, {
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
   },
 });
 
@@ -109,17 +113,36 @@ export default function Dashboard() {
         <CssBaseline />
         <AppBar position="absolute" open={open}>
           <Toolbar sx={{ pr: "24px" }}>
-            <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer} sx={{ marginRight: "36px", ...(open && { display: "none" }) }}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{ marginRight: "36px", ...(open && { display: "none" }) }}
+            >
               <MenuIcon />
             </IconButton>
-            <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
               Dashboard
             </Typography>
           </Toolbar>
         </AppBar>
 
         <Drawer variant="permanent" open={open}>
-          <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", px: [1] }}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
+            }}
+          >
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -132,15 +155,28 @@ export default function Dashboard() {
           </List>
         </Drawer>
 
-        <Box component="main" sx={{ backgroundColor: (theme) => theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[100], flexGrow: 1, height: "100vh", overflow: "auto" }}>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? theme.palette.grey[900]
+                : theme.palette.grey[100],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
+          }}
+        >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             {currentPage === "dashboard" && (
               <Grid container spacing={3}>
-                {/* Chart */}
+                {/* ChartTest Component */}
                 <Grid item xs={12}>
                   <Paper elevation={3} sx={{ padding: 2 }}>
-                    <Chart />
+                    <DndProvider backend={HTML5Backend}>
+                      <ChartTest />
+                    </DndProvider>
                   </Paper>
                 </Grid>
                 {/* Timeline */}
@@ -155,7 +191,9 @@ export default function Dashboard() {
             {currentPage === "artists" && <ArtistsPage />}
             {currentPage === "tasks" && <TasksPage />}
             {currentPage === "model" && <ModelViewerPage />}
-            <Copyright sx={{ pt: 4 }} />
+            <Box sx={{ pt: 4 }}>
+              <Copyright />
+            </Box>
           </Container>
         </Box>
       </Box>

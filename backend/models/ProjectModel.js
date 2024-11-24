@@ -1,12 +1,16 @@
 const driver = require('../database/db');
 const { v4: uuidv4 } = require('uuid');
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 /**
  * Creates a new project
  * @param {Object} projectDetails - The details of the project to create
  * @param {string} userId - The ID of the user who owns the project
  * @returns {Object} - The created project
  */
+
+
 const createProject = async (projectDetails, userId) => {
   const session = driver.session({ database: 'neo4j' });
   const projectId = uuidv4();

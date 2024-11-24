@@ -7,10 +7,15 @@ const createAsset = async (asset) => {
   const session = driver.session();
   try {
     await session.run(
-      'MERGE (a:Asset {id: $id}) ' +
-        'SET a.name = $name, a.type = $type, a.status = $status, a.x = $x, a.y = $y' +
-        (asset.file ? ', a.file = $file' : ''),
+      `
+      MATCH (p:Project {id: $projectId}) 
+      MERGE (a:Asset {id: $id}) 
+      SET a.name = $name, a.type = $type, a.status = $status, a.x = $x, a.y = $y
+      ${asset.file ? ', a.file = $file' : ''}
+      MERGE (p)-[:HAS_ASSET]->(a)
+      `,
       {
+        projectId: asset.projectId,
         id: asset.id,
         name: asset.name,
         type: asset.type,
@@ -20,7 +25,7 @@ const createAsset = async (asset) => {
         ...(asset.file && { file: asset.file }),
       }
     );
-    console.log('Asset created or updated:', asset);
+    console.log('Asset created or updated and linked to project:', asset);
   } catch (error) {
     console.error('Error creating or updating asset:', error);
     throw error;
@@ -29,13 +34,21 @@ const createAsset = async (asset) => {
   }
 };
 
+
 const createTask = async (task) => {
   const session = driver.session();
   try {
     await session.run(
-      'MERGE (t:Task {id: $id}) ' +
-        'SET t.title = $title, t.description = $description, t.assignedTo = $assignedTo, t.priority = $priority, t.progressState = $progressState, t.startDate = $startDate, t.endDate = $endDate, t.x = $x, t.y = $y',
+      `
+      MATCH (p:Project {id: $projectId}) 
+      MERGE (t:Task {id: $id}) 
+      SET t.title = $title, t.description = $description, t.assignedTo = $assignedTo, 
+          t.priority = $priority, t.progressState = $progressState, 
+          t.startDate = $startDate, t.endDate = $endDate, t.x = $x, t.y = $y 
+      MERGE (p)-[:HAS_TASK]->(t)
+      `,
       {
+        projectId: task.projectId,
         id: task.id,
         title: task.title,
         description: task.description,
@@ -48,7 +61,7 @@ const createTask = async (task) => {
         y: task.y,
       }
     );
-    console.log('Task created or updated:', task);
+    console.log('Task created or updated and linked to project:', task);
   } catch (error) {
     console.error('Error creating or updating task:', error);
     throw error;
@@ -57,18 +70,37 @@ const createTask = async (task) => {
   }
 };
 
+
 const createRelationship = async (relationship) => {
   const session = driver.session();
   try {
-    await session.run(
-      'MATCH (a {id: $sourceId}), (b {id: $targetId}) ' +
-        'MERGE (a)-[r:' + relationship.type + ']->(b) ' +
-        'RETURN r',
-      {
-        sourceId: relationship.sourceId,
-        targetId: relationship.targetId,
-      }
-    );
+    const { sourceId, targetId, type } = relationship;
+
+    // Validate relationship type to prevent injection attacks
+    const isValidType = /^[A-Za-z_][A-Za-z0-9_]*$/.test(type);
+    if (!isValidType) {
+      throw new Error(`Invalid relationship type: ${type}`);
+    }
+
+    // Log IDs and type
+    console.log(`Creating relationship of type ${type} between nodes with IDs ${sourceId} and ${targetId}`);
+
+    const query = `
+      MATCH (a {id: $sourceId}), (b {id: $targetId})
+      MERGE (a)-[r:${type}]->(b)
+      RETURN r
+    `;
+
+    const result = await session.run(query, {
+      sourceId,
+      targetId,
+    });
+
+    if (result.records.length === 0) {
+      console.error('No relationship created. Possible missing nodes.');
+      throw new Error('Failed to create relationship.');
+    }
+
     console.log('Relationship created or matched:', relationship);
   } catch (error) {
     console.error('Error creating relationship:', error);
@@ -79,12 +111,13 @@ const createRelationship = async (relationship) => {
 };
 
 
+
+
 const deleteAsset = async (session, id) => {
   try {
-    await session.run(
-      'MATCH (a:Asset {id: $id}) DETACH DELETE a',
-      { id: parseInt(id) }
-    );
+    await session.run('MATCH (a:Asset {id: $id}) DETACH DELETE a', {
+      id: parseInt(id),
+    });
     console.log('Asset deleted:', id);
   } catch (error) {
     console.error('Error deleting asset:', error);
@@ -94,10 +127,9 @@ const deleteAsset = async (session, id) => {
 
 const deleteTask = async (session, id) => {
   try {
-    await session.run(
-      'MATCH (t:Task {id: $id}) DETACH DELETE t',
-      { id: parseInt(id) }
-    );
+    await session.run('MATCH (t:Task {id: $id}) DETACH DELETE t', {
+      id: parseInt(id),
+    });
     console.log('Task deleted:', id);
   } catch (error) {
     console.error('Error deleting task:', error);

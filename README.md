@@ -113,6 +113,9 @@ To get the frontend up and running, follow these steps:
 
    npm install react-bootstrap bootstrap
 
+   npm install uuid
+
+
 
 
 

@@ -7,6 +7,8 @@ import DiagramSideBar from "./DiagramSidebar";
 import AssetForm from "../forms/AssetForm";
 import TasksForm from "../forms/TasksForm";
 import RelationshipForm from "../forms/RelationshipForm";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ChartTest = () => {
   const d3Container = useRef(null);
@@ -28,45 +30,47 @@ const ChartTest = () => {
   const [contextMenuNode, setContextMenuNode] = useState(null);
   const [showNodeInfo, setShowNodeInfo] = useState(false);
   const [nodeInfo, setNodeInfo] = useState(null);
-
   const fetchGraphData = async () => {
     try {
       console.log("fetchGraphData called");
-      const response = await fetch("http://localhost:3002/api/graph/get-graph");
+  
+      // Extract projectId from the URL
+      const projectId = window.location.pathname.split('/').pop();
+      console.log("Extracted projectId:", projectId);
+  
+      const response = await fetch(`http://localhost:3002/api/graph/get-graph?projectId=${projectId}`);
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched graph data:", data);
-
+  
         // Update nodes and links
         // Combine assets and tasks into nodes array
         const fetchedNodes = [
           ...data.assets.map((asset) => ({
-            ...asset, // Spread asset properties first
-            id: asset.id,
-            x: asset.x,
-            y: asset.y,
-            nodeType: "Asset", // Set nodeType after spreading properties
+            ...asset, // Spread asset properties
+            nodeType: "Asset",
           })),
           ...data.tasks.map((task) => ({
-            ...task, // Spread task properties first
-            id: task.id,
-            x: task.x,
-            y: task.y,
-            nodeType: "Task", // Set nodeType after spreading properties
+            ...task, // Spread task properties
+            nodeType: "Task",
           })),
         ];
-
+  
         // Map relationships to links
         const fetchedLinks = data.relationships
           .map((rel) => {
-            const sourceNode = fetchedNodes.find((node) => node.id === rel.sourceId);
-            const targetNode = fetchedNodes.find((node) => node.id === rel.targetId);
-
+            const sourceNode = fetchedNodes.find(
+              (node) => node.id.toString() === rel.sourceId.toString()
+            );
+            const targetNode = fetchedNodes.find(
+              (node) => node.id.toString() === rel.targetId.toString()
+            );
+  
             if (!sourceNode || !targetNode) {
-              console.error('Invalid link data:', rel);
+              console.error("Invalid link data:", rel);
               return null;
             }
-
+  
             return {
               source: sourceNode,
               target: targetNode,
@@ -74,7 +78,7 @@ const ChartTest = () => {
             };
           })
           .filter((link) => link !== null);
-
+  
         // Update state
         setNodes(fetchedNodes);
         setLinks(fetchedLinks);
@@ -88,7 +92,7 @@ const ChartTest = () => {
       console.error("Error fetching graph data:", error);
     }
   };
-
+  
   const colorMap = {
     Task: "#cc3300", // red
     Asset: "#00cc00", // green
@@ -105,7 +109,7 @@ const ChartTest = () => {
       svgPoint.y = offset.y;
       const point = svgPoint.matrixTransform(svg.getScreenCTM().inverse());
       const newNode = {
-        id: nodes.length,
+        id: uuidv4(),
         nodeType: item.type, // Use nodeType to distinguish between Asset and Task
         x: point.x,
         y: point.y,
@@ -449,13 +453,19 @@ const ChartTest = () => {
   }, [relationships]);
 
   const handleSaveGraph = async () => {
+    // Extract projectId from the URL
+    const projectId = window.location.pathname.split('/').pop();
+    console.log(projectId)
+  
     const graphData = {
       assets,
       tasks,
       relationships,
+      projectId, // Add projectId to the graph data
     };
+  
     console.log("Graph data being saved:", graphData); // Log the graph data
-
+  
     try {
       const response = await fetch("http://localhost:3002/api/graph/save-graph", {
         method: "POST",
@@ -464,7 +474,7 @@ const ChartTest = () => {
         },
         body: JSON.stringify(graphData),
       });
-
+  
       if (response.ok) {
         console.log("Graph saved successfully");
         alert("Graph saved successfully!");
@@ -477,7 +487,7 @@ const ChartTest = () => {
       alert("Error saving graph");
     }
   };
-
+  
   const handleSaveAsset = (assetData) => {
     const updatedAsset = {
       ...assetData,
@@ -506,8 +516,8 @@ const ChartTest = () => {
   const handleSaveRelationship = (relationshipType) => {
     if (newLink) {
       const relationshipData = {
-        sourceId: newLink.source.id,
-        targetId: newLink.target.id,
+        sourceId: newLink.source.id.toString(),
+        targetId: newLink.target.id.toString(),
         type: relationshipType,
       };
       console.log("Saving relationship:", relationshipData); // Log the relationship

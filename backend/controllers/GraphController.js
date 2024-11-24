@@ -9,36 +9,47 @@ const {
   deleteTask, // Ensure this line is present
 } = require('../models/GraphModel');
 
+const jwt = require('jsonwebtoken');
 
 
 exports.saveGraph = async (req, res) => {
-  const { assets, tasks, relationships } = req.body;
+  const { assets, tasks, relationships, projectId } = req.body;
 
   try {
+    // Log incoming data for debugging
+    console.log('Saving graph for projectId:', projectId);
+    console.log('Assets:', assets);
+    console.log('Tasks:', tasks);
+    console.log('Relationships:', relationships);
+
     // Save assets
     for (const asset of assets) {
-      await createAsset(asset);
+      console.log(`Saving asset: ${JSON.stringify(asset)}`);
+      await createAsset({ ...asset, projectId }); // Include projectId in asset
     }
 
     // Save tasks
     for (const task of tasks) {
-      await createTask(task);
+      console.log(`Saving task: ${JSON.stringify(task)}`);
+      await createTask({ ...task, projectId }); // Include projectId in task
     }
 
     // Save relationships
     for (const relationship of relationships) {
-      await createRelationship(relationship);
+      console.log(`Saving relationship: ${JSON.stringify(relationship)}`);
+      await createRelationship({ ...relationship, projectId }); // Include projectId in relationship
     }
 
-    res.status(200).send('Graph saved successfully');
+    res.status(200).json({ message: 'Graph saved successfully' });
   } catch (error) {
-    console.error('Error saving graph:', error);
-    res.status(500).send('Error saving graph');
+    console.error('Error saving graph:', error.message);
+    res.status(500).json({ error: 'Failed to save graph' });
   }
 };
 
 exports.getGraph = async (req, res) => {
   const session = driver.session();
+  const { projectId } = req.query; // Extract projectId from query parameters
 
   function convertNeo4jValue(value) {
     if (value && typeof value.toNumber === 'function') {
@@ -48,35 +59,43 @@ exports.getGraph = async (req, res) => {
   }
 
   try {
-    // Fetch assets
-    const assetResult = await session.run('MATCH (a:Asset) RETURN a');
+    if (!projectId) {
+      return res.status(400).json({ error: 'Project ID is required.' });
+    }
+
+    // Fetch assets associated with the projectId
+    const assetResult = await session.run(
+      `
+      MATCH (p:Project {id: $projectId})-[:HAS_ASSET]->(a:Asset)
+      RETURN a
+      `,
+      { projectId }
+    );
 
     const assets = assetResult.records.map(record => {
       const node = record.get('a');
-      const labels = node.labels; // Get labels from the node
       return {
         id: convertNeo4jValue(node.properties.id),
         name: node.properties.name,
-        type: node.properties.type, // e.g., 'Character'
+        type: node.properties.type,
         status: node.properties.status,
         file: node.properties.file,
         x: convertNeo4jValue(node.properties.x),
         y: convertNeo4jValue(node.properties.y),
-        labels: labels, // Add labels to the node data
       };
     });
 
-    // Fetch tasks
-    const taskResult = await session.run('MATCH (t:Task) RETURN t');
+    // Fetch tasks associated with the projectId
+    const taskResult = await session.run(
+      `
+      MATCH (p:Project {id: $projectId})-[:HAS_TASK]->(t:Task)
+      RETURN t
+      `,
+      { projectId }
+    );
 
     const tasks = taskResult.records.map(record => {
       const node = record.get('t');
-
-      // Console logs
-      console.log('Task Node:', node);
-      console.log('Type of node.properties.id:', typeof node.properties.id);
-      console.log('node.properties.id:', node.properties.id);
-
       return {
         id: convertNeo4jValue(node.properties.id),
         title: node.properties.title,
@@ -91,17 +110,17 @@ exports.getGraph = async (req, res) => {
       };
     });
 
-    // Fetch relationships
+    // Fetch relationships between nodes associated with the projectId
     const relationshipResult = await session.run(
-      'MATCH (a)-[r]->(b) RETURN id(r) as id, type(r) as type, a.id as sourceId, b.id as targetId'
+      `
+      MATCH (p:Project {id: $projectId})
+      MATCH (p)-[:HAS_ASSET|:HAS_TASK]->(a)-[r]->(b)<-[:HAS_ASSET|:HAS_TASK]-(p)
+      RETURN id(r) as id, type(r) as type, a.id as sourceId, b.id as targetId
+      `,
+      { projectId }
     );
 
     const relationships = relationshipResult.records.map(record => {
-      // Console logs
-      console.log('Relationship Record:', record);
-      console.log('Type of record.get("id"):', typeof record.get('id'));
-      console.log('record.get("id"):', record.get('id'));
-
       return {
         id: convertNeo4jValue(record.get('id')),
         type: record.get('type'),
@@ -110,7 +129,7 @@ exports.getGraph = async (req, res) => {
       };
     });
 
-    // Send the data back to the client
+    // Send the filtered graph data back to the client
     res.status(200).json({
       assets,
       tasks,
