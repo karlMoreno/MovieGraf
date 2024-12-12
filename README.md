@@ -1,201 +1,163 @@
 # MovieGraf
 
-## Under Construction
+## 🎬 Under Construction
 
 MovieGraf is a web application designed to provide comprehensive insights into the world of movies. It integrates with Neo4j to deliver powerful data visualizations and user-driven analytics.
 
-## Getting Started
+---
+
+## Getting Started 🚀
 
 These instructions will guide you through setting up your local development environment. Follow these steps to get a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
+### Prerequisites 📋
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: This project requires Node.js. If it's not installed, download and install it from [Node.js official website](https://nodejs.org/).
+- **Node.js**: Download and install from [Node.js official website](https://nodejs.org/).
+- **Git**: Required for cloning the repository.
 
-### Installation
+---
 
-Follow these steps to set up your local development environment:
+## Installation 🛠️
 
-#### Clone the Repository
-
-Start by cloning the repository and navigating into the project directory:
+### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/karlMoreno/MovieGraf.git
-cd MovieGraf
-npm install --save neo4j-driver
+# Clone the repository
+$ git clone https://github.com/karlMoreno/MovieGraf.git
+
+# Navigate to the project directory
+$ cd MovieGraf
+
+# Install Neo4j driver dependency
+$ npm install --save neo4j-driver
 ```
 
-### Set Up the Backend
+### Step 2: Set Up the Backend
 
-To get the backend up and running, follow these steps:
+```bash
+# Navigate to the backend directory
+$ cd backend
 
-1. **Navigate to the Backend Directory:**
+# Install backend dependencies
+$ npm install
 
-   Open your terminal and execute the following commands to enter the backend directory of your project:
+# Start the backend server
+$ node server.js
 
-   ```bash
-   cd backend
+# Additional dependencies
+$ npm install bcrypt cors multer jsonwebtoken
+```
 
-   npm install
+### Step 3: Set Up the Frontend
 
-   node server.js
+```bash
+# Navigate to the frontend directory
+$ cd ../frontend
 
-   npm install bcrypt
+# Install frontend dependencies
+$ npm install
 
-   npm install cors
+# Start the development server
+$ npm start
 
-   npm install bcrypt
+# Additional libraries
+$ npm install @mui/material @mui/icons-material @emotion/react @emotion/styled react-router-dom @mui/x-charts
+$ npm install react-virtuoso d3 @mui/x-date-pickers date-fns three @react-three/fiber @react-three/drei react-beautiful-dnd
+$ npm install antd @mui/x-data-grid uuid react-dnd react-dnd-html5-backend react-bootstrap bootstrap
+```
 
-   npm install multer
+---
 
-   npm install jsonwebtoken
+## Oleg's Workspace 🛠️
 
+### Welcome, Oleg! 👋
 
+As the new developer on the project, your main focus will be on the **Landing Page**. Follow these steps to get started:
 
+1. **Branch Setup:**
+   - Work on the `development` branch.
+   - If you encounter merge conflicts with `main`, you can resolve it by overriding `main` with `development`. Otherwise, you can leave the conflict and focus on your tasks.
 
-   ```
+2. **File Location:**
+   - Navigate to:
+     ```bash
+     frontend/src/pages/LandingPage.jsx
+     ```
 
-### Set Up the Frontend
+3. **Library in Use:**
+   - We are using **Material-UI** for components and styling.
+   - Refer to the Material-UI documentation for guidance: [Material-UI](https://mui.com/).
 
-To get the frontend up and running, follow these steps:
+4. **Focus:**
+   - Your main responsibility is the Landing Page. Feel free to explore and experiment with the Material-UI library to create an engaging and dynamic user interface.
 
-1. **Open a New Terminal Window:**
+---
 
-   It's important to keep the backend server running while you set up the frontend. Therefore, open a new terminal window or tab to continue with the frontend setup.
-
-2. **Navigate to the Frontend Directory:**
-
-   Use the following command to navigate to the frontend directory of your project:
-
-   ```bash
-   cd ../frontend
-
-   npm install
-
-   npm start
-
-
-   npm install @mui/material @mui/icons-material
-
-   npm install @emotion/react @emotion/styled
-
-   npm install react-router-domv
-
-   npm install @mui/x-charts
-
-   npm install react-virtuoso
-
-   npm install @mui/icons-material
-
-   npm install d3
-
-   
-
-   npm install @mui/x-date-pickers
-   npm install date-fns@2
-   npm install @mui/x-date-pickers @mui/lab date-fns
-
-   npm install three @react-three/fiber
-   npm install @react-three/drei
-   npm install react-beautiful-dnd
-
-   npm install antd
-
-   npm install @mui/x-data-grid
-   npm install uuid
-
-   npm install react-dnd react-dnd-html5-backend react-beautiful-dnd @mui/material antd
-
-   npm install react-dnd react-dnd-html5-backend
-
-   npm install react-bootstrap bootstrap
-
-   npm install uuid
-
-
-
-
-
-   ```
-
-
-
-# Application Overview
+## Application Overview 📊
 
 This application is a Node.js web application that uses Neo4j for data storage. It includes user authentication, project management, and a structured route system.
 
-- **Database**: Neo4j
-- **Backend Framework**: Express
-- **Authentication**: JWT (JSON Web Tokens)
+### Tech Stack:
+- **Database:** Neo4j
+- **Backend Framework:** Express
+- **Authentication:** JWT (JSON Web Tokens)
 
-## Structure
-
+### Structure:
 - **models**: Contains the database models
 - **controllers**: Contains the business logic
 - **routes**: Contains the API routes
 - **middleware**: Contains the authentication middleware
 
+---
 
-# Workflow
+## Workflow 🔄
 
-## Step 1: User Sign-Up
-1. User sends a POST request to `/signup` with firstName, lastName, email, and password.
-2. The `createUser` function hashes the password and stores the user in the database.
-3. A success message and the created user are returned.
+### User Actions:
 
-## Step 2: User Sign-In
-1. User sends a POST request to `/signin` with email and password.
-2. The `signInUser` function verifies the credentials and returns a JWT and user ID.
-3. The JWT is stored on the client-side for future requests.
+1. **User Sign-Up**
+   - Sends a POST request to `/signup` with firstName, lastName, email, and password.
+   - The `createUser` function hashes the password and stores the user in the database.
 
-## Step 3: Creating a Project
-1. Authenticated user sends a POST request to `/projects` with project details.
-2. The `createProject` function creates a project and associates it with the user.
-3. A success message and the created project are returned.
+2. **User Sign-In**
+   - Sends a POST request to `/signin` with email and password.
+   - The `signInUser` function verifies the credentials and returns a JWT and user ID.
 
-## Step 4: Retrieving Projects
-1. Authenticated user sends a GET request to `/projects`.
-2. The `getUserProjects` function retrieves all projects for the user.
-3. The projects are returned and displayed on the client-side.
+3. **Creating a Project**
+   - Authenticated user sends a POST request to `/projects` with project details.
+   - The `createProject` function creates a project and associates it with the user.
 
+4. **Retrieving Projects**
+   - Authenticated user sends a GET request to `/projects`.
+   - The `getUserProjects` function retrieves all projects for the user.
 
-# Tech Debt
+---
 
-*“He who pays his debts gets richer.”* – French Proverb
+## Tech Debt 🏗️
 
+> **“He who pays his debts gets richer.”** – French Proverb
 
-This section outlines the current technical debt within the project and tasks that need to be addressed. Developers can refer to this list to prioritize and manage the ongoing improvements and fixes.
+This section outlines the current technical debt within the project and tasks that need to be addressed:
 
-1. **User Management**
-   - 1a. Add users via email.
-   - 1b. Users can either own or be working on a project.
-   - 1c. Ability to add users to a project.
-   - 1d. Deleting users must delete their projects and remove other users from those projects.
+1. **User Management:**
+   - Add users via email.
+   - Allow users to own or collaborate on projects.
+   - Add functionality to delete users and their projects.
 
-2. ~~**Authentication and Authorization**~~
-   - ~~2a. Test if someone can create projects without being signed in (mostly solved, needs further testing).~~
-   - ~~2b. For the sign-up page, implement a robust email checker.~~
-   - ~~2c. Ensure sign-up leads to the projects page, not the sign-in page.~~
+2. **Authentication Improvements:**
+   - Add robust email validation for sign-up.
+   - Ensure secure user sessions.
 
+3. **API Configuration:**
+   - Move APIs to work on a live server with `.env` configurations.
 
-3. ~~**API Configuration**~~
-   - ~~3a. Change APIs from localhost to work on a server. This requires setting up a `.env` file for environment-specific configurations.~~
+4. **UI/UX Enhancements:**
+   - Add loading indicators and improve user navigation.
+   - Enhance accessibility and responsiveness.
 
-4. ~~**Password Management**~~
-   - ~~4a. Add functionality to the password field to show what requirements are missing (e.g., length, special characters) and a checklist of completed criteria.~~
+Feel free to update this list as the project progresses!
 
-5. **Assign Unique IDs to Proper Models**
-   - 5a. Make the dashboard unique to each project, ensuring that users see only the relevant data for their selected project.
-   - 5b. Delete icons must delete a single project.
-   - 5c. Add a loading screen for projects.
-   - 5d. Need navbar for signout and future settings page.
-   - 5e. Send Email Verification request
-   - 5f. Test if a user already exists
+---
 
-6. ~~**Server Security**~~
-   - ~~6a. Ensure Web tokens and server passwords are not being passed to github~~
-
-Feel free to add any additional tech debt items as they arise and update the status of ongoing tasks.
+Happy coding, Oleg! 🎉
