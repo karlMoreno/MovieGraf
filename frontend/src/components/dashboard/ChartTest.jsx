@@ -38,7 +38,10 @@ const ChartTest = () => {
       const projectId = window.location.pathname.split('/').pop();
       console.log("Extracted projectId:", projectId);
   
-      const response = await fetch(`http://localhost:3002/api/graph/get-graph?projectId=${projectId}`);
+      const response = await fetch(`http://localhost:3002/api/graph/get-graph?projectId=${projectId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched graph data:", data);
@@ -160,6 +163,7 @@ const ChartTest = () => {
   };
 
   const viewNodeInfo = (node) => {
+    console.log("Viewing node info:", node);
     setNodeInfo(node);
     setShowNodeInfo(true);
   };
@@ -455,7 +459,7 @@ const ChartTest = () => {
   const handleSaveGraph = async () => {
     // Extract projectId from the URL
     const projectId = window.location.pathname.split('/').pop();
-    console.log(projectId)
+    console.log("Extracted Project ID:", projectId);
   
     const graphData = {
       assets,
@@ -464,7 +468,9 @@ const ChartTest = () => {
       projectId, // Add projectId to the graph data
     };
   
-    console.log("Graph data being saved:", graphData); // Log the graph data
+    console.log("Graph data being prepared:", graphData); // Log the raw graph data object
+    const stringifiedGraphData = JSON.stringify(graphData);
+    console.log("Stringified Graph Data:", stringifiedGraphData); // Log the stringified data
   
     try {
       const response = await fetch("http://localhost:3002/api/graph/save-graph", {
@@ -472,7 +478,7 @@ const ChartTest = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(graphData),
+        body: stringifiedGraphData, // Pass the logged stringified data
       });
   
       if (response.ok) {
@@ -486,8 +492,8 @@ const ChartTest = () => {
       console.error("Error saving graph:", error);
       alert("Error saving graph");
     }
-  };
-  
+};
+
   const handleSaveAsset = (assetData) => {
     const updatedAsset = {
       ...assetData,
@@ -503,12 +509,20 @@ const ChartTest = () => {
   const handleSaveTask = (taskData) => {
     const updatedTask = {
       ...taskData,
-      id: newNode.id, // Ensure the task has the same id as the node
-      x: newNode.x, // This will always have the latest position
+      id: newNode.id,
+      x: newNode.x,
       y: newNode.y,
+      title: taskData.title ?? 'Untitled Task', // Use nullish coalescing
+      description: taskData.description ?? '',
+      assignedTo: taskData.assignedTo ?? 'Unassigned',
+      priority: taskData.priority ?? 'Low',
+      progressState: taskData.progressState ?? 'Not Started',
+      startDate: taskData.startDate ?? null,
+      endDate: taskData.endDate ?? null,
     };
+    
 
-    console.log("Saving task:", updatedTask); // Log the updated task data
+    console.log("Saving task (handle save task):", updatedTask); // Log the updated task data
     setTasks((prevTasks) => [...prevTasks, updatedTask]); // Store the updated task data in the state
     setShowTaskForm(false); // Close the task form
   };
@@ -594,60 +608,92 @@ const ChartTest = () => {
       )}
       {/* Node Info Modal */}
       {showNodeInfo && (
-        <div
-          style={{
-            position: "absolute",
-            top: "20%",
-            left: "20%",
-            width: "60%",
-            backgroundColor: "#333", // Dark background color
-            color: "#fff", // White font color
-            border: "1px solid #555", // Dark border color
-            borderRadius: "4px",
-            padding: "20px",
-            zIndex: 1000,
-          }}
-        >
-          <h3>Node Information</h3>
-          {/* Customize the display as needed */}
-          {nodeInfo && (
-            <div>
-              <p>
-                <strong>ID:</strong> {nodeInfo.id}
-              </p>
-              {nodeInfo.nodeType === "Asset" && (
-                <div>
-                  <p>
-                    <strong>Name:</strong> {nodeInfo.name}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {nodeInfo.type}
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {nodeInfo.status}
-                  </p>
-                  {/* Include other asset properties */}
-                </div>
-              )}
-              {nodeInfo.nodeType === "Task" && (
-                <div>
-                  <p>
-                    <strong>Title:</strong> {nodeInfo.title}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {nodeInfo.description}
-                  </p>
-                  <p>
-                    <strong>Assigned To:</strong> {nodeInfo.assignedTo}
-                  </p>
-                  {/* Include other task properties */}
-                </div>
-              )}
-            </div>
-          )}
-          <button onClick={() => setShowNodeInfo(false)}>Close</button>
-        </div>
-      )}
+  <div
+    style={{
+      position: "absolute",
+      top: "20%",
+      left: "20%",
+      width: "60%",
+      backgroundColor: "#333", // Dark background color
+      color: "#fff", // White font color
+      border: "1px solid #555", // Dark border color
+      borderRadius: "4px",
+      padding: "20px",
+      zIndex: 1000,
+    }}
+  >
+    <h3>Node Information</h3>
+    {nodeInfo && (
+      <div>
+        <p>
+          <strong>ID:</strong> {nodeInfo.id}
+        </p>
+        {nodeInfo.nodeType === "Asset" && (
+          <div>
+            <p>
+              <strong>Name:</strong> {nodeInfo.name}
+            </p>
+            <p>
+              <strong>Type:</strong> {nodeInfo.type}
+            </p>
+            <p>
+              <strong>Status:</strong> {nodeInfo.status}
+            </p>
+          </div>
+        )}
+        {nodeInfo.nodeType === "Task" && (
+          <div>
+            <p>
+              <strong>Title:</strong> {nodeInfo.title}
+            </p>
+            <p>
+              <strong>Description:</strong> {nodeInfo.description}
+            </p>
+            <p>
+              <strong>Assigned To:</strong> {nodeInfo.assignedTo}
+            </p>
+            <p>
+              <strong>Priority:</strong> {nodeInfo.priority}
+            </p>
+            <p>
+              <strong>Progress State:</strong> {nodeInfo.progressState}
+            </p>
+            <p>
+              <strong>Files:</strong>
+            </p>
+            <ul>
+              {nodeInfo.files &&
+                nodeInfo.files.map((file, index) => (
+                  <li key={index}>
+                    {file.path.endsWith(".jpg") ||
+                    file.path.endsWith(".png") ||
+                    file.path.endsWith(".jpeg") ? (
+                      <img
+                        src={`http://localhost:3002/${file.path}`}
+                        alt="Uploaded file"
+                        style={{ maxWidth: "100%", maxHeight: "200px" }}
+                      />
+                    ) : (
+                      <a
+                        href={`http://localhost:3002/${file.path}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#4CAF50" }}
+                      >
+                        {file.filename}
+                      </a>
+                    )}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+    <button onClick={() => setShowNodeInfo(false)}>Close</button>
+  </div>
+)}
+
       {/* Existing forms */}
       {showAssetForm && (
         <AssetForm

@@ -9,9 +9,10 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import axios from "axios";
 
 export default function TasksForm({ onClose, onSave }) {
   const [title, setTitle] = useState("");
@@ -21,32 +22,56 @@ export default function TasksForm({ onClose, onSave }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [priority, setPriority] = useState("");
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    const taskData = {
-      title,
-      description,
-      assignedTo,
-      progressState,
-      startDate: startDate ? startDate.toISOString() : '',
-      endDate: endDate ? endDate.toISOString() : '',
-      priority,
-      file: file ? URL.createObjectURL(file) : null,
-    };
-
-    console.log('Task Data:', taskData);
-    onSave(taskData);
-    onClose();
+  
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("assignedTo", assignedTo);
+    formData.append("progressState", progressState);
+    formData.append("startDate", startDate ? startDate.toISOString() : "");
+    formData.append("endDate", endDate ? endDate.toISOString() : "");
+    formData.append("priority", priority);
+  
+    Array.from(files).forEach((file) => {
+      formData.append("files", file);
+    });
+  
+    try {
+      const response = await axios.post("http://localhost:3002/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      console.log("Upload Response:", response.data);
+  
+      // Combine file response with form fields
+      const taskData = {
+        ...response.data,
+        title,
+        description,
+        assignedTo,
+        progressState,
+        startDate,
+        endDate,
+        priority,
+      };
+  
+      console.log("Final Task Data:", taskData);
+  
+      onSave(taskData); // Pass the combined data to the parent component
+      onClose();
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
   };
+  
+
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
+    setFiles(event.target.files);
   };
 
   return (
@@ -64,13 +89,12 @@ export default function TasksForm({ onClose, onSave }) {
           <Typography variant="h6" gutterBottom>
             Create New Task
           </Typography>
-          {file && (
-            <img
-              src={URL.createObjectURL(file)}
-              alt="Thumbnail"
-              style={{ width: "100%", marginBottom: 16 }}
-            />
-          )}
+          {files.length > 0 &&
+            Array.from(files).map((file, index) => (
+              <Typography key={index} variant="body2">
+                {file.name}
+              </Typography>
+            ))}
           <TextField
             label="Title"
             variant="outlined"
@@ -138,14 +162,13 @@ export default function TasksForm({ onClose, onSave }) {
           <label htmlFor="upload-button-file">
             <Button
               component="label"
-              role={undefined}
               variant="contained"
-              tabIndex={-1}
               startIcon={<CloudUploadIcon />}
             >
-              Upload Thumbnail
+              Upload Files
               <input
                 type="file"
+                multiple
                 hidden
                 onChange={handleFileChange}
               />

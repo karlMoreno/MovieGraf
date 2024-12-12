@@ -2,16 +2,51 @@ const neo4j = require('neo4j-driver');
 const driver = require('../database/db');
 const { v4: uuidv4 } = require('uuid');
 
-const createTask = async ({ title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }) => {
-  const session = driver.session({ database: "neo4j" });
-  const taskId = uuidv4(); // Generate a unique identifier for the task
+const createTask = async ({
+  id,
+  title,
+  description,
+  assignedTo,
+  progressState,
+  startDate,
+  endDate,
+  priority,
+  files,
+}) => {
+  const session = driver.session({ database: 'neo4j' });
   try {
     const result = await session.run(
-      'CREATE (t:Task {id: $taskId, title: $title, description: $description, assignedTo: $assignedTo, progressState: $progressState, startDate: $startDate, endDate: $endDate, priority: $priority, thumbnail: $thumbnail}) RETURN t',
-      { taskId, title, description, assignedTo, progressState, startDate, endDate, priority, thumbnail }
+      `
+      CREATE (t:Task {
+        id: $id,
+        title: $title,
+        description: $description,
+        assignedTo: $assignedTo,
+        progressState: $progressState,
+        startDate: CASE WHEN $startDate IS NULL THEN NULL ELSE $startDate END,
+        endDate: CASE WHEN $endDate IS NULL THEN NULL ELSE $endDate END,
+        priority: $priority,
+        files: $files
+      })
+      RETURN t
+      `,
+      {
+        id,
+        title,
+        description,
+        assignedTo,
+        progressState,
+        startDate: startDate || null, // Ensure explicit null is passed
+        endDate: endDate || null, // Ensure explicit null is passed
+        priority,
+        files,
+      }
     );
-    const task = result.records[0]?.get('t').properties;
-    return task;
+
+    return result.records[0]?.get('t').properties;
+  } catch (error) {
+    console.error('Error in createTask:', error);
+    throw error;
   } finally {
     await session.close();
   }

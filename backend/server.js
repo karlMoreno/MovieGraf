@@ -35,6 +35,13 @@ const path = require('path');
 const logger = require('./middleware/logger'); // Import the logger middleware
 // const upload = require('./config/multerConfig'); // Import Multer configuration
 const driver = require('./database/db'); // Ensure driver is imported correctly
+
+
+const multer = require('multer');
+
+
+
+
 require('dotenv').config();
 
 const app = express();
@@ -42,7 +49,40 @@ const port = 3002;
 
 console.log("Starting server...");
 
-app.use(cors());
+
+// Configure Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+// Multer instance to handle multiple files
+const upload = multer({ storage });
+
+app.post('/upload', upload.array('files', 10), (req, res) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // Debugging, ensure CORS for this route
+  const fileDetails = req.files.map((file) => ({
+    filename: file.filename,
+    path: file.path,
+  }));
+  res.status(200).json({ message: 'Files uploaded successfully', files: fileDetails });
+});
+
+app.use((req, res, next) => {
+  console.log('Request headers:', req.headers);
+  next();
+});
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
+app.use(cors({ origin: 'http://localhost:3000' }));
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

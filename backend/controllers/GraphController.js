@@ -18,32 +18,44 @@ exports.saveGraph = async (req, res) => {
   try {
     // Log incoming data for debugging
     console.log('Saving graph for projectId:', projectId);
-    console.log('Assets:', assets);
-    console.log('Tasks:', tasks);
-    console.log('Relationships:', relationships);
+    console.log('Assets:', JSON.stringify(assets, null, 2)); // Pretty print for clarity
+    console.log('Tasks:', JSON.stringify(tasks, null, 2));
+    console.log('Relationships:', JSON.stringify(relationships, null, 2));
 
     // Save assets
     for (const asset of assets) {
-      console.log(`Saving asset: ${JSON.stringify(asset)}`);
+      console.log(`Saving asset: ${JSON.stringify(asset, null, 2)}`);
       await createAsset({ ...asset, projectId }); // Include projectId in asset
     }
 
     // Save tasks
     for (const task of tasks) {
-      console.log(`Saving task: ${JSON.stringify(task)}`);
-      await createTask({ ...task, projectId }); // Include projectId in task
+      console.log(`Saving task (before calling createTask): ${JSON.stringify(task, null, 2)}`);
+      try {
+        await createTask({ ...task, projectId }); // Include projectId in task
+      } catch (taskError) {
+        console.error(`Error creating task: ${JSON.stringify(task, null, 2)}`);
+        console.error(`Error Details: ${taskError.message}`);
+        throw taskError; // Re-throw to be handled by the main error handler
+      }
     }
 
     // Save relationships
     for (const relationship of relationships) {
-      console.log(`Saving relationship: ${JSON.stringify(relationship)}`);
-      await createRelationship({ ...relationship, projectId }); // Include projectId in relationship
+      console.log(`Saving relationship: ${JSON.stringify(relationship, null, 2)}`);
+      try {
+        await createRelationship({ ...relationship, projectId }); // Include projectId in relationship
+      } catch (relationshipError) {
+        console.error(`Error creating relationship: ${JSON.stringify(relationship, null, 2)}`);
+        console.error(`Error Details: ${relationshipError.message}`);
+        throw relationshipError; // Re-throw to be handled by the main error handler
+      }
     }
 
     res.status(200).json({ message: 'Graph saved successfully' });
   } catch (error) {
     console.error('Error saving graph:', error.message);
-    res.status(500).json({ error: 'Failed to save graph' });
+    res.status(500).json({ error: 'Failed to save graph', details: error.message });
   }
 };
 
